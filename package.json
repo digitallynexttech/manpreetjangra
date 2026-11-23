@@ -1,11 +1,12 @@
 {
-  "name": "site",
+  "name": "manpreet-jangra-portfolio",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3100",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 3100",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint"
   },
   "dependencies": {
