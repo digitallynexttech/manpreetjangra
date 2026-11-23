@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# dev server output (see next.config.ts)
+/.next-dev/
+
+# local QA artefacts
+/qa-shots/
+*.log
