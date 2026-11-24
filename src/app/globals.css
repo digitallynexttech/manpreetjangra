@@ -261,7 +261,9 @@
      inside its own box (its later lines are not pulled under the clip) and
      the next item starts a fresh line. Lines break between items only.
      --site-sep is three Geist Mono cells (0.6em plus the tracking each), the
-     width " · " had, so the spacing on a line is unchanged. */
+     width " · " had, so the spacing on a line is unchanged. The dot is real
+     text (.site-seps-dot, " · " with its spaces kept), so the text sits in
+     the page once, separators included. */
   .site-seps {
     --site-sep: calc(3 * (0.6em + var(--text-caption--letter-spacing)));
     display: block;
@@ -270,13 +272,13 @@
   .site-eyebrow .site-seps { --site-sep: calc(3 * (0.6em + var(--text-eyebrow--letter-spacing))); }
   .site-seps-inner { display: block; margin-inline-start: calc(-1 * var(--site-sep)); }
   .site-seps-inner > span { display: inline-block; position: relative; margin-inline-start: var(--site-sep); }
-  .site-seps-inner > span::before {
-    content: "\00B7";
+  .site-seps-dot {
     position: absolute;
     top: 0;
     inset-inline-end: 100%;
     width: var(--site-sep);
     text-align: center;
+    white-space: pre;
   }
   .site-caption {
     font-family: var(--font-mono);

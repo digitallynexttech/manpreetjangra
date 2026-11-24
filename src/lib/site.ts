@@ -112,14 +112,20 @@ const longDate = new Intl.DateTimeFormat("en-GB", {
   timeZone: "Asia/Kolkata",
 });
 
-/** "2026-11-23" -> "23 November 2026". Used for every "as of" caption (proof row, Careers roles). */
+/** "2026-11-23" -> "23 November 2026". Used for every "as of" caption (proof row, Careers roles).
+ *  The spaces are no-break spaces, so a date never splits across two lines. */
 export function formatLongDate(iso: string): string {
-  return longDate.format(new Date(`${iso}T12:00:00Z`));
+  return longDate.format(new Date(`${iso}T12:00:00Z`)).replaceAll(" ", " ");
 }
 
-/** Quote attribution, the single rule from 7.3. */
+/** Quote attribution, the single rule from 7.3. Inside each part (speaker,
+ *  source, date) the spaces are no-break spaces, so a line breaks only after
+ *  a comma ("Manpreet Jangra," / "Women Entrepreneurs Review, August 2026"). */
 export function attributionOf(q: Pick<Quote, "speaker" | "source" | "dateLabel">): string {
-  return (q.speaker ? q.speaker + ", " : "") + q.source + ", " + q.dateLabel;
+  return [q.speaker, q.source, q.dateLabel]
+    .filter((part): part is string => Boolean(part))
+    .map((part) => part.replaceAll(" ", " "))
+    .join(", ");
 }
 
 /** Department and group names are stored as listed ("BSG - Business Support

@@ -31,7 +31,8 @@ export type Quote = Sourced & {
 };
 /** Attribution rule (one place, lib/site.ts `attributionOf`):
  *  (quote.speaker ? quote.speaker + ", " : "") + quote.source + ", " + quote.dateLabel
- *  gives "Manpreet Jangra, Women Entrepreneurs Review, August 2026" or "Instagram reel caption, 28 May 2025". */
+ *  gives "Manpreet Jangra, Women Entrepreneurs Review, August 2026" or "Instagram reel caption, 28 May 2025".
+ *  The spaces inside each part are rendered as no-break spaces, so lines break only after a comma. */
 export type Venture = Sourced & {
   name: string; href: Url; category: string; role: string; preview: string | null; previewAlt?: string;
 };
