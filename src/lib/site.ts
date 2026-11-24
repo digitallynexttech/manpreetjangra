@@ -127,11 +127,3 @@ export function attributionOf(q: Pick<Quote, "speaker" | "source" | "dateLabel">
 export function displayName(name: string): string {
   return name.replaceAll(" - ", " · ");
 }
-
-/** Lines may break before a middle dot but never after one: the space after
- *  each " · " becomes a no-break space, so no line ends on a dangling dot
- *  (eyebrows, the hero credential line, venture categories). Render-time only;
- *  the stored copy keeps plain spaces. */
-export function keepSeparators(text: string): string {
-  return text.replaceAll(" · ", " ·\u00a0");
-}

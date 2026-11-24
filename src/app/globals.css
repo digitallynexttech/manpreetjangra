@@ -253,6 +253,31 @@
   .site-eyebrow > .mj-thread { margin-top: calc(0.65em - 1px); }
   .band-night .site-eyebrow,
   .site-eyebrow--night { color: var(--color-marigold); }
+  /* Separated text (components/Separated.tsx): "A · B · C" as items that
+     each carry their dot in a margin before them. The inner block is pulled
+     back by one separator width and the outer block clips it, so the dot of
+     an item that starts a line is hidden and a dot only shows between two
+     items on the same line. Items are inline blocks: a long item wraps
+     inside its own box (its later lines are not pulled under the clip) and
+     the next item starts a fresh line. Lines break between items only.
+     --site-sep is three Geist Mono cells (0.6em plus the tracking each), the
+     width " · " had, so the spacing on a line is unchanged. */
+  .site-seps {
+    --site-sep: calc(3 * (0.6em + var(--text-caption--letter-spacing)));
+    display: block;
+    overflow: hidden;
+  }
+  .site-eyebrow .site-seps { --site-sep: calc(3 * (0.6em + var(--text-eyebrow--letter-spacing))); }
+  .site-seps-inner { display: block; margin-inline-start: calc(-1 * var(--site-sep)); }
+  .site-seps-inner > span { display: inline-block; position: relative; margin-inline-start: var(--site-sep); }
+  .site-seps-inner > span::before {
+    content: "\00B7";
+    position: absolute;
+    top: 0;
+    inset-inline-end: 100%;
+    width: var(--site-sep);
+    text-align: center;
+  }
   .site-caption {
     font-family: var(--font-mono);
     font-size: var(--text-caption);
