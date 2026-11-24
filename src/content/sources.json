@@ -2,20 +2,109 @@
   "verifiedOn": "2026-11-23",
   "factBase": "research/facts.json in the project folder; ids F### in src/content/*.ts",
   "images": [
-    { "file": "public/images/portrait/manpreet-2019-cutout.png", "generated": false, "what": "Manpreet Jangra, black-and-white portrait, 2019", "origin": "iSoCIAL 'Watch now' video thumbnail, https://isocialconnect.in/wp-content/uploads/2019/09/Manpreet-Jangra-Digital-Talent-Acquisition-.png", "processing": "Background keyed out (assets/photos/portrait-isocial-2019-bw-transparent.png), cropped to 708x848 to remove an 11 px residue column, then the alpha of the last column (x=707) set to 0", "rights": "Produced by her own group (iSoCIAL / BFG); permission requested in CONTENT-REVIEW", "facts": ["F214", "F035"] },
-    { "file": "public/images/stage/manpreet-podium.jpg", "generated": false, "what": "Manpreet Jangra speaking at a podium (event not identified)", "origin": "Her LinkedIn profile photo, saved 2026-11-23", "rights": "Hers / the event organiser's; original requested", "facts": ["F082", "F210"] },
-    { "file": "public/images/ventures/digitally-next.webp", "generated": false, "what": "Screenshot of https://www.digitallynext.com/ homepage", "origin": "Copied from the sibling site E:/deepkgoel/public/images/ventures/", "rights": "Digitally Next (same group)" },
-    { "file": "public/images/ventures/imet-global.webp", "generated": false, "what": "Screenshot of https://www.imetglobal.com/ homepage", "origin": "Copied from the sibling site E:/deepkgoel/public/images/ventures/", "rights": "iMET Global (same group)" },
-    { "file": "public/images/textures/zari.webp", "generated": true, "tool": "Codex image generation (ChatGPT plan), 2026-11-23", "what": "Gold embroidery on vermilion silk. Generated image: not a photograph of her clothing or of any real object or event", "prompt": "see plan/images.md G0" },
-    { "file": "public/images/textures/silk-ivory.webp", "generated": true, "tool": "Codex image generation", "what": "Ivory silk folds. Generated image, not a photograph", "prompt": "see plan/images.md G1" },
-    { "file": "public/images/textures/marble-ivory.webp", "generated": true, "tool": "Codex image generation", "what": "Ivory marble. Generated image, not a photograph", "prompt": "see plan/images.md G2" },
-    { "file": "public/images/textures/thread-paper.webp", "generated": true, "tool": "Codex image generation", "what": "A vermilion thread on handmade paper. Generated image, not a photograph", "prompt": "see plan/images.md G3" },
-    { "file": "public/social-card.jpg", "generated": false, "what": "Screenshot of this site's home hero at 1200x630", "origin": ".work/qa/social-card.mjs (Playwright; script written by the builder)" }
+    {
+      "file": "public/images/portrait/manpreet-2019-cutout.png",
+      "generated": false,
+      "what": "Manpreet Jangra, black-and-white portrait, 2019",
+      "origin": "iSoCIAL 'Watch now' video thumbnail, https://isocialconnect.in/wp-content/uploads/2019/09/Manpreet-Jangra-Digital-Talent-Acquisition-.png",
+      "processing": "Background keyed out (assets/photos/portrait-isocial-2019-bw-transparent.png, 720x848), cropped to 708x848 to remove an 11 px residue column, then the alpha of the last column (x=707) set to 0; saved as PNG by .work/scripts/prepare_images.py",
+      "rights": "Produced by her own group (iSoCIAL / BFG); permission requested in CONTENT-REVIEW",
+      "facts": [
+        "F214",
+        "F035"
+      ]
+    },
+    {
+      "file": "public/images/stage/manpreet-podium.jpg",
+      "generated": false,
+      "what": "Manpreet Jangra speaking at a podium (event not identified)",
+      "origin": "Her LinkedIn profile photo, saved 2026-11-23",
+      "processing": "Re-saved as 400x400 progressive JPEG quality 88 without EXIF by .work/scripts/prepare_images.py",
+      "rights": "Hers / the event organiser's; original requested",
+      "facts": [
+        "F082",
+        "F210"
+      ]
+    },
+    {
+      "file": "public/images/ventures/digitally-next.webp",
+      "generated": false,
+      "what": "Screenshot of https://www.digitallynext.com/ homepage",
+      "origin": "Copied from the sibling site E:/deepkgoel/public/images/ventures/",
+      "processing": "960x600 WebP, byte copy",
+      "rights": "Digitally Next (same group)"
+    },
+    {
+      "file": "public/images/ventures/imet-global.webp",
+      "generated": false,
+      "what": "Screenshot of https://www.imetglobal.com/ homepage",
+      "origin": "Copied from the sibling site E:/deepkgoel/public/images/ventures/",
+      "processing": "960x600 WebP, byte copy",
+      "rights": "iMET Global (same group)"
+    },
+    {
+      "file": "public/images/textures/zari.webp",
+      "generated": true,
+      "what": "Gold embroidery on vermilion silk. Generated image: not a photograph of her clothing or of any real object or event",
+      "tool": "Codex image generation (ChatGPT plan), 2026-11-23",
+      "source": "plan/assets/her-evidence/zari-vermilion-16x9-sample.png (1672x941)",
+      "processing": "1600x900 WebP quality 80 (LANCZOS scale to cover, centre crop) by .work/scripts/prepare_images.py",
+      "prompt": "Generate one image: an extreme close-up macro photograph of gold zari thread embroidery on vermilion orange-red raw silk fabric, floral paisley motif partly out of frame, shallow depth of field, soft warm light from the upper left, gentle silk sheen and one soft fold, restrained and luxurious, muted highlights, no sequin glare. Aspect about 1536x864 (16:9). No text, no letters, no numbers, no people, no faces, no hands, no logos."
+    },
+    {
+      "file": "public/images/textures/silk-ivory.webp",
+      "generated": true,
+      "what": "Ivory silk folds. Generated image, not a photograph",
+      "tool": "Codex image generation (ChatGPT plan), 2026-11-24",
+      "source": "assets/generated/silk-ivory.png (1672x941)",
+      "processing": "1600x900 WebP quality 80 (LANCZOS scale to cover, centre crop) by .work/scripts/prepare_images.py",
+      "prompt": "Generate one image: soft folds of ivory cream raw silk fabric filling the whole frame, gentle diagonal folds running from lower left to upper right, matte with a faint sheen, soft diffuse daylight from the upper left, pale warm shadows. Colour palette: ivory #F4EEE6 and #FAF7F2 in the lights, warm sand #E3DBD1 and #D6C3A9 in the shadows, no saturated colour anywhere. Minimal, calm, very low contrast, photographic. Aspect about 16:9 (1600x900). No text, no letters, no people, no faces, no hands, no logos, no embroidery, no pattern, no objects."
+    },
+    {
+      "file": "public/images/textures/marble-ivory.webp",
+      "generated": true,
+      "what": "Ivory marble. Generated image, not a photograph",
+      "tool": "Codex image generation (ChatGPT plan), 2026-11-24",
+      "source": "assets/generated/marble-ivory.png (1672x941)",
+      "processing": "1600x900 WebP quality 80 (LANCZOS scale to cover, centre crop) by .work/scripts/prepare_images.py",
+      "prompt": "Generate one image: top-down photograph of a slab of pale ivory marble filling the frame, faint warm grey veins (#B9AEA3) and a few thin honey-coloured veins (#D9B98A) drifting diagonally, polished but matte, even soft light, very low contrast. Base colour close to #F2ECE3 and #FAF7F2. Subtle and calm. Aspect about 16:9 (1600x900). No text, no letters, no objects, no people, no faces, no reflections, no logos."
+    },
+    {
+      "file": "public/images/textures/thread-paper.webp",
+      "generated": true,
+      "what": "A vermilion thread on handmade paper. Generated image, not a photograph",
+      "tool": "Codex image generation (ChatGPT plan), 2026-11-24",
+      "source": "assets/generated/thread-paper.png (1672x941)",
+      "processing": "1600x900 WebP quality 80 (LANCZOS scale to cover, centre crop) by .work/scripts/prepare_images.py",
+      "prompt": "Generate one image: a sheet of warm ivory handmade cotton paper (#F6F1E9, #FAF7F2) filling the frame, very faint fibre texture, evenly lit from above, and a single thin vermilion-orange silk thread (#E4270C) lying in a loose, gentle curve across the lower third from left to right, casting a soft warm shadow. Minimal, calm, photographic, shallow depth of field. Aspect about 16:9 (1600x900). No text, no letters, no other objects, no needle, no people, no hands, no faces, no logos."
+    },
+    {
+      "file": "public/social-card.jpg",
+      "generated": false,
+      "what": "Screenshot of this site's home hero at 1200x630",
+      "origin": ".work/qa/social-card.mjs (Playwright; script written by the builder)"
+    }
   ],
   "content": [
-    { "scope": "Quotes, Women Entrepreneurs Review", "source": "https://www.womenentrepreneursreview.com/article/6-women-leaders-on-patriotism-purpose-and-building-india-s-future-nwid-9136.html", "published": "2026-08" },
-    { "scope": "Open roles", "source": "https://www.digitallynext.com/careers", "asOf": "2026-11-23" },
-    { "scope": "LinkedIn figures", "source": "https://www.linkedin.com/in/manpreetjangraofficial/", "asOf": "2026-11-23" },
-    { "scope": "Job-post lines", "source": "https://cutshort.io/company/digitally-next-47-LkawMqgJ", "note": "Posted by Manpreet Jangra, 2023-2024" }
+    {
+      "scope": "Quotes, Women Entrepreneurs Review",
+      "source": "https://www.womenentrepreneursreview.com/article/6-women-leaders-on-patriotism-purpose-and-building-india-s-future-nwid-9136.html",
+      "published": "2026-08"
+    },
+    {
+      "scope": "Open roles",
+      "source": "https://www.digitallynext.com/careers",
+      "asOf": "2026-11-23"
+    },
+    {
+      "scope": "LinkedIn figures",
+      "source": "https://www.linkedin.com/in/manpreetjangraofficial/",
+      "asOf": "2026-11-23"
+    },
+    {
+      "scope": "Job-post lines",
+      "source": "https://cutshort.io/company/digitally-next-47-LkawMqgJ",
+      "note": "Posted by Manpreet Jangra, 2023-2024"
+    }
   ]
 }
