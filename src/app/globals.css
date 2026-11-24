@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+/* The /v2 edition has its own stylesheet (src/app/v2/v2.css) and no
+   Tailwind classes; keeping its files out of the class scan leaves this
+   stylesheet, and so the classic pages, exactly as they were. */
+@source not "./v2";
+@source not "../components/v2";
+@source not "../content/v2.ts";
+@source not "../lib/v2.ts";
+
 /* One stylesheet for the whole site, in this order:
    1. motion tokens (verbatim from the sibling Deepak Goel site)
    2. design tokens (plan/design-decision.md section 2.4)

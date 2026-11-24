@@ -77,8 +77,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         {/* The chrome lives in the route layouts: the classic site's in
             (site)/layout.tsx (components/SiteChrome.tsx, which the 404 uses
-            too). Every chrome gives its main landmark the id
-            "site-content", the skip link's target. */}
+            too), the scroll edition's in v2/layout.tsx. Every chrome gives
+            its main landmark the id "site-content", the skip link's target. */}
         {children}
         {/* Person and WebSite structured data (spec 9.4). */}
         <JsonLd data={[personJsonLd(), websiteJsonLd()]} />
