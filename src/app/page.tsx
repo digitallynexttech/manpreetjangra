@@ -42,6 +42,7 @@ export default function Home() {
           <Counter
             items={stats.items.map(({ value, label, href, linkLabel }) => ({ value, label, href, linkLabel }))}
             caption={stats.caption}
+            phoneColumns={2}
           />
         </div>
       </section>
@@ -72,16 +73,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Journey teaser: the compact timeline, oldest first. */}
+      {/* Journey teaser: the compact timeline, oldest first. From lg the
+          heading column stays in view on the left and the timeline runs in
+          the right column, as on About (design review DR-03). */}
       <section id={journey.id} aria-labelledby={titleId(journey.id)} className="site-section bg-sand">
-        <div className="site-wrap">
-          <SectionHead
-            id={journey.id}
-            eyebrow={journey.eyebrow}
-            title={journey.title}
-            accent={journey.accent}
-            lede={journey.lede}
-          />
+        <div className="site-wrap site-editorial-grid">
+          <div>
+            <SectionHead
+              id={journey.id}
+              eyebrow={journey.eyebrow}
+              title={journey.title}
+              accent={journey.accent}
+              lede={journey.lede}
+              className="lg:mb-0"
+            />
+          </div>
           <div className="site-journey">
             <Timeline entries={journey.entries.map(timelineView)} variant="compact" />
             <p className="mt-10" data-reveal>
@@ -110,9 +116,11 @@ export default function Home() {
               <div className="md:col-span-2" data-reveal>
                 <QuoteCard quote={quoteView(words.featured)} variant="night-large" />
               </div>
+              {/* Same feature as the large quote, whose caption names it:
+                  the two smaller quotes carry no third and fourth copy of it. */}
               {words.quotes.map((id) => (
                 <div key={id} data-reveal>
-                  <QuoteCard quote={quoteView(id)} variant="night" />
+                  <QuoteCard quote={quoteView(id)} variant="night" showAttribution={false} />
                 </div>
               ))}
             </div>
@@ -137,7 +145,6 @@ export default function Home() {
         <div className="site-wrap">
           <div className="site-panel site-hiring">
             <div className="site-hiring-text">
-              {hasRoles ? <HiringPill count={roles.length} className="site-hiring-pill" /> : null}
               <SectionHead id={hiring.id} eyebrow={hiring.eyebrow} title={hiring.title} accent={hiring.accent} lede={hiring.lede} />
               <div className="flex flex-wrap items-center gap-x-6 gap-y-4" data-reveal>
                 <Button
@@ -150,7 +157,10 @@ export default function Home() {
                 <TextLink href={hiring.email.href}>{hiring.email.label}</TextLink>
               </div>
             </div>
+            {/* The pill heads the job-post lines, so the eyebrow leads
+                straight into its heading (design review DR-16). */}
             <div className="site-hiring-list" data-reveal>
+              {hasRoles ? <HiringPill count={roles.length} className="site-hiring-pill" /> : null}
               <h3 className="site-hiring-list-title">{hiring.listTitle}</h3>
               <ul className="site-rows">
                 {hiring.list.map((line) => (

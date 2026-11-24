@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { NavItem } from "@/content/types";
 import { Button } from "./Button";
 
@@ -20,7 +20,19 @@ function isCurrent(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(href + "/");
 }
 
-export function Header({ home, nav, cta }: { home: NavItem; nav: readonly NavItem[]; cta: NavItem }) {
+export function Header({
+  home,
+  nav,
+  cta,
+  sheetFoot,
+}: {
+  home: NavItem;
+  nav: readonly NavItem[];
+  cta: NavItem;
+  /** The foot of the phone sheet (her profiles and the local time), built
+   *  by the server layout; hidden from lg. */
+  sheetFoot?: ReactNode;
+}) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
@@ -188,6 +200,7 @@ export function Header({ home, nav, cta }: { home: NavItem; nav: readonly NavIte
                 {cta.label}
               </Button>
             </span>
+            {sheetFoot ? <div className="site-nav-sheet-foot">{sheetFoot}</div> : null}
           </nav>
         </div>
       </div>

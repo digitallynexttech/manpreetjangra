@@ -54,7 +54,7 @@ export default function Work() {
             </p>
             <ol className="site-rows my-8" data-reveal="group">
               {operations.serviceLines.map((line) => (
-                <li key={line.index} className="site-row-static site-railed" data-reveal>
+                <li key={line.index} className="site-row-static site-railed site-railed--index" data-reveal>
                   <span className="site-caption site-tabular">{line.index}</span>
                   <h3 className="text-h4">{line.text}</h3>
                 </li>
@@ -78,7 +78,7 @@ export default function Work() {
               <TextLink href={talent.link.href}>{talent.link.label}</TextLink>
             </p>
           </div>
-          <div className="mt-12 lg:col-span-5 lg:col-start-8 lg:mt-0 lg:self-end" data-reveal>
+          <div className="mt-12 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:self-end" data-reveal>
             <QuoteCard quote={quoteView(talent.quote.quote, talent.quote.linkLabel)} variant="paper" />
           </div>
         </div>

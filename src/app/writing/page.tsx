@@ -138,7 +138,7 @@ export default function Writing() {
         <div className="site-wrap site-editorial-grid">
           <div className="mb-10 lg:mb-0">
             <SectionHead id={articles.id} eyebrow={articles.eyebrow} title={articles.title} accent={articles.accent} className="mb-0" />
-            <p className="mt-5 text-small text-ink-muted" data-reveal>
+            <p className="site-caption mt-5 max-w-[30rem]" data-reveal>
               {articles.note}
             </p>
           </div>
@@ -186,7 +186,7 @@ export default function Writing() {
             </figure>
             <div className="site-stage-text">
               <SectionHead id={stage.id} eyebrow={stage.eyebrow} title={stage.title} accent={stage.accent} className="mb-0" />
-              <p className="site-prose mt-5" data-reveal>
+              <p className="site-lede mt-5" data-reveal>
                 {stage.paragraph}
               </p>
 

@@ -53,9 +53,12 @@ export const stats: Sourced & { title: string; items: readonly Stat[]; caption: 
         ]
       : []),
   ],
-  caption: hasRoles
-    ? `LinkedIn figures as of ${formatLongDate(LINKEDIN_AS_OF)}. Roles as listed on digitallynext.com on ${formatLongDate(ROLES_AS_OF)}.`
-    : `LinkedIn figures as of ${formatLongDate(LINKEDIN_AS_OF)}.`,
+  // One date when both lists were read the same day (design review DR-15).
+  caption: !hasRoles
+    ? `LinkedIn figures as of ${formatLongDate(LINKEDIN_AS_OF)}.`
+    : formatLongDate(LINKEDIN_AS_OF) === formatLongDate(ROLES_AS_OF)
+      ? `LinkedIn figures and roles as listed on digitallynext.com, as of ${formatLongDate(LINKEDIN_AS_OF)}.`
+      : `LinkedIn figures as of ${formatLongDate(LINKEDIN_AS_OF)}. Roles as listed on digitallynext.com on ${formatLongDate(ROLES_AS_OF)}.`,
   facts: ["F190", "F191", "F140"],
 };
 
@@ -83,19 +86,22 @@ export const pillars: readonly Pillar[] = [
   {
     index: "02",
     title: "Talent and hiring",
+    // The Work page's sentence, not a third copy of "I have fronted
+    // Digitally Next's hiring since 2018" (design review DR-14, DR-15).
     body: {
-      parts: [{ text: "I have fronted Digitally Next's hiring since 2018." }],
-      facts: ["F012", "F032"],
+      parts: [{ text: "I have posted the agency's roles under my own name, on Instahyre in 2018 and on Cutshort from 2023 to 2024." }],
+      facts: ["F012", "F032", "F038"],
     },
     link: { label: "How I hire", href: "/careers#criteria" },
-    facts: ["F012", "F032"],
+    facts: ["F012", "F032", "F038"],
   },
   {
     index: "03",
     title: "AI Decision and Acceleration Center",
     body: {
       parts: [
-        { text: "I am building the agency's AI Decision and Acceleration Center. The agency's own line for it: " },
+        // "it" is the card title; the body no longer repeats the name.
+        { text: "I am building it at Digitally Next. The agency's own line for it: " },
         { quote: "Not all work needs AI. Some need judgment." },
       ],
       facts: ["F011", "F116"],
@@ -179,7 +185,8 @@ export const words: Section & {
   featured: "wer-empathy",
   quotes: ["wer-independence", "wer-transformation"],
   links: [
-    { label: "Read the feature on Women Entrepreneurs Review", href: WER, external: true, facts: ["F100"] },
+    // No-break spaces keep the outlet's name whole on phones (QA3-10).
+    { label: "Read the feature on Women Entrepreneurs Review", href: WER, external: true, facts: ["F100"] },
     { label: "More of her writing", href: "/writing", facts: [] },
     { label: "Bio for organisers", href: "/about#bio", facts: [] },
   ],

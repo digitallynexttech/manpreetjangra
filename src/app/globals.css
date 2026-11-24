@@ -271,7 +271,9 @@
   }
   .site-eyebrow .site-seps { --site-sep: calc(3 * (0.6em + var(--text-eyebrow--letter-spacing))); }
   .site-seps-inner { display: block; margin-inline-start: calc(-1 * var(--site-sep)); }
-  .site-seps-inner > span { display: inline-block; position: relative; margin-inline-start: var(--site-sep); }
+  /* An item that wraps inside its own box balances its lines, so a phone
+     never shows a two-word widow ("and data" in the hero credential, QA3-10). */
+  .site-seps-inner > span { display: inline-block; position: relative; margin-inline-start: var(--site-sep); text-wrap: balance; }
   .site-seps-dot {
     position: absolute;
     top: 0;
@@ -387,6 +389,9 @@
   @media (width >= 48rem) {
     .site-railed { grid-template-columns: 96px minmax(0, 1fr); }
   }
+  /* A two-digit index needs no date-wide rail (Work service lines; design
+     review DR-10). Placed after the md rule so it wins at every width. */
+  .site-railed--index { grid-template-columns: 40px minmax(0, 1fr); }
   /* Link cards (Home pillars). */
   .site-card {
     display: flex;
@@ -403,6 +408,11 @@
     .site-card { padding: 32px; }
   }
   .site-card-link { margin-top: auto; padding-top: 24px; }
+  /* Side by side from lg, every card keeps room for a two-line title, so the
+     bodies start level (design review DR-14). */
+  @media (width >= 64rem) {
+    .site-card h3 { min-height: calc(2 * 1.3em); }
+  }
   /* A static sand card (Home hiring block). */
   .site-panel {
     padding: 24px;
@@ -640,10 +650,14 @@
   @media (width >= 64rem) {
     .site-header nav { display: flex; align-items: center; gap: 32px; }
     /* Home and Contact are listed only in the phone sheet; from lg the
-       wordmark is home and the outline button is Contact. */
-    .site-nav-sheet-only { display: none; }
+       wordmark is home and the outline button is Contact. The sheet's foot
+       (profiles and local time) is sheet-only too. */
+    .site-nav-sheet-only,
+    .site-nav-sheet-foot { display: none; }
   }
-  /* Below lg the nav becomes a solid paper sheet under the bar. */
+  /* Below lg the nav becomes a solid paper sheet under the bar. It is always
+     laid out; closed, it is lifted, faded and hidden (the motion section
+     drops it in like an iOS sheet, as on the sibling site). */
   @media (width < 64rem) {
     .site-menu-toggle { display: inline-flex; }
     .site-header-cta { display: none; }
@@ -652,12 +666,22 @@
       inset: var(--spacing-header) 0 0 0;
       background: var(--color-paper);
       padding: 32px var(--spacing-gutter);
-      display: none;
+      display: flex;
       flex-direction: column;
       gap: 8px;
       overflow-y: auto;
+      overscroll-behavior: contain;
     }
-    .site-header nav.is-open { display: flex; }
+    /* The foot of the sheet: her profiles and the time in New Delhi,
+       anchored to the bottom so the lower half of the sheet is not empty. */
+    .site-nav-sheet-foot {
+      margin-top: auto;
+      padding-top: 32px;
+      display: grid;
+      gap: 12px;
+      justify-items: start;
+    }
+    .site-nav-sheet-foot .site-social > a { min-height: 44px; }
     .site-header nav > a {
       display: flex;
       align-items: center;
@@ -760,19 +784,29 @@
   }
   .site-intro-lede { margin-top: 20px; color: var(--color-ink); }
   .site-intro-actions { margin-top: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
+  /* Phones: one action per line, like the hero CTAs, so the 404 links never
+     wrap two and two (QA3-17). */
+  @media (width < 48rem) {
+    .site-intro-actions { flex-direction: column; align-items: flex-start; gap: 16px; }
+  }
   /* A faint picture behind the heading of every inner page. It sits on the
      right, away from the words, and fades out toward them, so the heading stays
      easy to read. Each page sets how strongly it shows (`--intro-opacity`),
      which part of it to keep in view (`--intro-position`) and how far across it
-     begins (`--intro-start`). */
+     begins (`--intro-start`). The intro and the section under it are both
+     paper, so the picture also fades out toward its bottom edge instead of
+     stopping in a straight line (design review DR-01; the sibling's mask is
+     horizontal only because its intro is a dark band). */
   .site-intro-backdrop {
     position: absolute;
     inset: 0 0 0 var(--intro-start, 38%);
     z-index: -1;
     pointer-events: none;
     opacity: var(--intro-opacity);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 58%);
-    mask-image: linear-gradient(90deg, transparent, #000 58%);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 58%), linear-gradient(180deg, #000 55%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(90deg, transparent, #000 58%), linear-gradient(180deg, #000 55%, transparent);
+    mask-composite: intersect;
   }
   .site-intro-backdrop > img {
     object-fit: cover;
@@ -895,6 +929,9 @@
      the summary). The spine is the list's ::before, at --spine-x. */
   .site-timeline { position: relative; --spine-x: 84px; }
   .site-timeline--full { --spine-x: 12px; }
+  /* Compact: 8 px either side of the node column, so the title starts 16 px
+     after the node (design review DR-08). */
+  .site-timeline--compact { --spine-x: 92px; }
   .site-timeline::before {
     content: "";
     position: absolute;
@@ -906,7 +943,13 @@
     transform-origin: top;
   }
   .site-timeline-row { position: relative; display: grid; padding-block: 20px; }
-  .site-timeline--compact .site-timeline-row { grid-template-columns: 72px 24px minmax(0, 1fr); }
+  .site-timeline--compact .site-timeline-row { grid-template-columns: 72px 24px minmax(0, 1fr); column-gap: 8px; }
+  /* Phones: a 48 px year rail ("2017" and "Now" fit in 12 px mono), so the
+     titles keep their width after the wider node gap (QA3-12). */
+  @media (width < 30rem) {
+    .site-timeline--compact { --spine-x: 68px; }
+    .site-timeline--compact .site-timeline-row { grid-template-columns: 48px 24px minmax(0, 1fr); }
+  }
   .site-timeline--full .site-timeline-row { grid-template-columns: 24px minmax(0, 1fr); column-gap: 16px; padding-block: 0; }
   .site-timeline-year { color: var(--color-ink-muted); }
   .site-timeline--compact .site-timeline-year { padding-top: 0.3em; }
@@ -916,6 +959,13 @@
     margin-top: 0.55em;
     justify-self: center;
     background: var(--color-vermilion);
+  }
+  /* Only "Now" (the last row) is a solid mark; the past years are outlines,
+     so the node column stays inside the red budget (DD 2.2 rule 3; design
+     review DR-09). Both timelines sit on sand. */
+  .site-timeline-row:not(:last-child) .site-timeline-node {
+    background: var(--color-sand);
+    box-shadow: inset 0 0 0 1.5px var(--color-vermilion);
   }
   /* Level with the year: 20 px summary padding plus half its 17.4 px line, less half the node. */
   .site-timeline--full .site-timeline-node { margin-top: 25px; }
@@ -979,12 +1029,16 @@
   .site-disclosure-body > * + * { margin-top: 12px; }
 
   /* --- Editorial grid and sticky columns (spec 6.12) ------------------- */
+  /* Two equal columns with the 12-column gutter, so the second column starts
+     exactly on column 7, as in every 12-column section (`lg:col-start-7`).
+     Replaces DD's 1 : 1.35 so the right column never jogs between sections
+     (design review DR-02). */
   @media (width >= 64rem) {
-    .site-editorial-grid { display: grid; grid-template-columns: 1fr 1.35fr; gap: 48px; }
+    .site-editorial-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; }
     .site-editorial-grid > :first-child { position: sticky; top: calc(var(--spacing-header) + 32px); align-self: start; transition: top 0.5s var(--ease-ios); }
     .site:has(.site-header.is-hidden) .site-editorial-grid > :first-child { top: 48px; }
   }
-  @media (width >= 80rem) { .site-editorial-grid { gap: 80px; } }
+  @media (width >= 80rem) { .site-editorial-grid { column-gap: 32px; } }
   @media (width >= 64rem) {
     .site-contact-details { position: sticky; top: calc(var(--spacing-header) + 32px); align-self: start; transition: top 0.5s var(--ease-ios); }
     .site:has(.site-header.is-hidden) .site-contact-details { top: 48px; }
@@ -1012,9 +1066,6 @@
     margin-inline: -12px;
     color: var(--color-ink);
   }
-  @media (width >= 64rem) {
-    .site-venture { grid-template-columns: 1fr 1.4fr 24px; align-items: center; }
-  }
   .site-venture:hover { transform: translateX(4px); background: var(--color-blush); }
   .site-venture-name {
     font-family: var(--font-display);
@@ -1024,15 +1075,23 @@
     font-weight: var(--text-h3--font-weight);
   }
   /* Phones and tablets: name and category with the arrow beside them, the
-     role underneath. From lg: name | role | arrow (above). */
+     role underneath. From lg: name | role in two equal columns with the
+     12-column gutter, so the role starts on column 7 like every other second
+     column (design review DR-02); the arrow sits outside the grid at the
+     right edge, vertically centred, and the role keeps 48 px clear of it. */
   .site-venture { grid-template-columns: minmax(0, 1fr) 24px; }
   .site-venture-head { display: grid; gap: 4px; }
   .site-venture-arrow { grid-column: 2; grid-row: 1; justify-self: end; color: var(--color-ink-muted); }
   .site-venture-role { grid-column: 1 / -1; }
   @media (width >= 64rem) {
-    .site-venture { grid-template-columns: 1fr 1.4fr 24px; }
-    .site-venture-arrow { grid-column: 3; }
-    .site-venture-role { grid-column: 2; grid-row: 1; }
+    .site-venture { position: relative; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; align-items: center; }
+    /* `grid-area: auto` so the containing block is the whole row (a placed
+       absolute grid child is positioned in its grid area instead). */
+    .site-venture-arrow { position: absolute; grid-area: auto; right: 12px; top: 50%; translate: 0 -50%; }
+    .site-venture-role { grid-column: 2; grid-row: 1; padding-right: 48px; }
+  }
+  @media (width >= 80rem) {
+    .site-venture { column-gap: 32px; }
   }
   .site-venture .site-arrow { transition: transform 0.5s var(--spring), color 0.25s; }
   .site-venture:hover .site-arrow { transform: translate(2px, -2px); color: var(--color-ink); }
@@ -1117,11 +1176,14 @@
     line-height: var(--text-lede--line-height);
     color: var(--color-ink);
   }
-  /* On stage: the 200 px podium photo above the words on phones, beside them
-     (vertically centred) from md. */
+  /* On stage: the 200 px podium photo above the words on phones. From md the
+     words lead on the page's left axis and the photo sits at the right edge,
+     vertically centred (design review DR-06: the heading never leaves the
+     left axis). */
   .site-stage { display: grid; gap: 32px; justify-items: start; }
   @media (width >= 48rem) {
-    .site-stage { grid-template-columns: max-content minmax(0, 44rem); justify-content: start; column-gap: 48px; align-items: center; }
+    .site-stage { grid-template-columns: minmax(0, 44rem) max-content; justify-content: space-between; column-gap: 48px; align-items: center; }
+    .site-stage-photo { order: 2; }
   }
   @media (width >= 64rem) {
     .site-stage { column-gap: 64px; }
@@ -1198,7 +1260,10 @@
   /* --- Forms (spec 6.13) ------------------------------------------------ */
   .site-enquiry { display: grid; gap: 24px; }
   .site-form-row { display: grid; gap: 24px; }
-  @media (width >= 48rem) {
+  /* Two fields per row on tablets and from xl. Between lg and xl the form
+     column is too narrow for two, and the Organisation placeholder was cut
+     off (QA3-04), so the fields stack there. */
+  @media (width >= 48rem) and (width < 64rem), (width >= 80rem) {
     .site-form-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   .site-field { display: grid; gap: 8px; align-content: start; }
@@ -1256,6 +1321,29 @@
   /* The copy status takes no room until it has something to say; it stays in
      the DOM so the live region still announces. */
   .site-draft .site-status:empty { margin-block: 0; min-height: 0; }
+
+  /* --- Touch screens: no sticky hover (QA3-13; design review DR-12) ------ */
+  /* A tap leaves :hover on the element it hit, so the blush fill, the 4 px
+     shift, the lift and the arrow nudge would stay until the next tap. Where
+     nothing can hover, the hover looks are reset; the press feedback (:active,
+     unlayered below) still runs. */
+  @media (hover: none) {
+    .site-row:hover,
+    .site-venture:hover { background: none; transform: none; }
+    .site-card:hover { border-color: var(--color-line); }
+    .site-card:hover .site-text-link--static { text-decoration: none; }
+    .site-button:hover { transform: none; }
+    .site-button:hover::before { background: var(--face); }
+    .site-button--outline:hover::before { background: transparent; border-color: var(--color-line-strong); }
+    .site-button--outline[aria-current="page"]:hover::before { border-color: var(--color-ink); }
+    .site-card:hover .site-arrow,
+    .site-venture:hover .site-arrow,
+    .site-role:hover .site-arrow,
+    .site-button:hover .site-arrow,
+    .site-text-link:hover .site-arrow { transform: none; }
+    .site-venture:hover .site-arrow,
+    .site-role:hover .site-arrow { color: var(--color-ink-muted); }
+  }
 }
 
 /* --- Motion -------------------------------------------------------------
@@ -1487,14 +1575,58 @@ details > summary:active {
   }
 }
 
-/* The phone menu: links rise in one after another (40 ms apart, six at most). */
+/* The phone menu drops in like an iOS sheet (ported from the sibling site,
+   E:\deepkgoel\app\globals.css, "The menu drops in like an iOS sheet").
+   Closed, it is lifted, faded and hidden from the keyboard; `visibility`
+   flips only after it has faded. Open, it springs down into place and the
+   links follow one after another (45 ms apart). Reduced motion zeroes the
+   durations and delays (below), so it simply appears and goes. */
 @media (width < 64rem) {
-  .site-header nav.is-open > a { animation: site-rise-in 0.45s var(--ease-ios) both; }
-  .site-header nav.is-open > a:nth-child(2) { animation-delay: 40ms; }
-  .site-header nav.is-open > a:nth-child(3) { animation-delay: 80ms; }
-  .site-header nav.is-open > a:nth-child(4) { animation-delay: 120ms; }
-  .site-header nav.is-open > a:nth-child(5) { animation-delay: 160ms; }
-  .site-header nav.is-open > a:nth-child(n + 6) { animation-delay: 200ms; }
+  .site-header nav {
+    visibility: hidden;
+    opacity: 0;
+    translate: 0 -16px;
+    transition:
+      opacity 0.22s ease-out,
+      translate 0.4s var(--ease-ios),
+      visibility 0s linear 0.4s;
+  }
+  .site-header nav.is-open {
+    visibility: visible;
+    opacity: 1;
+    translate: none;
+    transition:
+      opacity 0.3s ease-out,
+      translate 0.6s var(--spring),
+      visibility 0s;
+  }
+  .site-header nav:not(.is-open) > * {
+    opacity: 0;
+    translate: 0 -10px;
+    transition:
+      opacity 0.15s,
+      translate 0.2s;
+  }
+  .site-header nav.is-open > * {
+    opacity: 1;
+    translate: none;
+    transition:
+      opacity 0.4s ease-out calc(var(--i, 0) * 45ms + 70ms),
+      translate 0.7s var(--spring) calc(var(--i, 0) * 45ms + 70ms);
+  }
+  /* Text links still dim under the finger, at once. */
+  .site-header nav.is-open > a:active {
+    opacity: 0.55;
+    transition-duration: 0.06s;
+    transition-delay: 0s;
+  }
+  .site-header nav > :nth-child(2) { --i: 1; }
+  .site-header nav > :nth-child(3) { --i: 2; }
+  .site-header nav > :nth-child(4) { --i: 3; }
+  .site-header nav > :nth-child(5) { --i: 4; }
+  .site-header nav > :nth-child(6) { --i: 5; }
+  /* The foot follows the last link (child 7 is the lg-only Contact button). */
+  .site-header nav > .site-nav-sheet-foot { --i: 6; }
 }
 
 /* Small confirmations and arrivals. */

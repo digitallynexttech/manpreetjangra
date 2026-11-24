@@ -1,6 +1,11 @@
 # Design decision: "Ink, Vermilion and Marigold"
 
 > Copy kept in the repository so the code carries its own rationale. The original lives in the project's `plan/` folder (outside this repository), copied on 24 November 2026. Paths such as `plan/`, `research/`, `assets/` and `.work/` refer to that project folder; `site/` is this repository. The repository branch is `main`. Edited for the copy: one detail of a personal photo in section 4.3 is shortened. Content now lives in `src/content/` (decisions.md D04), not `src/data/`.
+>
+> Changed after the design review of 24 November 2026 (the code is the reference; each change is commented where it lives):
+> - 4.4: the intro backdrop also fades out toward its bottom edge (intro and next section are both paper), and the zari on Writing and Contact is 0.14 from 46 % instead of 0.22 from 38 %.
+> - 6.2 / 6.12: editorial sections are two equal columns with the 12-column gutter (24 px, 32 px from xl), not `1fr 1.35fr`, so every second column starts on column 7. The Work venture rows follow the same axis.
+> - 2.2 rule 3: timeline nodes are outlines except "Now", the one solid mark.
 
 Judge: design-judge agent, 2026-11-23. Status: FINAL. The planner and the builder follow this file; nothing in it is open.
 Subject: personal site of Manpreet Jangra, Chief Operating Officer, Digitally Next (BFG Market Consult Pvt Ltd), New Delhi.

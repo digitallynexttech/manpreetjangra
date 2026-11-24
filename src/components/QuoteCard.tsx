@@ -12,12 +12,16 @@ export function QuoteCard({
   quote,
   variant,
   showTheme = false,
+  showAttribution = true,
   linkLabel,
   className,
 }: {
   quote: QuoteView;
   variant: "paper" | "night" | "night-large";
   showTheme?: boolean;
+  /** Off only where a neighbouring quote from the same source already
+   *  carries the full attribution (Home night band, design review DR-15). */
+  showAttribution?: boolean;
   /** Shows a link to the source under the attribution. */
   linkLabel?: string;
   className?: string;
@@ -39,7 +43,7 @@ export function QuoteCard({
         {/* night-large opens with the marigold mark, so it gets no CSS marks. */}
         <p className={variant === "night-large" ? "site-quote-text" : "site-quote-text site-quoted"}>{quote.text}</p>
       </blockquote>
-      <figcaption className="site-quote-attribution site-caption">{quote.attribution}</figcaption>
+      {showAttribution ? <figcaption className="site-quote-attribution site-caption">{quote.attribution}</figcaption> : null}
       {label && quote.href ? (
         <p className="site-quote-link">
           <TextLink href={quote.href}>{label}</TextLink>
