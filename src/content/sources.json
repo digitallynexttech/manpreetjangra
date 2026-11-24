@@ -82,7 +82,8 @@
       "file": "public/social-card.jpg",
       "generated": false,
       "what": "Screenshot of this site's home hero at 1200x630",
-      "origin": ".work/qa/social-card.mjs (Playwright; script written by the builder)"
+      "origin": ".work/qa/social-card.mjs (Playwright; script written by the builder)",
+      "processing": "Viewport screenshot of / from the production build at 1200x630, deviceScaleFactor 1, reduced motion (final state), after the fonts and the portrait loaded; JPEG quality 85. Rendered 2026-11-24; re-run the script after any hero change"
     }
   ],
   "content": [

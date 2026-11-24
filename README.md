@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Manpreet Jangra
 
-## Getting Started
+The personal website of Manpreet Jangra, Chief Operating Officer of Digitally Next, New Delhi. Built with Next.js 16 (App Router), React 19, TypeScript and Tailwind CSS 4. Six pages (Home, About, Work, Writing, Careers, Contact) plus a branded 404, all prerendered as static pages. It shares its engineering and motion with the sibling site of Deepak Goel, Group CEO of the same group, and has its own look: warm paper, vermilion and marigold, Newsreader serif.
 
-First, run the development server:
+## Run locally
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
+```sh
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3100. Port 3100 is set in `package.json` so the site never collides with another project on port 3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+pnpm typecheck   # tsc --noEmit
+pnpm lint        # eslint
+pnpm build       # production build into .next
+pnpm start       # serves that build on port 3100
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Development writes to `.next-dev`; production builds and `start` use the default `.next` (which Vercel expects), so a build never overwrites a running development server. `NEXT_DIST_DIR` can override either location. Run all three checks (`typecheck`, `lint`, `build`) before every commit; `build` must list every route as static (○).
 
-## Learn More
+After deleting a route, run `pnpm build` before `pnpm typecheck`: until the next build, the stale `.next/types/validator.ts` still names the deleted route and fails with TS2344.
 
-To learn more about Next.js, take a look at the following resources:
+## Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `src/app/`: the pages (`page.tsx` for Home, then `about/`, `work/`, `writing/`, `careers/`, `contact/`), `not-found.tsx` (the 404), `layout.tsx` (fonts, header, footer, root metadata, JSON-LD), `sitemap.ts` and `robots.ts` (served as `/sitemap.xml` and `/robots.txt`), `icon.svg` (the MJ monogram favicon) and `globals.css`.
+- `src/app/globals.css`: the site's single stylesheet, in a fixed order: motion tokens, design tokens (`@theme`), base styles, components in `@layer components`, then the motion rules unlayered. Light theme only.
+- `src/components/`: one file per component. Only `Header`, `Motion`, `Counter`, `Disclosure`, `VentureList`, `EnquiryForm`, `CopyButton` and `LocalTime` run in the browser (`"use client"`); everything else renders on the server.
+- `src/content/`: every word, number, link and image reference on the site, as typed data (see Content model).
+- `src/lib/site.ts`: the site address, `pageMetadata()` (title, description, canonical, Open Graph and Twitter tags per page), the JSON-LD builders, `plural()`, `formatLongDate()` and `attributionOf()`. It imports only types from `src/content/`, so it never pulls content into a browser bundle.
+- `src/lib/views.tsx`: server-only helpers that turn content objects into the plain props the components need (timeline years, quote attributions, venture hostnames, education lines).
+- `public/images/`: the portrait, the podium photo, two venture screenshots and four textures. `public/social-card.jpg`: the 1200x630 image shown in link previews.
+- `docs/`: the reasoning behind the site, copied from the project's planning folder: `decisions.md` (every structural and content decision with its reason), `design-decision.md` (palette, type, imagery and motion, with the contrast table) and `CONTENT-REVIEW.md` (the open questions for Manpreet and Karan).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Content model
 
-## Deploy on Vercel
+All copy lives in `src/content/*.ts`, one file per page (`home.ts`, `about.ts`, `work.ts`, `writing.ts`, `careers.ts`, `contact.ts`) plus `shared.ts` (footer, contact band, 404, Hiring pill), `navigation.ts` (menu, footer links, social profiles), `quotes.ts` (every quotation, verbatim, with source and date), `roles.ts` (open roles), `images.ts` (every picture and the intro backdrops) and `types.ts`. Components never contain copy; pages read these files and pass plain values down.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Fact ids.** Every claim on the site is backed by research in `research/facts.json` (in the project folder, outside this repository). Each content object carries a `facts` array of ids such as `F010`. `src/content/facts.ts` lists only the ids whose status is publish or flag, so a content object that cites a hold fact fails `pnpm typecheck`. The arrays are never rendered and never reach the browser.
+- **Placeholders.** Details only Manpreet can give are stored as `{{CONFIRM: ...}}` strings (type `Confirm`). The server checks them with `isConfirmed()`: until one is replaced, the line or item it belongs to is simply not shown, and the string never reaches the browser. Items that need several answers (the 2026 entry-level article, the Japanese delegation session) carry a `gate` and appear only when every field in it is confirmed. Seven items wait for answers in all; `docs/CONTENT-REVIEW.md` section A lists each one and the field to edit.
+- **Switches.** `SHOW_DIRECTORSHIP` in `about.ts` shows or hides all five mentions of her BFG Market Consult directorship at once (Home journey, About story, About journey, the bio, Work). `COO_SINCE` in `about.ts` turns the "Now" journey entries into "Since {year}" once it is confirmed.
+- **Quotes.** Quotation marks are drawn by CSS, never typed into the data. Attributions are built by `attributionOf()` from the speaker, source and date, so every quote is credited the same way.
+- **Server and browser.** Content files are imported only by server components. Client components receive finished values as props: no `facts` array and no placeholder is ever sent to the browser.
+- **Writing rules.** No long dashes (U+2013, U+2014) anywhere: use a hyphen, comma, colon, middle dot or full stop. Store straight apostrophes. Never add a number, title, client, award or testimonial that is not in the fact base.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Updating roles, numbers and facts
+
+- **Open roles** (from https://www.digitallynext.com/careers): edit the `roles` array in `src/content/roles.ts`, titles exactly as the agency lists them, and set `ROLES_AS_OF` to the date you checked. Every count on the site is derived from the array: the Hiring pill, the home proof row, the Work talent line and ADAC list, the Careers groups and FAQ, and both "as listed on" captions. With no roles the site switches to its empty state ("No roles are listed right now." plus the CV address); one role reads "1 open role".
+- **LinkedIn figures:** edit the numbers in `stats` and `LINKEDIN_AS_OF` in `src/content/home.ts`; the caption under the proof row is built from the date.
+- **A confirmed answer from Manpreet:** replace the matching `{{CONFIRM: ...}}` string with the answer (for example `COO_SINCE = "2024"`). Nothing else changes: the item appears on the next build. `docs/CONTENT-REVIEW.md` names the file and field for every question.
+- **A new claim:** check its id and status in `research/facts.json`. If it is publish or flag but missing from `src/content/facts.ts`, add the id to `PUBLISH` or `FLAG` there. Then write the copy in the right content file with the id in its `facts` array. Hold facts never go on the site.
+- **A new page:** add its folder under `src/app/`, its copy and `meta` in a new content file, `export const metadata = pageMetadata(meta)` in the page, and its path in `ROUTES` (`src/lib/site.ts`) so the sitemap lists it. Wrap the page in `PageTransition` and give it a `PageIntro` with an `introImages` entry.
+
+After any change: `pnpm typecheck`, `pnpm lint`, `pnpm build`, and look at the page at 390 and 1520 px wide.
+
+## Motion
+
+The site moves the way iOS does: quick presses, springy releases, and pages that slide and fade into one another. There is no animation library; everything is CSS plus a few small components, ported from the sibling Deepak Goel site.
+
+- **Timings** live at the top of `src/app/globals.css`: `--ease-ios` (the curve iOS uses for sheets and navigation) and two springs, `--spring` and `--spring-bouncy`. Use these instead of inventing new easings.
+- **Moving between pages** is handled by `src/components/PageTransition.tsx` (React's `<ViewTransition>`), which wraps the content of every page and the 404. Pages cross-fade by default. A link that passes `transitionTypes={["nav-forward"]}` slides forward (the Home teaser links into inner pages); `["nav-back"]` slides back (the 404's "Back to home"). The header keeps its own view-transition name, so it stays still while the page changes.
+- **Blocks that appear as you scroll** carry a `data-reveal` attribute (`data-reveal="zoom"` grows in instead of rising; `data-reveal="group"` staggers its children). The script is `src/components/Motion.tsx`; new sections only need the attribute. Never put a Tailwind `translate-*` or `scale-*` class on an element with `data-reveal`.
+- **The vermilion thread** (`.mj-thread`) is the site's one signature motif: a 2 px line beside each section eyebrow that draws itself in when its heading appears. `.mj-thread--static` never draws.
+- **The home hero** plays a short entrance as the page loads (the portrait settles onto its vermilion field while the eyebrow, her name, the statement, the buttons and the credential line rise in one after another), and on desktop it has a little depth while you scroll: the portrait moves at a different speed from the words (`animation-timeline: scroll()`, only where the browser supports it).
+- **Components with their own motion:** `Counter` (the numbers count up once when 30 % visible; the final values are in the page source), `Disclosure` (the About journey and the Careers FAQ open and close smoothly; a shared `group` keeps one open at a time; real `<details>`, so they work without JavaScript), `VentureList` (hovering or focusing the Digitally Next or iMET Global row shows a small screenshot of that website that follows the pointer; phones get a separate preview button) and `Header` (transparent at the top, frosted after scrolling, hides when you scroll down and returns when you scroll up, never while it holds focus or the menu is open).
+- **Press feedback:** controls shrink slightly under the finger (0.94 for small controls, 0.985 for large surfaces), text links dim, and the primary button presses into its marigold backing and springs back.
+
+Everything respects the visitor's "reduce motion" setting: animations, transitions, the thread, the counters, the hero depth and the page transitions all switch off, and every block is visible. View transitions and the hero depth need a recent browser; older ones skip them and the site works as before.
+
+## Images and where they came from
+
+`src/content/sources.json` records every image: what it shows, where it came from, how it was processed and whether it was generated.
+
+- `images/portrait/manpreet-2019-cutout.png`: her 2019 black-and-white portrait from an iSoCIAL video thumbnail, background removed, shown only on the vermilion field of the home hero. Credited in the footer.
+- `images/stage/manpreet-podium.jpg`: her LinkedIn podium photo (event not identified, so it has no caption), shown at 200 px on Writing.
+- `images/ventures/digitally-next.webp`, `imet-global.webp`: homepage screenshots of the two group websites, reused from the sibling site, for the Work page previews.
+- `images/textures/zari.webp`, `silk-ivory.webp`, `marble-ivory.webp`, `thread-paper.webp`: **generated images, not photographs** (made with Codex image generation; full prompts in `sources.json`). They sit faintly behind page headings and behind the home night band. The footer says so on every page.
+- `social-card.jpg`: a 1200x630 screenshot of the home hero, rendered from the production build by `.work/qa/social-card.mjs` in the project folder (Playwright, reduced motion, JPEG quality 85). Re-run it after any change to the hero: `pnpm build`, then `node E:\manpreetjangraportfolio\.work\qa\social-card.mjs` (it starts the QA server on port 3101 if none is running, and stops it again afterwards).
+
+The images are prepared by `.work/scripts/prepare_images.py` (Pillow) in the project folder. A new portrait needs no redesign: put the file in `public/images/portrait/` and update `portrait` in `src/content/images.ts` (`src`, `width`, `height`, `kind: "photo"`, `alt`, `caption`, `focal`), then re-render the social card. `docs/CONTENT-REVIEW.md` section E has the brief for the shoot.
+
+## Search and sharing
+
+- `layout.tsx` sets the site-wide defaults: the title template `%s · Manpreet Jangra`, description, keywords, Open Graph and Twitter cards with `social-card.jpg`.
+- Each page calls `pageMetadata(meta)` from `src/lib/site.ts` with the `meta` object in its content file, which sets its own title, description, canonical address and sharing tags. Descriptions stay between 100 and 160 characters.
+- The root layout renders JSON-LD for a `Person` (job title, employer, city, LinkedIn and Instagram as `sameAs`, the Women Entrepreneurs Review feature) and the `WebSite`. Add `alumniOf` only once her education details are confirmed.
+- The 404 page is not indexed (Next.js adds `noindex`).
+
+## Deploying to Vercel
+
+Nothing has been pushed or deployed; that waits for Karan's go-ahead. When it is time:
+
+1. Push this repository to GitHub and import it in Vercel. The Next.js preset and pnpm (from `pnpm-lock.yaml`) are detected; keep the default build command and output. This is a normal Next.js deployment, not a static export, so image optimisation, `/sitemap.xml` and `/robots.txt` work as they do locally.
+2. The site's own address comes from `NEXT_PUBLIC_SITE_URL` and defaults to `https://manpreetjangra.com`, which is not registered yet (`docs/CONTENT-REVIEW.md` section F). Until it is, set `NEXT_PUBLIC_SITE_URL` to the Vercel address (for example `https://your-project.vercel.app`) for Production and Preview, so canonical links, the sitemap, the JSON-LD and the share image point at a live site. It is read at build time: redeploy after changing it.
+3. Once the domain is registered, add it in Vercel's Domains settings and set `NEXT_PUBLIC_SITE_URL` to `https://manpreetjangra.com` (or remove it to use the default), then redeploy.
+
+No other environment variables, no analytics, no cookies and no backend: the contact form prepares an email draft in the visitor's own mail app.
+
+## Open content questions
+
+What only Manpreet or Karan can answer (the year she became COO, her education details, two hidden Writing items, the podium photo's event, where enquiries should go, which first-person lines she approves, the domain) is listed in `docs/CONTENT-REVIEW.md`, with the exact file and field to edit for each answer. The site is complete without them: anything unconfirmed stays hidden.
