@@ -11,6 +11,8 @@ export default function nextConfig(phase: string): NextConfig {
       process.env.NEXT_DIST_DIR ||
       (phase === PHASE_DEVELOPMENT_SERVER ? ".next-dev" : ".next"),
     reactCompiler: true,
+    // next/image serves AVIF first, then WebP (both keep the portrait's alpha).
+    images: { formats: ["image/avif", "image/webp"] },
     turbopack: {
       rules: {
         "*.css": {

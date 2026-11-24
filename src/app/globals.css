@@ -1,26 +1,1406 @@
 @import "tailwindcss";
 
+/* One stylesheet for the whole site, in this order:
+   1. motion tokens (verbatim from the sibling Deepak Goel site)
+   2. design tokens (plan/design-decision.md section 2.4)
+   3. base styles
+   4. components, in @layer components
+   5. motion, unlayered: thread, entrances, press feedback, scroll reveal,
+      hero depth, page transitions, reduced motion and print.
+   Class names are listed in .work/build-notes.md for the component builders. */
+
+/* Motion, modelled on iOS: one curve for moves and sheets, and springs that
+   overshoot a little and settle. A press is quick; the release springs back.
+   Defined on the root so page transitions can use them too. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* The curve iOS uses for sheets and navigation. */
+  --ease-ios: cubic-bezier(0.32, 0.72, 0, 1);
+  /* Approximations for browsers that cannot draw a real spring. */
+  --spring: cubic-bezier(0.3, 1.25, 0.5, 1);
+  --spring-bouncy: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@supports (transition-timing-function: linear(0, 1)) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Sampled damped springs. Most of the travel happens in the first half
+       of the duration; the rest is the settle. */
+    --spring: linear(
+      0,
+      0.0009 0.5%,
+      0.0075 1.5%,
+      0.0258 2.8%,
+      0.0599 4.4%,
+      0.1119 6.4%,
+      0.1813 8.5%,
+      0.2654 10.9%,
+      0.3601 13.5%,
+      0.4602 16.3%,
+      0.5604 19.3%,
+      0.6557 22.4%,
+      0.7422 25.8%,
+      0.8171 29.3%,
+      0.8789 33%,
+      0.9273 36.8%,
+      0.963 40.8%,
+      0.9877 45%,
+      1.0031 49.3%,
+      1.0115 53.8%,
+      1.0148 58.4%,
+      1.0149 63.1%,
+      1.013 68%,
+      1.0103 73%,
+      1.0075 78.1%,
+      1.0051 83.4%,
+      1.0031 88.8%,
+      1.0017 94.3%,
+      1
+    );
+    --spring-bouncy: linear(
+      0,
+      0.0016 0.5%,
+      0.0142 1.5%,
+      0.0488 2.8%,
+      0.1128 4.4%,
+      0.2084 6.4%,
+      0.3322 8.5%,
+      0.4755 10.9%,
+      0.6263 13.5%,
+      0.771 16.3%,
+      0.8975 19.3%,
+      0.9965 22.4%,
+      1.0634 25.8%,
+      1.0986 29.3%,
+      1.1065 33%,
+      1.0947 36.8%,
+      1.0716 40.8%,
+      1.045 45%,
+      1.0211 49.3%,
+      1.0034 53.8%,
+      0.9929 58.4%,
+      0.9888 63.1%,
+      0.9893 68%,
+      0.9922 73%,
+      0.9957 78.1%,
+      0.9986 83.4%,
+      1.0004 88.8%,
+      1.0011 94.3%,
+      1
+    );
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme {
+  --color-*: initial;
+  /* light */
+  --color-paper: #FAF7F2;
+  --color-sand: #F2ECE3;
+  --color-blush: #F9E4DC;
+  --color-ink: #1C1816;
+  --color-ink-muted: #5C544E;
+  --color-line: #E3DBD1;
+  --color-line-strong: #8A7F77;
+  --color-vermilion: #E4270C;        /* graphic only, never text */
+  --color-vermilion-ink: #B4220B;    /* all accent text, primary button */
+  --color-vermilion-deep: #8C1A09;   /* hover / pressed */
+  --color-marigold: #F3B35C;         /* never text on light */
+  /* night band and footer */
+  --color-night: #1C1816;
+  --color-night-raised: #2A2421;
+  --color-on-night: #F4EEE6;
+  --color-on-night-muted: #B9AEA3;
+  --color-night-line: #3D3531;
+  --color-night-line-strong: #9A8F86;
+
+  --text-*: initial;
+  --text-display: clamp(2.75rem, 1.967rem + 3.478vw, 4.75rem);
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 400;
+  --text-statement: clamp(1.3125rem, 1.141rem + 0.761vw, 1.75rem);
+  --text-statement--line-height: 1.3;
+  --text-h2: clamp(2rem, 1.609rem + 1.739vw, 3rem);
+  --text-h2--line-height: 1.08;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h2--font-weight: 400;
+  --text-h3: clamp(1.5rem, 1.353rem + 0.652vw, 1.875rem);
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.005em;
+  --text-h3--font-weight: 500;
+  --text-h4: clamp(1.1875rem, 1.114rem + 0.326vw, 1.375rem);
+  --text-h4--line-height: 1.3;
+  --text-h4--letter-spacing: -0.01em;
+  --text-h4--font-weight: 600;
+  --text-lede: clamp(1.1875rem, 1.114rem + 0.326vw, 1.375rem);
+  --text-lede--line-height: 1.45;
+  --text-body: clamp(1rem, 0.976rem + 0.109vw, 1.0625rem);
+  --text-body--line-height: 1.65;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1.3;
+  --text-eyebrow--letter-spacing: 0.14em;
+  --text-eyebrow--font-weight: 500;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.45;
+  --text-caption--letter-spacing: 0.02em;
+  --text-stat: clamp(2.75rem, 2.261rem + 2.174vw, 4rem);
+  --text-stat--line-height: 1;
+  --text-stat--letter-spacing: -0.02em;
+  --text-quote: clamp(1.5rem, 1.206rem + 1.304vw, 2.25rem);
+  --text-quote--line-height: 1.3;
+  --text-button: 0.9375rem;
+  --text-button--line-height: 1.25rem;
+  --text-button--font-weight: 500;
+  --text-nav: 0.875rem;
+  --text-nav--line-height: 1.25rem;
+  --text-nav--font-weight: 500;
+
+  --radius-*: initial;
+  --radius-xs: 2px;      /* buttons, inputs, tags, photo frames */
+  --radius-md: 6px;      /* cards, venture preview window */
+  --radius-full: 9999px; /* status dots, the Hiring pill only */
+
+  --shadow-*: initial;
+  --shadow-header: 0 1px 0 rgb(227 219 209 / 0.9), 0 8px 24px rgb(28 24 22 / 0.06);
+  --shadow-preview: 0 18px 48px rgb(28 24 22 / 0.35);
+
+  --container-site: 80rem;   /* 1280 px content width */
+  --container-lede: 44rem;
+  --container-prose: 38rem;  /* about 68 characters of Geist at 17 px */
+
+  --spacing-gutter: clamp(1.25rem, 4.5vw, 4rem);
+  --spacing-section: clamp(4rem, 2.826rem + 5.217vw, 7rem);
+  --spacing-header: 4rem;    /* 64 px; 4.5rem (72 px) from lg */
+}
+
+@theme inline {
+  --font-display: var(--font-newsreader), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-geist), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "Cascadia Mono", monospace;
+}
+
+@layer base {
+  html { color-scheme: light; scroll-behavior: smooth; background: var(--color-paper); }
+  body { background: var(--color-paper); color: var(--color-ink); font-family: var(--font-sans);
+         font-size: var(--text-body); line-height: var(--text-body--line-height); }
+  ::selection { background: var(--color-marigold); color: var(--color-ink); }
+  :focus-visible { outline: 2px solid var(--color-vermilion-ink); outline-offset: 3px; }
+  /* DD 2.4 wrote `footer :focus-visible`; scoped to the site footer so the
+     <footer> attribution inside a QuoteCard on paper keeps the vermilion-ink
+     ring (spec 6.2, audit D3). */
+  .band-night :focus-visible, .site-footer :focus-visible { outline-color: var(--color-marigold); }
+
+  /* Base additions (spec 6.3). */
+  html { scroll-padding-top: calc(var(--spacing-header) + 1rem); -webkit-text-size-adjust: 100%; }
+  body { -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { text-wrap: balance; }
+  p, li, blockquote { text-wrap: pretty; }
+  q { quotes: "\201C" "\201D" "\2018" "\2019"; }
+  img, svg { -webkit-user-select: none; user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
+  a, button, summary, select { -webkit-tap-highlight-color: transparent; }
+  .site-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  main:focus { outline: none; }
+
+  /* Headings default to the display face (spec 6.4): H1 and H2 are always
+     Newsreader 400; an H3 sets its own face through its class. */
+  h1, h2 { font-family: var(--font-display); font-weight: 400; }
+  button { cursor: pointer; }
+}
+.band-night { background: var(--color-night); color: var(--color-on-night); }
+
+/* Header height grows to 72 px from lg (design-decision 6.2). Unlayered so
+   it overrides the theme value. */
+@media (width >= 64rem) {
+  :root { --spacing-header: 4.5rem; }
+}
+
+@layer components {
+  /* --- Containers and grid (spec 6.5) ---------------------------------- */
+  .site-wrap {
+    width: min(100%, calc(var(--container-site) + 2 * var(--spacing-gutter)));
+    padding-inline: var(--spacing-gutter);
+    margin-inline: auto;
+  }
+  .site-section { padding-block: var(--spacing-section); }
+  .site-prose { max-width: var(--container-prose); }
+  .site-prose > * + * { margin-top: 1em; }
+  @media (width >= 64rem) {
+    .site-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 24px;
+    }
+  }
+  @media (width >= 80rem) {
+    .site-grid { column-gap: 32px; }
+  }
+
+  /* --- Type helpers (spec 6.4) ----------------------------------------- */
+  /* Thread and label in a row; the thread stays level with the first line
+     when the label wraps on a phone. */
+  .site-eyebrow {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-family: var(--font-mono);
+    font-size: var(--text-eyebrow);
+    line-height: var(--text-eyebrow--line-height);
+    letter-spacing: var(--text-eyebrow--letter-spacing);
+    font-weight: var(--text-eyebrow--font-weight);
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+  .site-eyebrow > .mj-thread { margin-top: calc(0.65em - 1px); }
+  .band-night .site-eyebrow,
+  .site-eyebrow--night { color: var(--color-marigold); }
+  .site-caption {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    line-height: var(--text-caption--line-height);
+    letter-spacing: var(--text-caption--letter-spacing);
+    font-weight: 400;
+    color: var(--color-ink-muted);
+  }
+  .band-night .site-caption,
+  .site-footer .site-caption { color: var(--color-on-night-muted); }
+  .site-section-head { margin-bottom: 40px; }
+  .site-section-title {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+    letter-spacing: var(--text-h2--letter-spacing);
+    font-weight: var(--text-h2--font-weight);
+  }
+  .site-lede {
+    font-family: var(--font-display);
+    font-size: var(--text-lede);
+    line-height: var(--text-lede--line-height);
+    font-weight: 400;
+    max-width: var(--container-lede);
+  }
+  .site-section-title + .site-lede { margin-top: 20px; }
+  .band-night .site-lede { color: var(--color-on-night-muted); }
+  /* The one italic phrase of a heading (Accent). Ink everywhere except the
+     hero statement, where it is vermilion-ink. */
+  .site-accent { font-family: var(--font-display); font-style: italic; font-weight: inherit; }
+  .site-hero-statement .site-accent { color: var(--color-vermilion-ink); }
+  .site-tabular,
+  .site-stat-value,
+  .site-timeline-year { font-variant-numeric: lining-nums tabular-nums; }
+  .site-stat-value {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-stat);
+    line-height: var(--text-stat--line-height);
+    letter-spacing: var(--text-stat--letter-spacing);
+    font-weight: 400;
+    color: var(--color-ink);
+  }
+  .site-stat-label {
+    display: block;
+    margin-top: 8px;
+    max-width: 24ch;
+    font-size: var(--text-small);
+    line-height: var(--text-small--line-height);
+    color: var(--color-ink-muted);
+  }
+
+  /* --- Skip link (spec 3.2) -------------------------------------------- */
+  .site-skip {
+    position: fixed;
+    top: -100px;
+    left: 12px;
+    z-index: 1000;
+    padding: 10px 14px;
+    border-radius: var(--radius-xs);
+    background: var(--color-marigold);
+    color: var(--color-ink);
+    font: 500 var(--text-small) / 1.25 var(--font-sans);
+  }
+  .site-skip:focus { top: 12px; }
+
+  /* --- Surfaces and lists (spec 6.6) ----------------------------------- */
+  .site-night-band { position: relative; isolation: isolate; overflow: clip; }
+  /* The zari texture behind the night band, lg and up only, never under text. */
+  .site-night-texture { display: none; }
+  @media (width >= 64rem) {
+    .site-night-texture {
+      display: block;
+      position: absolute;
+      inset: 0 0 0 45%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.16;
+      -webkit-mask-image: radial-gradient(80% 90% at 100% 40%, #000 30%, transparent 75%);
+      mask-image: radial-gradient(80% 90% at 100% 40%, #000 30%, transparent 75%);
+    }
+  }
+  /* Hairline lists: every child gets a top hairline, the last one a bottom one. */
+  .site-rows > * { border-top: 1px solid var(--color-line); }
+  .site-rows > :last-child { border-bottom: 1px solid var(--color-line); }
+  .band-night .site-rows > * { border-color: var(--color-night-line); }
+  .site-row-static { padding-block: 24px; }
+  /* A row that is a link: the hover fill reaches 12 px into the gutter. */
+  .site-row {
+    display: block;
+    padding: 24px 12px;
+    margin-inline: -12px;
+    color: var(--color-ink);
+  }
+  .site-row:hover { background: var(--color-blush); }
+  /* Left rail for dates and indices (72 px, 96 px from md). */
+  .site-railed {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    column-gap: 24px;
+    row-gap: 8px;
+    align-items: baseline;
+  }
+  @media (width >= 48rem) {
+    .site-railed { grid-template-columns: 96px minmax(0, 1fr); }
+  }
+  /* Link cards (Home pillars). */
+  .site-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 24px;
+    background: var(--color-sand);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    color: var(--color-ink);
+  }
+  .site-card:hover { border-color: var(--color-line-strong); }
+  @media (width >= 64rem) {
+    .site-card { padding: 32px; }
+  }
+  .site-card-link { margin-top: auto; padding-top: 24px; }
+  /* A static sand card (Home hiring block). */
+  .site-panel {
+    padding: 24px;
+    background: var(--color-sand);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+  }
+  @media (width >= 48rem) {
+    .site-panel { padding: 32px; }
+  }
+  /* Hiring pill. The dot is drawn by ::before, so it is never read aloud. */
+  .site-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    background: var(--color-blush);
+    color: var(--color-vermilion-ink);
+    font: 500 var(--text-small) / 1.25 var(--font-sans);
+  }
+  .site-pill::before {
+    content: "";
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--color-vermilion);
+  }
+  .site-icon { flex: none; color: var(--color-ink-muted); }
+  .band-night .site-icon,
+  .site-footer .site-icon { color: var(--color-on-night-muted); }
+  /* Bio for organisers: a bordered box on paper. */
+  .site-bio-box {
+    max-width: var(--container-lede);
+    padding: 24px;
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-xs);
+    font-family: var(--font-display);
+    font-size: var(--text-lede);
+    line-height: var(--text-lede--line-height);
+  }
+  @media (width >= 48rem) {
+    .site-bio-box { padding: 32px; }
+  }
+  /* Photo frames (podium photo): hairline, 2 px radius. */
+  .site-photo-frame {
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-xs);
+  }
+  .site-status {
+    min-height: 1.5em;
+    font-size: var(--text-small);
+    line-height: var(--text-small--line-height);
+    color: var(--color-ink-muted);
+  }
+
+  /* --- Quotes (spec 6.7) ----------------------------------------------- */
+  .site-quote { border-top: 1px solid var(--color-line); padding-top: 20px; }
+  .site-quote-theme { margin-bottom: 12px; }
+  .site-quote-text {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: var(--text-lede);
+    line-height: var(--text-lede--line-height);
+    color: var(--color-ink);
+  }
+  /* Quote marks come from CSS, never from the data. */
+  .site-quoted { quotes: "\201C" "\201D" "\2018" "\2019"; }
+  .site-quoted::before { content: open-quote; }
+  .site-quoted::after { content: close-quote; }
+  .site-quote-attribution { margin-top: 16px; }
+  .site-quote-link { margin-top: 12px; }
+  .site-quote--night,
+  .site-quote--night-large { border-top: 0; padding-top: 0; }
+  .site-quote--night::before,
+  .site-quote--night-large::before {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 2px;
+    margin-bottom: 20px;
+    background: var(--color-vermilion);
+  }
+  .site-quote--night .site-quote-text { color: var(--color-on-night); }
+  .site-quote--night-large .site-quote-text {
+    max-width: 30ch;
+    font-size: var(--text-quote);
+    line-height: var(--text-quote--line-height);
+    color: var(--color-on-night);
+  }
+  .site-quote-mark {
+    display: block;
+    height: 0.6em;
+    font-family: var(--font-display);
+    font-size: 96px;
+    line-height: 0.6;
+    font-style: normal;
+    color: var(--color-marigold);
+  }
+  .band-night .site-quote-attribution { color: var(--color-on-night-muted); }
+  /* Omission mark inside a multi-line blockquote (Careers mentorship). */
+  .site-quote-gap { color: var(--color-ink-muted); font-style: normal; line-height: 1; margin-block: 4px; }
+
+  /* --- Buttons and links (spec 6.8, 3.8) ------------------------------- */
+  .site-button { --face: var(--color-vermilion-ink); --face-hover: var(--color-vermilion-deep);
+    --label: var(--color-paper); --backing: var(--color-marigold); --offset: 4px;
+    position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center;
+    gap: 12px; min-height: 48px; padding: 0 22px; color: var(--label); border-radius: var(--radius-xs);
+    font: var(--text-button--font-weight) var(--text-button)/var(--text-button--line-height) var(--font-sans);
+    white-space: nowrap; transition: transform 0.55s var(--spring); }
+  .site-button::before, .site-button::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+  .site-button::before { z-index: -1; background: var(--face); transition: background-color 0.25s; }
+  .site-button::after { z-index: -2; background: var(--backing); transform: translate(var(--offset), var(--offset)); transition: transform 0.55s var(--spring); }
+  .site-button:hover { transform: translateY(-2px); }
+  .site-button:hover::before { background: var(--face-hover); }
+  .site-button .site-arrow, .site-text-link .site-arrow { transition: transform 0.5s var(--spring); }
+  .site-button:hover .site-arrow, .site-text-link:hover .site-arrow { transform: translate(2px, -2px); }
+  .band-night .site-button { --face: var(--color-marigold); --face-hover: var(--color-marigold); --label: var(--color-night); --backing: var(--color-vermilion); }
+  .site-button--outline { --label: var(--color-ink); }
+  .site-button--outline::before { background: transparent; border: 1px solid var(--color-line-strong); }
+  .site-button--outline::after { display: none; }
+  .site-button--outline:hover::before { background: transparent; border-color: var(--color-ink); }
+  .site-button--compact { min-height: 40px; padding: 0 16px; }
+  .site-button { max-width: 100%; }
+  @media (width < 40rem) { .site-button { white-space: normal; text-align: center; } }
+  /* An outline button on night (none planned today; kept so it never turns
+     dark on dark). */
+  .band-night .site-button--outline { --label: var(--color-on-night); }
+  .band-night .site-button--outline::before { border-color: var(--color-night-line-strong); }
+  .band-night .site-button--outline:hover::before { border-color: var(--color-on-night); }
+  /* .site-text-link--static: the label span inside a link card (4.1.3); styled like a TextLink, not an anchor */
+  .site-card:hover .site-text-link--static { text-decoration: underline; text-decoration-color: var(--color-vermilion-ink); text-underline-offset: 0.2em; }
+  .site-card:hover .site-arrow { transform: translate(2px, -2px); }
+
+  /* TextLink: ink text and an arrow; underline on hover. */
+  .site-text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-ink);
+    font-weight: 500;
+    text-decoration-line: none;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+  .site-text-link:hover { text-decoration-line: underline; text-decoration-color: var(--color-vermilion-ink); }
+  .site-text-link .site-arrow { flex: none; }
+  button.site-text-link { min-height: 44px; }
+  .site-text-link--night,
+  .band-night .site-text-link,
+  .site-footer .site-text-link { color: var(--color-marigold); }
+  .site-text-link--night:hover,
+  .band-night .site-text-link:hover,
+  .site-footer .site-text-link:hover { text-decoration-color: var(--color-marigold); }
+  /* Inline links inside paragraphs. */
+  .site-inline-link,
+  .site-prose a {
+    color: var(--color-vermilion-ink);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+  .site-inline-link:hover,
+  .site-prose a:hover { color: var(--color-vermilion-deep); text-decoration-thickness: 2px; }
+  .band-night .site-inline-link,
+  .band-night .site-prose a { color: var(--color-marigold); }
+  .band-night .site-inline-link:hover,
+  .band-night .site-prose a:hover { color: var(--color-marigold); }
+
+  /* --- Header and menu (spec 6.9, 3.3) --------------------------------- */
+  .site-header { position: sticky; top: 0; z-index: 50; margin-bottom: calc(-1 * var(--spacing-header));
+    color: var(--color-ink); isolation: isolate; transition: transform 0.5s var(--ease-ios); }
+  .site-header::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0;
+    background: rgb(250 247 242 / 0.86); -webkit-backdrop-filter: blur(20px) saturate(115%); backdrop-filter: blur(20px) saturate(115%);
+    box-shadow: var(--shadow-header); transition: opacity 0.4s; }
+  .site-header.is-scrolled::after, .site-header--menu-open::after { opacity: 1; }
+  .site-header.is-hidden:not(:has(:focus-visible)) { transform: translateY(calc(-100% - 12px)); pointer-events: none; }
+  .site-header:has(:focus-visible) { transform: none; transition: none; }
+  .site-header-inner { min-height: var(--spacing-header); display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+  .site-header nav > a { position: relative; padding-block: 10px; font: var(--text-nav--font-weight) var(--text-nav)/var(--text-nav--line-height) var(--font-sans); }
+  .site-header nav > a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 4px; height: 2px; background: var(--color-vermilion);
+    transform: scaleX(0); transform-origin: left; transition: transform 0.45s var(--ease-ios); }
+  .site-header nav > a:hover::after, .site-header nav > a[aria-current="page"]::after { transform: scaleX(1); }
+  .site-header nav > a[aria-current="page"] { font-weight: 600; }
+  :root:has(.site-header--menu-open) { overflow: hidden; }
+
+  .site-wordmark {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.125rem, 1.076rem + 0.217vw, 1.25rem);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+  .site-header-actions { display: flex; align-items: center; gap: 32px; }
+  .site-menu-toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    margin-inline-end: -10px;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-ink);
+  }
+  @media (width >= 64rem) {
+    .site-header nav { display: flex; align-items: center; gap: 32px; }
+    /* Home and Contact are listed only in the phone sheet; from lg the
+       wordmark is home and the outline button is Contact. */
+    .site-nav-sheet-only { display: none; }
+  }
+  /* Below lg the nav becomes a solid paper sheet under the bar. */
+  @media (width < 64rem) {
+    .site-menu-toggle { display: inline-flex; }
+    .site-header-cta { display: none; }
+    .site-header nav {
+      position: fixed;
+      inset: var(--spacing-header) 0 0 0;
+      background: var(--color-paper);
+      padding: 32px var(--spacing-gutter);
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+    }
+    .site-header nav.is-open { display: flex; }
+    .site-header nav > a {
+      display: flex;
+      align-items: center;
+      align-self: flex-start;
+      min-height: 48px;
+      padding-block: 8px;
+      font: 400 28px / 1.2 var(--font-display);
+    }
+    /* The 32 px thread under the current page only (Newsreader is never bold). */
+    .site-header nav > a::after { right: auto; width: 32px; bottom: 2px; }
+    .site-header nav > a:hover::after { transform: scaleX(0); }
+    .site-header nav > a[aria-current="page"]::after { transform: scaleX(1); }
+    .site-header nav > a[aria-current="page"] { font-weight: 400; }
+  }
+
+  /* --- Footer (spec 3.4) ----------------------------------------------- */
+  .site-footer {
+    background: var(--color-night);
+    color: var(--color-on-night);
+    padding-block: 64px;
+  }
+  @media (width >= 64rem) {
+    .site-footer { padding-block: 80px; }
+  }
+  .site-footer a { color: var(--color-on-night); }
+  .site-footer a:hover { color: var(--color-marigold); }
+  .site-footer-grid { display: grid; gap: 40px; }
+  @media (width >= 64rem) {
+    .site-footer-grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 24px;
+    }
+    .site-footer-brand { grid-column: 1 / 6; }
+    .site-footer-site { grid-column: 6 / 9; }
+    .site-footer-elsewhere { grid-column: 9 / -1; }
+  }
+  @media (width >= 80rem) {
+    .site-footer-grid { column-gap: 32px; }
+  }
+  .site-footer-wordmark {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.2;
+    color: var(--color-on-night);
+  }
+  .site-footer-heading {
+    margin-bottom: 16px;
+    font-family: var(--font-mono);
+    font-size: var(--text-eyebrow);
+    line-height: var(--text-eyebrow--line-height);
+    letter-spacing: var(--text-eyebrow--letter-spacing);
+    font-weight: var(--text-eyebrow--font-weight);
+    text-transform: uppercase;
+    color: var(--color-on-night-muted);
+  }
+  .site-footer-links { display: grid; gap: 4px; justify-items: start; }
+  .site-footer-links a { display: inline-flex; align-items: center; min-height: 32px; }
+  .site-footer-bottom {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-night-line);
+    font-size: var(--text-small);
+    line-height: var(--text-small--line-height);
+    color: var(--color-on-night-muted);
+  }
+  /* Social links: icon and label rows (footer), icon, label and handle (contact). */
+  .site-social { display: grid; gap: 4px; justify-items: start; }
+  .site-social > a { display: inline-flex; align-items: center; gap: 12px; min-height: 32px; }
+  .site-social svg { flex: none; width: 20px; height: 20px; color: var(--color-ink-muted); }
+  .site-footer .site-social svg,
+  .band-night .site-social svg { color: var(--color-on-night-muted); }
+
+  /* --- Page intro and intro backdrop (spec 3.5) ------------------------ */
+  .site-page-intro { position: relative; isolation: isolate; overflow: clip; background: var(--color-paper); }
+  .site-page-intro > .site-wrap { padding-block: calc(var(--spacing-header) + 4rem) 4rem; }
+  @media (width >= 64rem) {
+    .site-page-intro > .site-wrap { padding-block: calc(var(--spacing-header) + 6rem) 5rem; }
+  }
+  .site-page-intro h1 {
+    max-width: 20ch;
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+    letter-spacing: var(--text-h2--letter-spacing);
+    font-weight: var(--text-h2--font-weight);
+    color: var(--color-ink);
+  }
+  .site-intro-lede { margin-top: 20px; color: var(--color-ink); }
+  .site-intro-actions { margin-top: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
+  /* A faint picture behind the heading of every inner page. It sits on the
+     right, away from the words, and fades out toward them, so the heading stays
+     easy to read. Each page sets how strongly it shows (`--intro-opacity`),
+     which part of it to keep in view (`--intro-position`) and how far across it
+     begins (`--intro-start`). */
+  .site-intro-backdrop {
+    position: absolute;
+    inset: 0 0 0 var(--intro-start, 38%);
+    z-index: -1;
+    pointer-events: none;
+    opacity: var(--intro-opacity);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 58%);
+    mask-image: linear-gradient(90deg, transparent, #000 58%);
+  }
+  .site-intro-backdrop > img {
+    object-fit: cover;
+    object-position: var(--intro-position, center);
+  }
+  /* Phones: the backdrop sits under the heading and lede, so it moves right and
+     fades to keep ink-muted text at 4.5:1 or better. */
+  @media (width < 48rem) {
+    .site-intro-backdrop { inset-inline-start: 55%; opacity: calc(var(--intro-opacity) * 0.7); }
+  }
+
+  /* --- Hero (spec 4.1.1, 6.11) ----------------------------------------- */
+  .site-hero {
+    position: relative;
+    overflow: clip;
+    padding-block: calc(var(--spacing-header) + clamp(2.5rem, 6vh, 5rem)) clamp(2.5rem, 6vh, 5rem);
+  }
+  /* Below lg the stage follows the text (phone 320 px, tablet 360 px wide). */
+  .site-hero-stage { margin: 40px 0 0; width: min(100% - 8px, 20rem); }
+  @media (width >= 48rem) {
+    .site-hero-stage { width: min(100% - 8px, 22.5rem); }
+  }
+  @media (width >= 64rem) {
+    .site-hero-stage { margin: 0; }
+  }
+  @media (width >= 64rem) {
+    .site-hero {
+      display: grid;
+      align-items: center;
+      min-height: min(100svh, calc(56rem + var(--spacing-header)));
+    }
+    .site-hero > .site-wrap { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: center; }
+    .site-hero-content { grid-column: 1 / 8; }
+    .site-hero-stage { grid-column: 8 / -1; justify-self: end;
+      width: min(28.75rem, (100svh - var(--spacing-header) - 8rem) * 0.8, 100%); }
+  }
+  @media (width >= 80rem) { .site-hero > .site-wrap { column-gap: 32px; } }
+  .site-hero h1 {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    line-height: var(--text-display--line-height);
+    letter-spacing: var(--text-display--letter-spacing);
+    font-weight: var(--text-display--font-weight);
+    color: var(--color-ink);
+  }
+  .site-hero-statement {
+    margin-top: 20px;
+    max-width: 32ch;
+    font-family: var(--font-display);
+    font-size: var(--text-statement);
+    line-height: var(--text-statement--line-height);
+    font-weight: 400;
+    text-wrap: balance;
+  }
+  .site-hero-ctas { margin-top: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 24px; }
+  .site-hero-credential { margin-top: 24px; max-width: 56ch; }
+  .site-hero-credential,
+  .site-hero-caption {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    line-height: var(--text-caption--line-height);
+    letter-spacing: var(--text-caption--letter-spacing);
+    color: var(--color-ink-muted);
+  }
+  @media (width < 48rem) {
+    .site-hero-ctas { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .site-hero-ctas > .site-button { width: 100%; }
+  }
+  .site-hero-frame { position: relative; width: 100%; aspect-ratio: 4 / 5; }
+  .site-hero-plate { position: absolute; inset: 0; background: var(--color-marigold); border-radius: 2px; transform: translate(12px, 12px); z-index: 0; }
+  @media (width < 64rem) { .site-hero-plate { transform: translate(8px, 8px); } }
+  .site-hero-clip { position: absolute; inset: 0; overflow: clip; border-radius: 2px; z-index: 1; }
+  .site-hero-field { position: absolute; inset: 0; background: radial-gradient(120% 90% at 30% 20%, var(--color-vermilion) 0%, var(--color-vermilion-ink) 70%); }
+  .site-hero-figure { position: absolute; left: 0; right: 0; bottom: 0; height: 96%; width: 100%; object-fit: contain; object-position: 50% 100%; }
+  /* A future full-frame photograph (Portrait kind "photo"). */
+  .site-hero-photo { object-fit: cover; object-position: var(--focal, 50% 30%); }
+  .site-hero-caption { margin-top: 16px; }
+
+  /* --- Timeline (spec 4.1.4, 4.2.3, 6.10) ------------------------------ */
+  /* compact: year | node | body. full: node | disclosure (year and title in
+     the summary). The spine is the list's ::before, at --spine-x. */
+  .site-timeline { position: relative; --spine-x: 84px; }
+  .site-timeline--full { --spine-x: 12px; }
+  .site-timeline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--spine-x) - 0.5px);
+    width: 1px;
+    background: var(--color-line-strong);
+    transform-origin: top;
+  }
+  .site-timeline-row { position: relative; display: grid; padding-block: 20px; }
+  .site-timeline--compact .site-timeline-row { grid-template-columns: 72px 24px minmax(0, 1fr); }
+  .site-timeline--full .site-timeline-row { grid-template-columns: 24px minmax(0, 1fr); padding-block: 0; }
+  .site-timeline-year { color: var(--color-ink-muted); }
+  .site-timeline--compact .site-timeline-year { padding-top: 0.3em; }
+  .site-timeline-node {
+    width: 8px;
+    height: 8px;
+    margin-top: 0.55em;
+    justify-self: center;
+    background: var(--color-vermilion);
+  }
+  .site-timeline--full .site-timeline-node { margin-top: 30px; }
+  .site-timeline-title {
+    font-family: var(--font-sans);
+    font-size: var(--text-h4);
+    line-height: var(--text-h4--line-height);
+    letter-spacing: var(--text-h4--letter-spacing);
+    font-weight: var(--text-h4--font-weight);
+  }
+  .site-timeline-text { margin-top: 4px; color: var(--color-ink-muted); }
+  .site-timeline--full .site-timeline-year { display: block; margin-bottom: 4px; }
+  .site-timeline--full .site-disclosure { border-top: 0; }
+  .site-timeline-sources { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 4px 24px; }
+  .site-timeline-sources .site-text-link { font-size: var(--text-caption); font-family: var(--font-mono); letter-spacing: var(--text-caption--letter-spacing); }
+
+  /* --- Disclosure (Deepak 1931-1960 pattern) --------------------------- */
+  .site-disclosures > .site-disclosure { border-top: 1px solid var(--color-line); }
+  .site-disclosures > .site-disclosure:last-child { border-bottom: 1px solid var(--color-line); }
+  .site-disclosure > summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    min-height: 44px;
+    padding-block: 20px;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-sans);
+    font-size: var(--text-h4);
+    line-height: var(--text-h4--line-height);
+    letter-spacing: var(--text-h4--letter-spacing);
+    font-weight: var(--text-h4--font-weight);
+  }
+  .site-disclosure > summary::-webkit-details-marker { display: none; }
+  .site-disclosure-icon {
+    flex: none;
+    font-weight: 400;
+    color: var(--color-ink-muted);
+    transition: transform 0.5s var(--spring);
+  }
+  /* The plus turns into a cross while the block is open, and turns back as
+     soon as it starts to close. */
+  .site-disclosure[open]:not([data-closing]) > summary .site-disclosure-icon { transform: rotate(45deg); }
+  /* Clipped so the content is revealed as the block grows (see Disclosure.tsx). */
+  .site-disclosure-panel { overflow: hidden; }
+  .site-disclosure-body { padding-bottom: 24px; color: var(--color-ink-muted); }
+  .site-disclosure-body > * + * { margin-top: 12px; }
+
+  /* --- Editorial grid and sticky columns (spec 6.12) ------------------- */
+  @media (width >= 64rem) {
+    .site-editorial-grid { display: grid; grid-template-columns: 1fr 1.35fr; gap: 48px; }
+    .site-editorial-grid > :first-child { position: sticky; top: calc(var(--spacing-header) + 32px); align-self: start; transition: top 0.5s var(--ease-ios); }
+    .site:has(.site-header.is-hidden) .site-editorial-grid > :first-child { top: 48px; }
+  }
+  @media (width >= 80rem) { .site-editorial-grid { gap: 80px; } }
+  @media (width >= 64rem) {
+    .site-contact-details { position: sticky; top: calc(var(--spacing-header) + 32px); align-self: start; transition: top 0.5s var(--ease-ios); }
+    .site:has(.site-header.is-hidden) .site-contact-details { top: 48px; }
+  }
+  .site-contact-details a { overflow-wrap: anywhere; }
+
+  /* --- Ventures and website previews (spec 4.3.7; Deepak 1178-1246) --- */
+  .site-ventures { display: grid; }
+  .site-venture-wrap { position: relative; min-width: 0; border-top: 1px solid var(--color-line); }
+  .site-venture-wrap:last-child { border-bottom: 1px solid var(--color-line); }
+  .site-venture {
+    display: grid;
+    gap: 8px 24px;
+    padding: 24px 12px;
+    margin-inline: -12px;
+    color: var(--color-ink);
+  }
+  @media (width >= 64rem) {
+    .site-venture { grid-template-columns: 1fr 1.4fr 24px; align-items: center; }
+  }
+  .site-venture:hover { transform: translateX(4px); background: var(--color-blush); }
+  .site-venture-name {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    letter-spacing: var(--text-h3--letter-spacing);
+    font-weight: var(--text-h3--font-weight);
+  }
+  .site-venture-preview-toggle { display: none; }
+  .site-venture-preview {
+    position: fixed;
+    z-index: 220;
+    width: min(320px, 100vw - 32px);
+    overflow: hidden;
+    border: 1px solid rgb(244 238 230 / 0.18);
+    border-radius: var(--radius-md);
+    background: var(--color-night-raised);
+    color: var(--color-on-night);
+    box-shadow: var(--shadow-preview);
+    font-family: var(--font-sans);
+    animation: site-preview-in 180ms var(--ease-ios) both;
+  }
+  .site-venture-preview-bar {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 0 16px;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: var(--text-caption--letter-spacing);
+    color: var(--color-on-night-muted);
+  }
+  .site-venture-preview-bar button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-xs);
+    color: var(--color-on-night);
+  }
+  .site-venture-preview-bar button:hover { background: rgb(244 238 230 / 0.1); }
+  .site-venture-preview a,
+  .site-venture-preview img { display: block; width: 100%; }
+  .site-venture-preview :focus-visible,
+  .site-venture-preview-toggle:focus-visible { outline: 2px solid var(--color-marigold); outline-offset: -3px; }
+  .site-venture-preview-toggle:focus-visible { outline-color: var(--color-vermilion-ink); outline-offset: 2px; }
+  @media (hover: none), (width < 48rem) {
+    .site-venture-preview-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      margin: -12px 0 12px;
+      font: 500 var(--text-small) / 1.25 var(--font-sans);
+      color: var(--color-ink);
+    }
+  }
+
+  /* --- Forms (spec 6.13) ------------------------------------------------ */
+  .site-enquiry { display: grid; gap: 24px; }
+  .site-form-row { display: grid; gap: 24px; }
+  @media (width >= 48rem) {
+    .site-form-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  .site-field { display: grid; gap: 8px; align-content: start; }
+  .site-field > label { font: 500 var(--text-small) / 1.4 var(--font-sans); color: var(--color-ink); }
+  .site-enquiry input,
+  .site-enquiry select,
+  .site-enquiry textarea {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    background: var(--color-paper);
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-xs);
+    color: var(--color-ink);
+    font: 400 1rem / 1.5 var(--font-sans);
+  }
+  .site-enquiry textarea { resize: vertical; }
+  .site-enquiry input:focus,
+  .site-enquiry select:focus,
+  .site-enquiry textarea:focus { border-color: var(--color-ink); box-shadow: 0 0 0 4px rgb(28 24 22 / 0.07); }
+  .site-enquiry ::placeholder { color: var(--color-ink-muted); opacity: 1; }
+  .site-form-note { font-size: var(--text-small); line-height: var(--text-small--line-height); color: var(--color-ink-muted); }
+  .site-form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
+  .site-draft {
+    margin-top: 32px;
+    padding: 24px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+  }
+  .site-draft > * + * { margin-top: 16px; }
+  .site-draft pre {
+    padding: 16px;
+    background: var(--color-sand);
+    border-radius: var(--radius-xs);
+    font: 400 14px / 1.6 var(--font-mono);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* --- Motion -------------------------------------------------------------
+   Unlayered, as on the sibling site, so it wins over component styles. */
+
+/* The vermilion thread (design-decision 5.2): a 2 px line that draws itself
+   from the left. Once on load in the hero and page intros; in section heads
+   just after the heading rises. Never looping, scrubbed or on hover. */
+.mj-thread { display: inline-block; flex: none; width: 32px; height: 2px; background: var(--color-vermilion); transform-origin: left center; }
+.mj-thread--hero { width: 48px; }
+@media (width >= 48rem) { .mj-thread--hero { width: 64px; } }
+.site-hero .mj-thread, .site-page-intro .mj-thread { animation: mj-thread-draw 0.9s var(--ease-ios) 0.45s both; }
+@keyframes mj-thread-draw { from { scale: 0 1; } }
+[data-reveal] .mj-thread { transition: scale 0.9s var(--ease-ios) calc(var(--reveal-delay, 0s) + 0.12s); }
+.site-reveal-ready:not(.is-visible) .mj-thread { scale: 0 1; }
+.mj-thread--static { transition: none !important; scale: none !important; }
+
+/* Touch feedback: tappable controls shrink slightly under the finger and
+   spring back on release. `scale` keeps their hover `transform` intact. */
+.site-menu-toggle,
+.site-button--outline,
+.site-social > a,
+.site-copy-button,
+.site-venture-preview-toggle,
+.site-venture-preview-bar button,
+.site-card,
+.site-row,
+.site-venture,
+details > summary {
+  transition:
+    transform 0.5s var(--spring),
+    scale 0.5s var(--spring),
+    background-color 0.25s,
+    border-color 0.25s,
+    color 0.25s,
+    box-shadow 0.3s;
+}
+.site-menu-toggle:active,
+.site-button--outline:active,
+.site-social > a:active,
+.site-copy-button:active,
+.site-venture-preview-toggle:active,
+.site-venture-preview-bar button:active,
+.site-card:active,
+.site-row:active,
+.site-venture:active,
+details > summary:active {
+  scale: 0.94;
+  transition-duration: 0.09s;
+  transition-timing-function: ease-out;
+}
+/* Large surfaces move less than small controls. */
+.site-card:active,
+.site-row:active,
+.site-venture:active,
+details > summary:active {
+  scale: 0.985;
+}
+/* Text links dim under the finger, as iOS text buttons do. */
+.site-header nav > a,
+.site-text-link,
+.site-wordmark,
+.site-footer a,
+.site-inline-link,
+.site-prose a {
+  transition:
+    opacity 0.35s,
+    color 0.2s,
+    border-color 0.2s;
+}
+.site-header nav > a:active,
+.site-text-link:active,
+.site-wordmark:active,
+.site-footer a:active,
+.site-inline-link:active,
+.site-prose a:active {
+  opacity: 0.55;
+  transition-duration: 0.06s;
+}
+/* The main button: a quick press into its backing, a springy release. */
+.site-button:active { transform: translate(3px, 3px); transition-duration: 0.09s; transition-timing-function: ease-out; }
+.site-button:active::after { transform: translate(calc(var(--offset) - 3px), calc(var(--offset) - 3px)); transition-duration: 0.09s; transition-timing-function: ease-out; }
+/* The outline button is a small control: it shrinks (scale 0.94, above)
+   instead of pressing into a backing it does not have. */
+.site-button--outline:active { transform: none; }
+
+/* Form fields change colour gently when selected. */
+.site-enquiry input,
+.site-enquiry select,
+.site-enquiry textarea {
+  transition:
+    border-color 0.25s,
+    box-shadow 0.3s;
+}
+
+/* Scroll reveal. The script in Motion.tsx adds these classes as blocks come
+   into view, then removes them; without the script everything is simply
+   visible. `translate` and `scale` are used instead of `transform` so each
+   element's own hover or press transform is left alone. Placed after the
+   press transitions so a card that is still revealing fades as it should. */
+.site-reveal-ready {
+  opacity: 0;
+  translate: 0 22px;
+  transition:
+    opacity 0.7s var(--ease-ios) var(--reveal-delay, 0s),
+    translate 0.9s var(--ease-ios) var(--reveal-delay, 0s),
+    scale 0.9s var(--ease-ios) var(--reveal-delay, 0s);
+}
+.site-reveal-ready[data-reveal="zoom"] {
+  translate: none;
+  scale: 0.94;
+}
+.site-reveal-ready.is-visible {
+  opacity: 1;
+  translate: none;
+  scale: none;
+}
+@media print {
+  .site-reveal-ready {
+    opacity: 1;
+    translate: none;
+    scale: none;
+  }
+  .site-intro-backdrop {
+    display: none;
+  }
+}
+/* A group is not hidden itself: its children animate when it comes into view. */
+.site-reveal-ready[data-reveal="group"] {
+  opacity: 1;
+  translate: none;
+}
+
+/* The journey spine draws top-down when its list reveals; each node pops in
+   with its row. */
+.site-timeline::before { transition: scale 1.2s var(--ease-ios); }
+.site-reveal-ready:not(.is-visible).site-timeline::before { scale: 1 0; }
+.site-timeline > .site-reveal-ready.is-visible .site-timeline-node {
+  animation: site-pop-in 0.55s var(--spring-bouncy) calc(var(--reveal-delay, 0s) + 0.2s) both;
+}
+
+/* Entrances. Each keyframe set gives only the starting state, so the element
+   animates to whatever its own styles say. */
+@keyframes site-rise-in {
+  from {
+    opacity: 0;
+    translate: 0 26px;
+  }
+}
+@keyframes site-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes site-pop-in {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+}
+
+/* First appearance of the homepage hero: the field settles, then the figure
+   and the words arrive in sequence. */
+.site-hero-field {
+  animation: site-hero-photo-in 1.5s var(--ease-ios) 0.12s both;
+}
+.site-hero-plate {
+  animation: site-fade-in 1.2s ease-out 0.1s both;
+}
+/* The figure fades in quickly and drifts into place more slowly, so the
+   field behind it never shows through. */
+.site-hero-figure {
+  animation:
+    site-fade-in 0.5s ease-out both,
+    site-hero-figure-in 1.2s var(--ease-ios) both;
+}
+/* A full-frame photograph settles as the field does. */
+.site-hero-photo {
+  animation: site-hero-photo-in 1.5s var(--ease-ios) 0.12s both;
+}
+.site-hero .site-eyebrow-label,
+.site-hero h1,
+.site-hero-statement,
+.site-hero-ctas,
+.site-hero-credential,
+.site-hero-caption {
+  animation: site-rise-in 0.9s var(--ease-ios) both;
+}
+.site-hero .site-eyebrow-label { animation-delay: 0.06s; }
+.site-hero h1 { animation-delay: 0.12s; }
+.site-hero-statement { animation-delay: 0.22s; }
+.site-hero-ctas { animation-delay: 0.32s; }
+.site-hero-credential,
+.site-hero-caption { animation-delay: 0.42s; }
+@keyframes site-hero-photo-in {
+  from {
+    opacity: 0;
+    scale: 1.08;
+  }
+}
+@keyframes site-hero-figure-in {
+  from {
+    translate: 2.5% 3%;
+  }
+}
+
+/* First appearance of the heading on every inner page. */
+.site-page-intro .site-eyebrow-label {
+  animation: site-rise-in 0.9s var(--ease-ios) 0.06s both;
+}
+.site-page-intro h1 {
+  animation: site-rise-in 0.9s var(--ease-ios) 0.06s both;
+}
+.site-page-intro .site-intro-lede {
+  animation: site-rise-in 0.9s var(--ease-ios) 0.18s both;
+}
+.site-page-intro .site-intro-actions {
+  animation: site-rise-in 0.9s var(--ease-ios) 0.26s both;
+}
+/* The picture behind the heading fades in and settles back, as the field on
+   the homepage does. */
+.site-intro-backdrop {
+  animation: site-intro-backdrop-in 1.6s var(--ease-ios) both;
+}
+@keyframes site-intro-backdrop-in {
+  from {
+    opacity: 0;
+    scale: 1.06;
+  }
+}
+
+/* The phone menu: links rise in one after another (40 ms apart, six at most). */
+@media (width < 64rem) {
+  .site-header nav.is-open > a { animation: site-rise-in 0.45s var(--ease-ios) both; }
+  .site-header nav.is-open > a:nth-child(2) { animation-delay: 40ms; }
+  .site-header nav.is-open > a:nth-child(3) { animation-delay: 80ms; }
+  .site-header nav.is-open > a:nth-child(4) { animation-delay: 120ms; }
+  .site-header nav.is-open > a:nth-child(5) { animation-delay: 160ms; }
+  .site-header nav.is-open > a:nth-child(n + 6) { animation-delay: 200ms; }
+}
+
+/* Small confirmations and arrivals. */
+/* "Bio copied", "Draft copied" and similar notes fade in when they have
+   something to say. */
+.site-draft [role="status"]:not(:empty),
+.site-copy-status:not(:empty) {
+  animation: site-rise-in 0.4s var(--ease-ios) both;
+}
+/* The prepared email draft slides into place. */
+.site-draft {
+  animation: site-rise-in 0.55s var(--ease-ios) both;
+}
+
+/* The website preview window arrives from just below. */
+@keyframes site-preview-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* The homepage hero has a little depth, as iOS wallpapers do: while it
+   scrolls away the portrait drifts more slowly than the page and the words
+   lift and fade. Only where the browser can tie an animation to scrolling,
+   never when reduced motion is requested, and only from lg (below lg the hero
+   is stacked, so a drift would push the stage over the next section). */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) and (width >= 64rem) {
+    .site-hero-stage { animation: site-hero-depth linear both; animation-timeline: scroll(root block); animation-range: 0 100vh; }
+    .site-hero-content { animation: site-hero-lift linear both; animation-timeline: scroll(root block); animation-range: 12vh 100vh; }
+  }
+}
+@keyframes site-hero-depth { to { translate: 0 14%; } }
+@keyframes site-hero-lift { to { opacity: 0.15; translate: 0 -7%; } }
+
+/* --- Page transitions ---------------------------------------------------
+   Moving between pages (see PageTransition.tsx). The page being left fades
+   out quickly and the new one fades in. Links from a home teaser into an
+   inner page slide forward and "Back to home" slides back, the way iOS
+   pushes and pops a screen. Browsers without view transitions simply switch
+   pages. */
+::view-transition {
+  /* Keep the page clickable while it animates. */
+  pointer-events: none;
+}
+::view-transition-old(.page-out) {
+  animation: 0.18s ease-in both site-page-fade-out;
+}
+::view-transition-new(.page-in) {
+  animation: 0.38s ease-out 0.1s both site-page-fade-in;
+}
+::view-transition-old(.nav-forward) {
+  --slide: -56px;
+  animation:
+    0.16s ease-in both site-page-fade-out,
+    0.5s var(--ease-ios) both site-page-slide-out;
+}
+::view-transition-new(.nav-forward) {
+  --slide: 72px;
+  animation:
+    0.32s ease-out 0.1s both site-page-fade-in,
+    0.6s var(--ease-ios) both site-page-slide-in;
+}
+::view-transition-old(.nav-back) {
+  --slide: 56px;
+  animation:
+    0.16s ease-in both site-page-fade-out,
+    0.5s var(--ease-ios) both site-page-slide-out;
+}
+::view-transition-new(.nav-back) {
+  --slide: -72px;
+  animation:
+    0.32s ease-out 0.1s both site-page-fade-in,
+    0.6s var(--ease-ios) both site-page-slide-in;
+}
+@keyframes site-page-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes site-page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes site-page-slide-in {
+  from {
+    translate: var(--slide) 0;
+  }
+}
+@keyframes site-page-slide-out {
+  to {
+    translate: var(--slide) 0;
+  }
+}
+/* The header stays put while the page changes. */
+.site-header {
+  view-transition-name: site-header;
+}
+::view-transition-group(site-header) {
+  z-index: 100;
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-venture-preview {
+    animation: none;
+  }
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*),
+  ::view-transition-image-pair(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/* Touch screens: small text links get a taller hit area (the text itself
+   does not move). */
+@media (pointer: coarse) {
+  .site-text-link,
+  .site-footer-links a,
+  .site-social > a {
+    min-height: 44px;
+  }
+}
+
+/* Reduced motion: every animation and transition is off; revealed blocks
+   simply show, threads are simply present. */
+@media (prefers-reduced-motion: reduce) {
+  html:has(.site) {
+    scroll-behavior: auto;
+  }
+  .site *,
+  .site *:before,
+  .site *:after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  .site .site-reveal-ready {
+    opacity: 1;
+    translate: none;
+    scale: none;
+  }
+}
+
+/* Print: the page as plain ink on paper, without chrome or decoration. */
+@media print {
+  .site-header,
+  .site-skip,
+  .site-night-texture,
+  .site-venture-preview,
+  .site-venture-preview-toggle,
+  .site-hero-plate {
+    display: none !important;
+  }
+  .site-hero,
+  .site-hero-stage,
+  .site-hero-content {
+    animation: none !important;
+    min-height: 0;
+  }
+  .band-night,
+  .site-footer {
+    background: none;
+    color: var(--color-ink);
+  }
+  .band-night *,
+  .site-footer * {
+    color: var(--color-ink) !important;
+  }
+  .site-button::after {
+    display: none;
+  }
 }
