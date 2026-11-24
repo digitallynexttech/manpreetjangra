@@ -69,12 +69,13 @@ export const entryLevel: EntryLevel = {
 };
 
 /** Themes (spec 4.4.3): six quotes, each with its theme label. */
-export const themes: Section & { items: readonly QuoteRef<QuoteId>[] } = {
+export const themes: Section & { linkLabel: string; items: readonly QuoteRef<QuoteId>[] } = {
   id: "themes",
   eyebrow: "Themes",
   title: "What she keeps coming back to.",
   facts: ["F067", "F155", "F069", "F154", "F070", "F152", "F156", "F037", "F066", "F151", "F100"],
-  // Link label "View the post", except where given.
+  // The link label of every card, except where an item gives its own.
+  linkLabel: "View the post",
   items: [
     { quote: "video-audience" },
     { quote: "reel-babysit" },
@@ -149,6 +150,8 @@ export const japanSession: JapanSession = {
   role: "{{CONFIRM: your role, e.g. speaker or panellist}}",
   href: "{{CONFIRM: URL of your post about it}}",
   title: "University and Institution Engagement with the Japanese CEO and Government Delegation to India",
+  // Filled from the fields above once they are confirmed.
+  line: "{role}, {venue}. Organised by {organiser}.",
   quote: "This week, I had the honour of being on stage at the University and Institution Engagement with the #Japanese CEO and Government Delegation to #India",
   linkLabel: "View the post",
   // Always the current values of the five fields above.

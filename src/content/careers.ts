@@ -37,6 +37,8 @@ export const rolesSection: Section & {
   button: LinkCopy & { href: MailtoHref };
   link: LinkCopy;
   groups: readonly RoleGroupView[];
+  /** The count under each RoleList group heading, through plural(). */
+  countLabel: { one: string; many: string };
 } = {
   id: "roles",
   eyebrow: "Open roles",
@@ -48,6 +50,7 @@ export const rolesSection: Section & {
   button: { label: "Email your CV", href: APPLY },
   link: ALL_ROLES,
   groups: roleGroups,
+  countLabel: { one: "1 role", many: "{n} roles" },
   facts: ["F140", "F196", "F144"],
 };
 
@@ -86,6 +89,8 @@ export const criteria: Section & { items: readonly SourcedText[]; closing: Para 
  *  with its screen-reader text "Lines omitted." */
 export const mentorship: Section & {
   lines: readonly { text: string; gapBefore?: boolean }[];
+  /** The omission line: the mark (U+2026) is shown, the label is read aloud. */
+  gap: { mark: string; label: string };
   attribution: string;
   link: LinkCopy;
 } = {
@@ -100,6 +105,7 @@ export const mentorship: Section & {
     { text: "No drama. No excuses. Just drive.", gapBefore: true },
     { text: "Thank you for proving that labels lie. And for reminding me why mentorship truly matters.", gapBefore: true },
   ],
+  gap: { mark: "…", label: "Lines omitted." },
   attribution: "Selected lines from an Instagram caption, 29 June 2025",
   link: { label: "View the post", href: "https://www.instagram.com/p/DLg-rnoPR7c/", external: true },
 };

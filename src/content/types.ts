@@ -58,8 +58,9 @@ export type EntryLevel = Gated<Sourced & {
 export type JapanSession = Gated<Sourced & {
   date: string | Confirm; venue: string | Confirm; organiser: string | Confirm; role: string | Confirm;
   href: Url | Confirm; quote: string;
-  // Fixed copy around the gated fields (spec 4.4.5).
-  title: string; linkLabel: string;
+  // Fixed copy around the gated fields (spec 4.4.5). `line` is the template
+  // "{role}, {venue}. Organised by {organiser}."
+  title: string; line: string; linkLabel: string;
 }>; // gate: [date, venue, organiser, role, href]
 
 // Home hero data (home.ts `hero`).

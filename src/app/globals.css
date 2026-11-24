@@ -1056,6 +1056,114 @@
     }
   }
 
+  /* --- Writing (spec 4.4) ---------------------------------------------- */
+  /* Featured: meta in columns 1-5, her words in columns 7-12 from lg,
+     between hairlines (the list is a .site-rows). */
+  .site-feature { padding-block: 40px; }
+  @media (width >= 64rem) {
+    .site-feature { padding-block: 48px; align-items: start; }
+  }
+  .site-feature-title { max-width: 26ch; text-wrap: balance; }
+  .site-feature-words { margin-top: 32px; }
+  @media (width >= 64rem) {
+    .site-feature-words { margin-top: 0; }
+  }
+  .site-feature-words > .site-quote-text + .site-quote-text { margin-top: 12px; }
+  /* Long titles with no spaces ("#MAKEININDIA#MUMBAI") break rather than
+     push a 320 px page sideways. */
+  .site-article-title { overflow-wrap: break-word; }
+  /* Phones: the date sits above the title instead of in the rail, so the
+     title and summary get the full width. */
+  @media (width < 48rem) {
+    .site-article-row { grid-template-columns: minmax(0, 1fr); row-gap: 8px; }
+  }
+  /* A line quoted inside an article row: Newsreader italic, never below the
+     lede size (Newsreader is never under 19 px). */
+  .site-article-quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--text-lede);
+    line-height: var(--text-lede--line-height);
+    color: var(--color-ink);
+  }
+  /* On stage: the 200 px podium photo above the words on phones, beside them
+     (vertically centred) from md. */
+  .site-stage { display: grid; gap: 32px; justify-items: start; }
+  @media (width >= 48rem) {
+    .site-stage { grid-template-columns: max-content minmax(0, 44rem); justify-content: start; column-gap: 48px; align-items: center; }
+  }
+  @media (width >= 64rem) {
+    .site-stage { column-gap: 64px; }
+  }
+  /* The photo is 200 x 200 inside its 1 px frame. */
+  .site-stage-photo .site-photo-frame { box-sizing: content-box; width: 200px; height: 200px; }
+  .site-stage-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  /* --- Careers (spec 4.5) ---------------------------------------------- */
+  /* Open roles: one block per group, 48 px apart; heading and count on one
+     line, then hairline link rows (title, department under it, arrow). */
+  .site-role-groups { display: grid; gap: 48px; }
+  .site-role-group-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 16px;
+    margin-bottom: 16px;
+  }
+  .site-role {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 18px;
+    column-gap: 16px;
+    row-gap: 4px;
+    align-items: center;
+    padding-block: 18px;
+  }
+  .site-role-title { font-weight: 500; }
+  .site-role-department { grid-column: 1; }
+  .site-role-arrow { grid-column: 2; grid-row: 1 / span 2; color: var(--color-ink-muted); }
+  .site-role .site-arrow { transition: transform 0.5s var(--spring), color 0.25s; }
+  .site-role:hover .site-arrow { transform: translate(2px, -2px); color: var(--color-ink); }
+  /* What I look for: hairline rows in one column, two columns from md that
+     run down, then across (the page sets the row count). */
+  .site-criteria { display: grid; }
+  .site-criteria > li {
+    padding-block: 24px;
+    border-bottom: 1px solid var(--color-line);
+    font-weight: 500;
+  }
+  .site-criteria > li:first-child { border-top: 1px solid var(--color-line); }
+  @media (width >= 48rem) {
+    .site-criteria { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-flow: column; column-gap: 48px; }
+    .site-criteria > .site-criteria-column { border-top: 1px solid var(--color-line); }
+  }
+  @media (width < 48rem) {
+    .site-criteria { grid-template-rows: none !important; }
+  }
+  /* Mentorship: selected lines of one caption in a single blockquote, 12 px
+     apart; the marks open the first line and close the last. */
+  .site-quote-lines { quotes: "\201C" "\201D" "\2018" "\2019"; }
+  .site-quote-lines > * + * { margin-top: 12px; }
+  .site-quote-lines > .site-quote-text:first-child::before { content: open-quote; }
+  .site-quote-lines > .site-quote-text:last-child::after { content: close-quote; }
+  /* The omission mark is set in Newsreader roman at the size of the lines. */
+  .site-quote-lines > .site-quote-gap { font-family: var(--font-display); font-size: var(--text-lede); }
+
+  /* --- Contact (spec 4.6) ---------------------------------------------- */
+  .site-contact-block + .site-contact-block { margin-top: 32px; }
+  .site-contact-block > h3 { margin-bottom: 12px; }
+  .site-contact-social > a { align-items: flex-start; min-height: 44px; }
+  .site-contact-social svg { margin-top: 3px; }
+  .site-enquiry-title { margin-bottom: 8px; }
+  .site-draft-title {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    letter-spacing: var(--text-h3--letter-spacing);
+    font-weight: var(--text-h3--font-weight);
+  }
+  .site-draft-recipient { font-weight: 500; overflow-wrap: anywhere; }
+
   /* --- Forms (spec 6.13) ------------------------------------------------ */
   .site-enquiry { display: grid; gap: 24px; }
   .site-form-row { display: grid; gap: 24px; }
@@ -1077,10 +1185,26 @@
     font: 400 1rem / 1.5 var(--font-sans);
   }
   .site-enquiry textarea { resize: vertical; }
+  /* A placeholder longer than a narrow field (Organisation at 1024 px) ends
+     in an ellipsis instead of a hard cut. */
+  .site-enquiry input { text-overflow: ellipsis; }
   .site-enquiry input:focus,
   .site-enquiry select:focus,
   .site-enquiry textarea:focus { border-color: var(--color-ink); box-shadow: 0 0 0 4px rgb(28 24 22 / 0.07); }
   .site-enquiry ::placeholder { color: var(--color-ink-muted); opacity: 1; }
+  /* The select draws its own chevron (Lucide ChevronDown, 1.5 stroke,
+     ink-muted) so it lines up with the text fields in every browser, and
+     "Choose one" reads as a placeholder until a type is chosen. */
+  .site-enquiry select {
+    appearance: none;
+    padding-right: 44px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235C544E' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 18px 18px;
+  }
+  .site-enquiry select:has(option[value=""]:checked) { color: var(--color-ink-muted); }
+  .site-enquiry option { color: var(--color-ink); }
   .site-form-note { font-size: var(--text-small); line-height: var(--text-small--line-height); color: var(--color-ink-muted); }
   .site-form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
   .site-draft {

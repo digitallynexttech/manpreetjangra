@@ -1,5 +1,4 @@
 import type { QuoteView } from "@/content/types";
-import { Eyebrow } from "./Eyebrow";
 import { TextLink } from "./TextLink";
 
 // A quotation in her words (spec 6.7). The quote marks come from CSS, never
@@ -27,9 +26,10 @@ export function QuoteCard({
   const classes = ["site-quote", variant !== "paper" && `site-quote--${variant}`, className].filter(Boolean).join(" ");
   return (
     <figure className={classes}>
-      {showTheme && quote.theme ? (
-        <Eyebrow className="site-quote-theme">{quote.theme}</Eyebrow>
-      ) : null}
+      {/* The theme is a mono label without the thread: threads belong to
+          section heads, and six of them drawing at once in the Writing
+          themes grid would break "one thread drawing per screen" (DD 5.2). */}
+      {showTheme && quote.theme ? <p className="site-eyebrow site-quote-theme">{quote.theme}</p> : null}
       {variant === "night-large" ? (
         <span className="site-quote-mark" aria-hidden="true">
           {"“"}
