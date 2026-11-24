@@ -433,6 +433,13 @@
     line-height: var(--text-small--line-height);
     color: var(--color-ink-muted);
   }
+  /* The bio's copy button with its status line beside it. */
+  .site-copy { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+  /* Education rows (About): degree left, institution and year right from md. */
+  .site-education-row { display: grid; gap: 4px 24px; }
+  @media (width >= 48rem) {
+    .site-education-row { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: baseline; }
+  }
 
   /* --- Quotes (spec 6.7) ----------------------------------------------- */
   .site-quote { border-top: 1px solid var(--color-line); padding-top: 20px; }
@@ -869,7 +876,7 @@
   }
   .site-timeline-row { position: relative; display: grid; padding-block: 20px; }
   .site-timeline--compact .site-timeline-row { grid-template-columns: 72px 24px minmax(0, 1fr); }
-  .site-timeline--full .site-timeline-row { grid-template-columns: 24px minmax(0, 1fr); padding-block: 0; }
+  .site-timeline--full .site-timeline-row { grid-template-columns: 24px minmax(0, 1fr); column-gap: 16px; padding-block: 0; }
   .site-timeline-year { color: var(--color-ink-muted); }
   .site-timeline--compact .site-timeline-year { padding-top: 0.3em; }
   .site-timeline-node {
@@ -879,7 +886,8 @@
     justify-self: center;
     background: var(--color-vermilion);
   }
-  .site-timeline--full .site-timeline-node { margin-top: 30px; }
+  /* Level with the year: 20 px summary padding plus half its 17.4 px line, less half the node. */
+  .site-timeline--full .site-timeline-node { margin-top: 25px; }
   .site-timeline-title {
     font-family: var(--font-sans);
     font-size: var(--text-h4);
@@ -892,6 +900,19 @@
   .site-timeline--full .site-disclosure { border-top: 0; }
   .site-timeline-sources { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 4px 24px; }
   .site-timeline-sources .site-text-link { font-size: var(--text-caption); font-family: var(--font-mono); letter-spacing: var(--text-caption--letter-spacing); }
+  /* Full variant (About): the summary holds the year, the <h3> title and the
+     plus sign as direct children (a <summary> may hold one heading), laid out
+     as year over title with the plus sign on the right. */
+  .site-timeline--full .site-disclosure > summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0 24px;
+    align-items: start;
+  }
+  .site-timeline--full .site-disclosure > summary > .site-timeline-year { grid-column: 1; grid-row: 1; }
+  .site-timeline--full .site-disclosure > summary > .site-timeline-title { grid-column: 1; grid-row: 2; }
+  .site-timeline--full .site-disclosure > summary > .site-disclosure-icon { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+  .site-timeline--full .site-timeline-text { margin-top: 0; }
 
   /* --- Disclosure (Deepak 1931-1960 pattern) --------------------------- */
   .site-disclosures > .site-disclosure { border-top: 1px solid var(--color-line); }
@@ -938,6 +959,16 @@
     .site:has(.site-header.is-hidden) .site-contact-details { top: 48px; }
   }
   .site-contact-details a { overflow-wrap: anywhere; }
+  /* The same sticky heading for a heading column inside the 12-column grid
+     (About "What drives her", Work ADAC), where the heading is not the first
+     child of an editorial grid. */
+  @media (width >= 64rem) {
+    .site-sticky-col { position: sticky; top: calc(var(--spacing-header) + 32px); align-self: start; transition: top 0.5s var(--ease-ios); }
+    .site:has(.site-header.is-hidden) .site-sticky-col { top: 48px; }
+  }
+  /* "Hairline above" sections (About education, Work how I work): the line
+     sits inside the content width, halfway between the two sections. */
+  .site-hairline-above { border-top: 1px solid var(--color-line); padding-top: var(--spacing-section); }
 
   /* --- Ventures and website previews (spec 4.3.7; Deepak 1178-1246) --- */
   .site-ventures { display: grid; }
@@ -961,6 +992,19 @@
     letter-spacing: var(--text-h3--letter-spacing);
     font-weight: var(--text-h3--font-weight);
   }
+  /* Phones and tablets: name and category with the arrow beside them, the
+     role underneath. From lg: name | role | arrow (above). */
+  .site-venture { grid-template-columns: minmax(0, 1fr) 24px; }
+  .site-venture-head { display: grid; gap: 4px; }
+  .site-venture-arrow { grid-column: 2; grid-row: 1; justify-self: end; color: var(--color-ink-muted); }
+  .site-venture-role { grid-column: 1 / -1; }
+  @media (width >= 64rem) {
+    .site-venture { grid-template-columns: 1fr 1.4fr 24px; }
+    .site-venture-arrow { grid-column: 3; }
+    .site-venture-role { grid-column: 2; grid-row: 1; }
+  }
+  .site-venture .site-arrow { transition: transform 0.5s var(--spring), color 0.25s; }
+  .site-venture:hover .site-arrow { transform: translate(2px, -2px); color: var(--color-ink); }
   .site-venture-preview-toggle { display: none; }
   .site-venture-preview {
     position: fixed;

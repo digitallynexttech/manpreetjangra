@@ -19,11 +19,20 @@ const STAGGER = 60;
 
 export type CounterItem = { value: string; label: string; href?: string; linkLabel?: string };
 
-// Columns from md: one per number, three at most (spec 4.1.2: three numbers,
-// two when there are no open roles).
-const COLUMNS = ["", "md:grid-cols-1", "md:grid-cols-2", "md:grid-cols-3"] as const;
+// Columns from md: one per number, four at most (spec 4.1.2: three numbers on
+// Home, two when there are no open roles; 4.3.6: four on Work). Phones get
+// one column, or two with `phoneColumns={2}` (the Work client story).
+const COLUMNS = ["", "md:grid-cols-1", "md:grid-cols-2", "md:grid-cols-3", "md:grid-cols-4"] as const;
 
-export function Counter({ items, caption }: { items: readonly CounterItem[]; caption?: string }) {
+export function Counter({
+  items,
+  caption,
+  phoneColumns = 1,
+}: {
+  items: readonly CounterItem[];
+  caption?: string;
+  phoneColumns?: 1 | 2;
+}) {
   const list = useRef<HTMLDListElement>(null);
 
   useEffect(() => {
@@ -98,7 +107,7 @@ export function Counter({ items, caption }: { items: readonly CounterItem[]; cap
 
   return (
     <>
-      <dl ref={list} className={`site-counter grid ${COLUMNS[Math.min(items.length, 3)]}`} data-reveal="group">
+      <dl ref={list} className={["site-counter grid", phoneColumns === 2 && "grid-cols-2", COLUMNS[Math.min(items.length, 4)]].filter(Boolean).join(" ")} data-reveal="group">
         {items.map(({ value, label, href, linkLabel }) => (
           <div key={label} data-reveal>
             <dt className="site-stat-value">

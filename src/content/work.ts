@@ -105,14 +105,19 @@ export const adac: Section & { paragraph: Para; roles: SourcedText | null } = {
       : null,
 };
 
-/** How I work (spec 4.3.5): two quotes, paper variant. */
+/** How I work (spec 4.3.5): two quotes, paper variant, each with a link to
+ *  the post it comes from ("View the post", the quote-card link label of
+ *  spec 4.4.3). */
 export const how: Section & { quotes: readonly QuoteRef<QuoteId>[] } = {
   id: "how",
   eyebrow: "How I work",
   title: "Partners, not vendors.",
   lede: "Two things I have posted about agencies and their audiences.",
   facts: ["F154", "F141", "F069", "F067"],
-  quotes: [{ quote: "reel-vendors" }, { quote: "video-smarter" }],
+  quotes: [
+    { quote: "reel-vendors", linkLabel: "View the post" },
+    { quote: "video-smarter", linkLabel: "View the post" },
+  ],
 };
 
 /** A client story (spec 4.3.6); the numbers are `clientStats`. */
