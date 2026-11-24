@@ -1,6 +1,6 @@
 # Content review: questions for Manpreet and Karan
 
-> Copy kept in the repository so the code carries its own rationale. The original lives in the project's `plan/` folder (outside this repository), copied on 24 November 2026. Paths such as `plan/`, `research/`, `assets/` and `.work/` refer to that project folder; `site/` is this repository. The repository branch is `master` (the plan says `main`). Edited for the copy: the A2 and A3 field paths match the code (`education.entries[...]`), and H6 names the real branch.
+> Copy kept in the repository so the code carries its own rationale. The original lives in the project's `plan/` folder (outside this repository), copied on 24 November 2026. Paths such as `plan/`, `research/`, `assets/` and `.work/` refer to that project folder; `site/` is this repository. The repository branch is `main`. Edited for the copy: the A2 and A3 field paths match the code (`education.entries[...]`).
 
 Date: 2026-11-24 (updated after `plan/audit-1.md`). The site is built to be complete without any answer below: anything unconfirmed is simply not shown. Each answer is a small edit in one data file under `site/src/content/`, listed in the "Where" column. Fact ids (F###) point to `research/facts.md`. Placeholder keys "spec C1-C7" refer to the table in `plan/spec.md` section 4.8 (not to section C of this file).
 
@@ -136,6 +136,6 @@ Background: you have not named a favourite colour anywhere public [F161]; your D
 | H3 | "Genetic Counsellor" and "Genetic Care Coordinator" are listed under the agency's Marketing Services Group and may be client-embedded roles [F140] | If so, delete those two objects from `roles.ts` |
 | H4 | Confirm she is happy with contact enquiries going to contact@digitallynext.com (A7) | - |
 | H5 | Analytics: none installed (no cookie banner needed). Decide whether to add any | - |
-| H6 | The build made local git commits per milestone on the `master` branch of `site/`; nothing was pushed or deployed | Review, then push and deploy when you are ready |
+| H6 | The build made local git commits per milestone on the `main` branch of `site/`; nothing was pushed or deployed | Review, then push and deploy when you are ready |
 | H7 | Not used, by design: the agency logo and red, and the agency font Stack Sans (licence unknown) [F222] | No action unless you want them |
 | H8 | If any generated texture could not be made, the build report says which page reuses another texture | Re-run the Codex prompt from `plan/images.md` |

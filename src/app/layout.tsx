@@ -4,13 +4,15 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
 import { Motion } from "@/components/Motion";
-import { headerCta, navigation } from "@/content/navigation";
+import { headerCta, homeNav, navigation } from "@/content/navigation";
 import { SITE_NAME, SITE_URL, SOCIAL_IMAGE, personJsonLd, websiteJsonLd } from "@/lib/site";
 import "./globals.css";
 
 // Fonts exactly as plan/design-decision.md section 3: Newsreader for display
 // (roman and italic, with the optical-size axis), Geist for body and UI,
 // Geist Mono for labels (not preloaded: it is never the first paint).
+// The four files weigh 323.5 KB, 24 KB over the 300 KB budget; the opsz axis
+// is the cost and is kept on purpose (README, "Fonts and performance").
 const newsreader = Newsreader({
   subsets: ["latin"],
   style: ["normal", "italic"],
@@ -80,7 +82,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </a>
           {/* The layout is a server component: it hands the links to the
               client Header as props (spec 7.5). */}
-          <Header nav={navigation} cta={headerCta} />
+          <Header home={homeNav} nav={navigation} cta={headerCta} />
           <main id="site-content" tabIndex={-1}>
             {children}
           </main>

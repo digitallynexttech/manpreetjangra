@@ -5,6 +5,7 @@ import { ArrowUpRight, Eye, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { VentureView } from "@/content/types";
+import { keepSeparators } from "@/lib/site";
 
 // "Where I work" (spec 4.3.7). Ported from the sibling site
 // (E:\deepkgoel\app\components\VentureCards.tsx). Each row is one link to the
@@ -179,7 +180,7 @@ export function VentureList({ ventures }: { ventures: readonly VentureView[] }) 
           >
             <div className="site-venture-head">
               <h3 className="site-venture-name">{item.name}</h3>
-              <p className="site-venture-category site-caption">{item.category}</p>
+              <p className="site-venture-category site-caption">{keepSeparators(item.category)}</p>
             </div>
             <p className="site-venture-role">{item.role}</p>
             <span className="site-sr-only"> (opens in a new tab)</span>

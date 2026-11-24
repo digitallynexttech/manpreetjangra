@@ -1,4 +1,5 @@
 import type { HomeHero, Portrait as PortraitData } from "@/content/types";
+import { keepSeparators } from "@/lib/site";
 import { Accent } from "./Accent";
 import { Button } from "./Button";
 import { Eyebrow } from "./Eyebrow";
@@ -32,7 +33,7 @@ export function Hero({ hero, portrait, hasRoles }: { hero: HomeHero; portrait: P
             <Button href={hero.primary.href}>{hero.primary.label}</Button>
             <TextLink href={secondary.href}>{secondary.label}</TextLink>
           </div>
-          <p className="site-hero-credential">{hero.credential}</p>
+          <p className="site-hero-credential">{keepSeparators(hero.credential)}</p>
         </div>
         <Portrait portrait={portrait} />
       </div>

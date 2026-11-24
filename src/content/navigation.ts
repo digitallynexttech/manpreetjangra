@@ -1,8 +1,8 @@
 import type { NavItem, Url } from "./types";
 
-// Navigation. The root layout (a server component) passes `navigation` and
-// `headerCta` to the client Header as props, so this file holds no fact ids
-// and no placeholders (spec 7.5).
+// Navigation. The root layout (a server component) passes `navigation`,
+// `homeNav` and `headerCta` to the client Header as props, so this file holds
+// no fact ids and no placeholders (spec 7.5).
 
 /** Header links from lg (spec 2.2). The phone sheet adds Home first and
  *  Contact last, in the order of `footerNav`. */
@@ -16,8 +16,11 @@ export const navigation: readonly NavItem[] = [
 /** The header's outline button (desktop) and the sheet's last link. */
 export const headerCta: NavItem = { label: "Contact", href: "/contact" };
 
+/** The sheet's first link (below lg the wordmark is not the only way home). */
+export const homeNav: NavItem = { label: "Home", href: "/" };
+
 export const footerNav: readonly NavItem[] = [
-  { label: "Home", href: "/" },
+  homeNav,
   ...navigation,
   headerCta,
 ];

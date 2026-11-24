@@ -20,7 +20,7 @@ function isCurrent(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(href + "/");
 }
 
-export function Header({ nav, cta }: { nav: readonly NavItem[]; cta: NavItem }) {
+export function Header({ home, nav, cta }: { home: NavItem; nav: readonly NavItem[]; cta: NavItem }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
@@ -99,9 +99,18 @@ export function Header({ nav, cta }: { nav: readonly NavItem[]; cta: NavItem }) 
     const grow = () => {
       if (wide.matches) setOpen(false);
     };
+    // The solid sheet covers the page, so the page behind it is inert while
+    // the menu is open: Tab stays in the header and never lands on a link
+    // nobody can see.
+    const behind = [
+      document.getElementById("site-content"),
+      document.querySelector(".site-footer"),
+    ];
+    behind.forEach((el) => el?.setAttribute("inert", ""));
     document.addEventListener("keydown", escape);
     wide.addEventListener("change", grow);
     return () => {
+      behind.forEach((el) => el?.removeAttribute("inert"));
       document.removeEventListener("keydown", escape);
       wide.removeEventListener("change", grow);
     };
@@ -164,12 +173,18 @@ export function Header({ nav, cta }: { nav: readonly NavItem[]; cta: NavItem }) 
             {/* Home and Contact are sheet-only links: from lg the wordmark
                 is home and the outline button is Contact. The links stay
                 direct children of nav (the sheet staggers them by position). */}
-            {link({ label: "Home", href: "/" }, true)}
+            {link(home, true)}
             {nav.map((item) => link(item))}
             {link(cta, true)}
-            {/* Shown from lg only, where there is no sheet to close. */}
+            {/* Shown from lg only, where there is no sheet to close. On
+                /contact it is the current page, like the links. */}
             <span className="site-header-cta">
-              <Button href={cta.href} variant="outline" size="compact">
+              <Button
+                href={cta.href}
+                variant="outline"
+                size="compact"
+                ariaCurrent={isCurrent(pathname, cta.href) ? "page" : undefined}
+              >
                 {cta.label}
               </Button>
             </span>

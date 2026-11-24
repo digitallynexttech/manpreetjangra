@@ -1,6 +1,6 @@
 # Design decision: "Ink, Vermilion and Marigold"
 
-> Copy kept in the repository so the code carries its own rationale. The original lives in the project's `plan/` folder (outside this repository), copied on 24 November 2026. Paths such as `plan/`, `research/`, `assets/` and `.work/` refer to that project folder; `site/` is this repository. The repository branch is `master` (the plan says `main`). Edited for the copy: one detail of a personal photo in section 4.3 is shortened. Content now lives in `src/content/` (decisions.md D04), not `src/data/`.
+> Copy kept in the repository so the code carries its own rationale. The original lives in the project's `plan/` folder (outside this repository), copied on 24 November 2026. Paths such as `plan/`, `research/`, `assets/` and `.work/` refer to that project folder; `site/` is this repository. The repository branch is `main`. Edited for the copy: one detail of a personal photo in section 4.3 is shortened. Content now lives in `src/content/` (decisions.md D04), not `src/data/`.
 
 Judge: design-judge agent, 2026-11-23. Status: FINAL. The planner and the builder follow this file; nothing in it is open.
 Subject: personal site of Manpreet Jangra, Chief Operating Officer, Digitally Next (BFG Market Consult Pvt Ltd), New Delhi.

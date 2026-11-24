@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Fragment } from "react";
 import { Button } from "@/components/Button";
 import { Eyebrow } from "@/components/Eyebrow";
 import { PageIntro } from "@/components/PageIntro";
@@ -26,6 +27,22 @@ export const metadata = pageMetadata(meta);
 // page. The podium photo gets its caption the same way (C6).
 
 const FEATURED_TITLE_ID = "featured-title";
+
+/** An article title may break after a slash ("E-Commerce/" then
+ *  "Digital-Social Media") rather than inside a hyphenated word. The stored
+ *  title stays verbatim; only the rendering adds the break points. */
+function breakAfterSlashes(title: string) {
+  return title.split("/").map((part, index, parts) => (
+    <Fragment key={index}>
+      {part}
+      {index < parts.length - 1 ? (
+        <>
+          /<wbr />
+        </>
+      ) : null}
+    </Fragment>
+  ));
+}
 
 export default function Writing() {
   const showEntryLevel = entryLevel.gate.every(isConfirmed);
@@ -132,7 +149,7 @@ export default function Writing() {
                   {article.dateLabel}
                 </time>
                 <div>
-                  <h3 className="site-article-title text-h4">{article.title}</h3>
+                  <h3 className="site-article-title text-h4">{breakAfterSlashes(article.title)}</h3>
                   <p className="mt-2">{article.summary}</p>
                   {article.quote ? (
                     <p className="site-article-quote mt-4">

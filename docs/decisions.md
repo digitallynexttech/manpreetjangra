@@ -1,6 +1,6 @@
 # Decision log: Manpreet Jangra site
 
-> Copy kept in the repository so the code carries its own rationale. The original lives in the project's `plan/` folder (outside this repository), copied on 24 November 2026. Paths such as `plan/`, `research/`, `assets/` and `.work/` refer to that project folder; `site/` is this repository. The repository branch is `master` (the plan says `main`). Edited for the copy: one row in section G no longer names the employer-review sites it rules out.
+> Copy kept in the repository so the code carries its own rationale. The original lives in the project's `plan/` folder (outside this repository), copied on 24 November 2026. Paths such as `plan/`, `research/`, `assets/` and `.work/` refer to that project folder; `site/` is this repository. The repository branch is `main`. Edited for the copy: one row in section G no longer names the employer-review sites it rules out.
 
 Status: FINAL, 2026-11-24, audit-1 fixes applied (section I). Planner: site-planner agent. Every decision below is closed; the builder follows `spec.md`. Visual decisions were made by the design judge in `design-decision.md` and are restated here only where the planner had to apply them (D17-D21); they are not re-opened.
 

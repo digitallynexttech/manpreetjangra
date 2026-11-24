@@ -29,15 +29,19 @@ export function pageMetadata({
   image = SOCIAL_IMAGE,
 }: PageMeta & { image?: typeof SOCIAL_IMAGE }): Metadata {
   const sharedTitle = absoluteTitle ? title : `${title} · ${SITE_NAME}`;
+  // One absolute address for both tags, so the canonical link and og:url
+  // always match (for home Next prints "https://manpreetjangra.com" in both,
+  // as the sitemap does).
+  const url = new URL(path, SITE_URL).toString();
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
-    alternates: { canonical: path },
+    alternates: { canonical: url },
     openGraph: {
       siteName: SITE_NAME,
       title: sharedTitle,
       description,
-      url: path,
+      url,
       type: "website",
       locale: "en_IN",
       images: [image],
@@ -122,4 +126,12 @@ export function attributionOf(q: Pick<Quote, "speaker" | "source" | "dateLabel">
  *  Group") and displayed with a middle dot ("BSG · Business Support Group"). */
 export function displayName(name: string): string {
   return name.replaceAll(" - ", " · ");
+}
+
+/** Lines may break before a middle dot but never after one: the space after
+ *  each " · " becomes a no-break space, so no line ends on a dangling dot
+ *  (eyebrows, the hero credential line, venture categories). Render-time only;
+ *  the stored copy keeps plain spaces. */
+export function keepSeparators(text: string): string {
+  return text.replaceAll(" · ", " ·\u00a0");
 }

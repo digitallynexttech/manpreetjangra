@@ -65,7 +65,26 @@ export function Motion() {
       node.classList.add("site-reveal-ready");
       observer.observe(node);
     }
+    // Keyboard focus that lands inside a block still waiting to reveal shows
+    // it (and any waiting block around it) at once, without the stagger, so
+    // the focus ring is never faded for long.
+    const waiting = ".site-reveal-ready:not(.is-visible)";
+    const focus = (event: FocusEvent) => {
+      if (!(event.target instanceof Element)) return;
+      let node = event.target.closest<HTMLElement>(waiting);
+      while (node) {
+        const shown = node;
+        shown.style.setProperty("--reveal-delay", "0ms");
+        shown.classList.add("is-visible");
+        observer.unobserve(shown);
+        if (shown.dataset.reveal !== "group")
+          timers.push(setTimeout(() => settle(shown), 1000));
+        node = shown.parentElement?.closest<HTMLElement>(waiting) ?? null;
+      }
+    };
+    document.addEventListener("focusin", focus);
     return () => {
+      document.removeEventListener("focusin", focus);
       observer.disconnect();
       timers.forEach(clearTimeout);
       nodes.forEach(settle);

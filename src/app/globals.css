@@ -300,6 +300,7 @@
     display: block;
     margin-top: 8px;
     max-width: 24ch;
+    text-wrap: balance;
     font-size: var(--text-small);
     line-height: var(--text-small--line-height);
     color: var(--color-ink-muted);
@@ -456,7 +457,7 @@
   .site-quoted { quotes: "\201C" "\201D" "\2018" "\2019"; }
   .site-quoted::before { content: open-quote; }
   .site-quoted::after { content: close-quote; }
-  .site-quote-attribution { margin-top: 16px; }
+  .site-quote-attribution { margin-top: 16px; text-wrap: balance; }
   .site-quote-link { margin-top: 12px; }
   .site-quote--night,
   .site-quote--night-large { border-top: 0; padding-top: 0; }
@@ -515,6 +516,8 @@
   .site-button--outline::before { background: transparent; border: 1px solid var(--color-line-strong); }
   .site-button--outline::after { display: none; }
   .site-button--outline:hover::before { background: transparent; border-color: var(--color-ink); }
+  /* The header's Contact button on /contact: the page you are on. */
+  .site-button--outline[aria-current="page"]::before { border-color: var(--color-ink); }
   .site-button--compact { min-height: 40px; padding: 0 16px; }
   .site-button { max-width: 100%; }
   @media (width < 40rem) { .site-button { white-space: normal; text-align: center; } }
@@ -685,7 +688,7 @@
     color: var(--color-on-night-muted);
   }
   .site-footer-links { display: grid; gap: 4px; justify-items: start; }
-  .site-footer-links a { display: inline-flex; align-items: center; min-height: 32px; }
+  .site-footer-links a { display: inline-flex; align-items: center; min-height: 32px; min-width: 44px; }
   .site-footer-bottom {
     margin-top: 48px;
     padding-top: 24px;
@@ -748,9 +751,10 @@
     object-fit: cover;
     object-position: var(--intro-position, center);
   }
-  /* Phones: the backdrop sits under the heading and lede, so it moves right and
-     fades to keep ink-muted text at 4.5:1 or better. */
-  @media (width < 48rem) {
+  /* Phones and tablets: the lede runs the full width here, so the backdrop
+     moves right and fades to keep the text clear (ink-muted at 4.5:1 or
+     better). Spec 3.5 stops this at 48rem; it runs to lg so tablets get it too. */
+  @media (width < 64rem) {
     .site-intro-backdrop { inset-inline-start: 55%; opacity: calc(var(--intro-opacity) * 0.7); }
   }
 
@@ -1222,6 +1226,9 @@
     white-space: pre-wrap;
     overflow-wrap: anywhere;
   }
+  /* The copy status takes no room until it has something to say; it stays in
+     the DOM so the live region still announces. */
+  .site-draft .site-status:empty { margin-block: 0; min-height: 0; }
 }
 
 /* --- Motion -------------------------------------------------------------
@@ -1555,8 +1562,10 @@ details > summary:active {
     translate: var(--slide) 0;
   }
 }
-/* The header stays put while the page changes. */
-.site-header {
+/* The header stays put while the page changes. It is named only while a
+   transition runs: a named element is a backdrop root, so a header named at
+   rest would blur only its own contents, never the page behind its glass. */
+:root:active-view-transition .site-header {
   view-transition-name: site-header;
 }
 ::view-transition-group(site-header) {

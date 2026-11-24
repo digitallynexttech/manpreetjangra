@@ -39,6 +39,7 @@ export function Button({
   external,
   transitionTypes,
   className,
+  ariaCurrent,
 }: {
   href: string;
   children: ReactNode;
@@ -51,6 +52,8 @@ export function Button({
   /** How the page change animates, such as ["nav-forward"] (spec 2.3). */
   transitionTypes?: string[];
   className?: string;
+  /** Marks the button as the current page (the header's Contact on /contact). */
+  ariaCurrent?: "page";
 }) {
   const isExternal = external ?? isExternalHref(href);
   const iconName = icon ?? (variant === "primary" ? defaultIcon(href, isExternal) : "none");
@@ -79,7 +82,7 @@ export function Button({
       </a>
     );
   return (
-    <Link className={classes} href={href} transitionTypes={transitionTypes}>
+    <Link className={classes} href={href} transitionTypes={transitionTypes} aria-current={ariaCurrent}>
       {children}
       <LinkIcon name={iconName} />
     </Link>
