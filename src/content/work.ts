@@ -177,7 +177,7 @@ export const ventures: readonly Venture[] = [
     name: "iSoCIAL",
     href: "https://isocialconnect.in/",
     category: "Digital and IoT professional community",
-    role: "Helped build the community, and fronted its 2018 IoT-community launch video.",
+    role: "Helped build the community, and fronted its 2018 IoT⁠-⁠community launch video.",
     // No screenshot exists (the domain did not resolve for the sibling site either).
     preview: null,
     facts: ["F124", "F017", "F033"],

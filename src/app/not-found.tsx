@@ -10,7 +10,7 @@ import { notFound } from "@/content/shared";
 // way back home that slides back (nav-back, spec 2.3) and three shortcuts.
 // Next adds the noindex tag to this page itself.
 
-export const metadata: Metadata = { title: notFound.title };
+export const metadata: Metadata = { title: notFound.title, description: null, openGraph: null, twitter: null };
 
 export default function NotFound() {
   return (

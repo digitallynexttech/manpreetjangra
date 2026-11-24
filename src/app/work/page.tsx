@@ -105,7 +105,7 @@ export default function Work() {
         <div className="site-wrap">
           <div className="site-hairline-above">
             <SectionHead id={how.id} eyebrow={how.eyebrow} title={how.title} accent={how.accent} lede={how.lede} />
-            <div className="grid gap-12 md:grid-cols-2" data-reveal="group">
+            <div className="grid gap-12 md:grid-cols-2 md:gap-x-[24px] xl:gap-x-[32px]" data-reveal="group">
               {how.quotes.map((ref) => (
                 <div key={ref.quote} data-reveal>
                   <QuoteCard quote={quoteView(ref.quote, ref.linkLabel)} variant="paper" />

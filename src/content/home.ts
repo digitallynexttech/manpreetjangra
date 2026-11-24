@@ -57,7 +57,7 @@ export const stats: Sourced & { title: string; items: readonly Stat[]; caption: 
   caption: !hasRoles
     ? `LinkedIn figures as of ${formatLongDate(LINKEDIN_AS_OF)}.`
     : formatLongDate(LINKEDIN_AS_OF) === formatLongDate(ROLES_AS_OF)
-      ? `LinkedIn figures and roles as listed on digitallynext.com, as of ${formatLongDate(LINKEDIN_AS_OF)}.`
+      ? `LinkedIn figures, and roles as listed on digitallynext.com, as of ${formatLongDate(LINKEDIN_AS_OF)}.`
       : `LinkedIn figures as of ${formatLongDate(LINKEDIN_AS_OF)}. Roles as listed on digitallynext.com on ${formatLongDate(ROLES_AS_OF)}.`,
   facts: ["F190", "F191", "F140"],
 };
@@ -140,7 +140,7 @@ export const journey: Section & { entries: readonly TimelineEntry[]; link: LinkC
       year: "2018",
       title: "Recruiting for Digitally Next",
       body: {
-        parts: [{ text: "Posts the agency's roles under her own name and fronts iSoCIAL's IoT-community launch video." }],
+        parts: [{ text: "Posts the agency's roles under her own name and fronts iSoCIAL's IoT⁠-⁠community launch video." }],
         facts: ["F032", "F012", "F033"],
       },
       facts: ["F032", "F012", "F033"],

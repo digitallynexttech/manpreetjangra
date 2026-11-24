@@ -32,7 +32,7 @@ export function IntroBackdrop({ image }: { image: IntroImage }) {
       }
     >
       {/* It sits at the top of the page, so it loads with the page. */}
-      <Image src={image.src} alt="" fill sizes="62vw" loading="eager" />
+      <Image src={image.src} alt="" fill sizes="62vw" loading="eager" fetchPriority="low" />
     </div>
   );
 }

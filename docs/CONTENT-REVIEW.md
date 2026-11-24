@@ -54,7 +54,8 @@ Written from the public record (fact ids in brackets); none adds a claim beyond 
 
 Home
 1. What I lead, lede: "Three responsibilities at Digitally Next, the New Delhi agency where I am Chief Operating Officer." [F010, F002]
-2. Pillar 3, AI Decision and Acceleration Center: "I am building the agency's AI Decision and Acceleration Center." [F011]
+2. Pillar 2, Talent and hiring: "I have posted the agency's roles under my own name, on Instahyre in 2018 and on Cutshort from 2023 to 2024." [F012, F032, F038] (reworded in the design polish)
+2a. Pillar 3, AI Decision and Acceleration Center: "I am building it at Digitally Next. The agency's own line for it: 'Not all work needs AI. Some need judgment.'" [F011, F116] (reworded in the design polish)
 3. Hiring, lede (after the job-post quote): "That line runs through the Digitally Next job posts published in my name." [F038, F012]
 
 Work
