@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Motion } from "@/components/Motion";
 import { headerCta, navigation } from "@/content/navigation";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 // Fonts exactly as plan/design-decision.md section 3: Newsreader for display
@@ -20,6 +21,8 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "sw
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap", preload: false });
 
 export const metadata: Metadata = {
+  // Resolves the canonical and share-image addresses of every page (spec 9.1).
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Manpreet Jangra · Chief Operating Officer, Digitally Next",
     template: "%s · Manpreet Jangra",

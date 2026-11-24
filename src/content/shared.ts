@@ -61,3 +61,12 @@ export const notFound: {
     { label: "Careers", href: "/careers" },
   ],
 };
+
+/** The Hiring pill on Home and Careers (spec 4.1.6, 6.6): "Hiring now · 28 open
+ *  roles", counted from roles.ts with plural(). Hidden when there are no roles. */
+export const hiringPill: Sourced & { prefix: string; one: string; many: string } = {
+  prefix: "Hiring now · ",
+  one: "1 open role",
+  many: "{n} open roles",
+  facts: ["F196", "F140"],
+};

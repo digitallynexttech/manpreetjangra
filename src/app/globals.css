@@ -469,9 +469,16 @@
     line-height: var(--text-quote--line-height);
     color: var(--color-on-night);
   }
+  /* Newsreader's opening mark at 96 px is a 26 px glyph whose top sits 70 px
+     above the baseline. With line-height 0.6 it would ride up into the rule
+     and leave a gap under it, so the box is set back down by 0.19em (glyph top
+     20 px under the rule) and is 0.39em tall (about 20 px from the glyph to
+     the first line of the quote). Measured in the QA browser (M4). */
   .site-quote-mark {
     display: block;
-    height: 0.6em;
+    position: relative;
+    top: 0.19em;
+    height: 0.39em;
     font-family: var(--font-display);
     font-size: 96px;
     line-height: 0.6;
@@ -526,6 +533,13 @@
   }
   .site-text-link:hover { text-decoration-line: underline; text-decoration-color: var(--color-vermilion-ink); }
   .site-text-link .site-arrow { flex: none; }
+  /* Phones: a label that wraps keeps its arrow after the last word (as a flex
+     row it would sit alone at the far edge, e.g. "Read the feature on Women
+     Entrepreneurs Review" at 390 px). */
+  @media (width < 48rem) {
+    a.site-text-link { display: inline-block; }
+    a.site-text-link > .site-arrow { display: inline-block; margin-left: 8px; vertical-align: -3px; }
+  }
   button.site-text-link { min-height: 44px; }
   .site-text-link--night,
   .band-night .site-text-link,
@@ -799,6 +813,44 @@
   /* A future full-frame photograph (Portrait kind "photo"). */
   .site-hero-photo { object-fit: cover; object-position: var(--focal, 50% 30%); }
   .site-hero-caption { margin-top: 16px; }
+
+  /* --- Proof numbers (spec 4.1.2; Counter) ----------------------------- */
+  /* One column on phones (32 px apart), one per number from md (48 px). */
+  .site-counter { gap: 32px; }
+  @media (width >= 48rem) {
+    .site-counter { column-gap: 48px; }
+  }
+  .site-counter-link { margin-top: 12px; }
+  .site-counter-caption { margin-top: 24px; }
+
+  /* --- Home hiring card (spec 4.1.6) ----------------------------------- */
+  /* Text in columns 1-7 and the job-post lines in columns 8-12 from lg;
+     stacked below. The card itself is a .site-panel. */
+  .site-hiring-pill { margin-bottom: 24px; }
+  .site-hiring-list { margin-top: 40px; }
+  .site-hiring-list-title {
+    margin-bottom: 16px;
+    font-family: var(--font-mono);
+    font-size: var(--text-eyebrow);
+    line-height: var(--text-eyebrow--line-height);
+    letter-spacing: var(--text-eyebrow--letter-spacing);
+    font-weight: var(--text-eyebrow--font-weight);
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+  @media (width >= 64rem) {
+    .site-hiring {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 24px;
+      align-items: end;
+    }
+    .site-hiring-text { grid-column: 1 / 8; }
+    .site-hiring-list { grid-column: 8 / -1; margin-top: 0; }
+  }
+  @media (width >= 80rem) {
+    .site-hiring { column-gap: 32px; }
+  }
 
   /* --- Timeline (spec 4.1.4, 4.2.3, 6.10) ------------------------------ */
   /* compact: year | node | body. full: node | disclosure (year and title in
