@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Button } from "@/components/Button";
 import { PageIntro } from "@/components/PageIntro";
 import PageTransition from "@/components/PageTransition";
+import { SiteChrome } from "@/components/SiteChrome";
 import { TextLink } from "@/components/TextLink";
 import { introImages } from "@/content/images";
 import { notFound } from "@/content/shared";
@@ -14,17 +15,19 @@ export const metadata: Metadata = { title: notFound.title, description: null, op
 
 export default function NotFound() {
   return (
-    <PageTransition>
-      <PageIntro eyebrow={notFound.eyebrow} title={notFound.heading} lede={notFound.lede} image={introImages.notFound}>
-        <Button href={notFound.back.href} transitionTypes={["nav-back"]}>
-          {notFound.back.label}
-        </Button>
-        {notFound.links.map((link) => (
-          <TextLink key={link.href} href={link.href}>
-            {link.label}
-          </TextLink>
-        ))}
-      </PageIntro>
-    </PageTransition>
+    <SiteChrome>
+      <PageTransition>
+        <PageIntro eyebrow={notFound.eyebrow} title={notFound.heading} lede={notFound.lede} image={introImages.notFound}>
+          <Button href={notFound.back.href} transitionTypes={["nav-back"]}>
+            {notFound.back.label}
+          </Button>
+          {notFound.links.map((link) => (
+            <TextLink key={link.href} href={link.href}>
+              {link.label}
+            </TextLink>
+          ))}
+        </PageIntro>
+      </PageTransition>
+    </SiteChrome>
   );
 }

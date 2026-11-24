@@ -1,13 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Newsreader, Geist, Geist_Mono } from "next/font/google";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
-import { LocalTime } from "@/components/LocalTime";
-import { Motion } from "@/components/Motion";
-import { SocialLinks } from "@/components/SocialLinks";
-import { headerCta, homeNav, navigation } from "@/content/navigation";
-import { footer } from "@/content/shared";
 import { SITE_NAME, SITE_URL, SOCIAL_IMAGE, personJsonLd, websiteJsonLd } from "@/lib/site";
 import "./globals.css";
 
@@ -79,33 +72,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${newsreader.variable} ${geist.variable} ${geistMono.variable}`}
     >
       <body>
-        <div className="site">
-          <a className="site-skip" href="#site-content">
-            Skip to content
-          </a>
-          {/* The layout is a server component: it hands the links to the
-              client Header as props (spec 7.5), and the foot of the phone
-              sheet (her profiles and the time in New Delhi, as in the
-              footer) as rendered elements. */}
-          <Header
-            home={homeNav}
-            nav={navigation}
-            cta={headerCta}
-            sheetFoot={
-              <>
-                <SocialLinks />
-                <p className="site-caption">
-                  <LocalTime prefix={footer.place.prefix} />
-                </p>
-              </>
-            }
-          />
-          <main id="site-content" tabIndex={-1}>
-            {children}
-          </main>
-          <Footer />
-          <Motion />
-        </div>
+        <a className="site-skip" href="#site-content">
+          Skip to content
+        </a>
+        {/* The chrome lives in the route layouts: the classic site's in
+            (site)/layout.tsx (components/SiteChrome.tsx, which the 404 uses
+            too). Every chrome gives its main landmark the id
+            "site-content", the skip link's target. */}
+        {children}
         {/* Person and WebSite structured data (spec 9.4). */}
         <JsonLd data={[personJsonLd(), websiteJsonLd()]} />
       </body>

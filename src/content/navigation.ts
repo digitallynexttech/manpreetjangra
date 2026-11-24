@@ -1,6 +1,6 @@
 import type { NavItem, Url } from "./types";
 
-// Navigation. The root layout (a server component) passes `navigation`,
+// Navigation. SiteChrome (a server component) passes `navigation`,
 // `homeNav` and `headerCta` to the client Header as props, so this file holds
 // no fact ids and no placeholders (spec 7.5).
 

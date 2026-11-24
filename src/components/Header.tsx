@@ -12,7 +12,7 @@ import { Button } from "./Button";
 // while it holds keyboard focus or while the menu is open. Escape closes the
 // menu and returns focus to the toggle; links close the menu.
 //
-// Unlike the sibling, the links arrive as props from the root layout (a
+// Unlike the sibling, the links arrive as props from SiteChrome (a
 // server component), so this client file never imports content data (spec 7.5).
 
 /** The current page, or a page inside it, marks its link (spec 2.2). */

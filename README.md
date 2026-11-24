@@ -24,7 +24,7 @@ After deleting a route, run `pnpm build` before `pnpm typecheck`: until the next
 
 ## Structure
 
-- `src/app/`: the pages (`page.tsx` for Home, then `about/`, `work/`, `writing/`, `careers/`, `contact/`), `not-found.tsx` (the 404), `layout.tsx` (fonts, header, footer, root metadata, JSON-LD), `sitemap.ts` and `robots.ts` (served as `/sitemap.xml` and `/robots.txt`), `icon.svg` (the MJ monogram favicon) and `globals.css`.
+- `src/app/`: the pages in the `(site)` route group, which does not change their URLs (`(site)/page.tsx` for Home, then `(site)/about/`, `work/`, `writing/`, `careers/`, `contact/`, and `(site)/layout.tsx`, which adds the header, footer and scroll reveals through `src/components/SiteChrome.tsx`), `not-found.tsx` (the 404, wrapped in the same `SiteChrome`), `layout.tsx` (fonts, root metadata, the skip link, JSON-LD), `sitemap.ts` and `robots.ts` (served as `/sitemap.xml` and `/robots.txt`), `icon.svg` (the MJ monogram favicon) and `globals.css`.
 - `src/app/globals.css`: the site's single stylesheet, in a fixed order: motion tokens, design tokens (`@theme`), base styles, components in `@layer components`, then the motion rules unlayered. Light theme only.
 - `src/components/`: one file per component. Only `Header`, `Motion`, `Counter`, `Disclosure`, `VentureList`, `EnquiryForm`, `CopyButton` and `LocalTime` run in the browser (`"use client"`); everything else renders on the server.
 - `src/content/`: every word, number, link and image reference on the site, as typed data (see Content model).
@@ -50,7 +50,7 @@ All copy lives in `src/content/*.ts`, one file per page (`home.ts`, `about.ts`, 
 - **LinkedIn figures:** edit the numbers in `stats` and `LINKEDIN_AS_OF` in `src/content/home.ts`; the caption under the proof row is built from the date.
 - **A confirmed answer from Manpreet:** replace the matching `{{CONFIRM: ...}}` string with the answer (for example `COO_SINCE = "2024"`). Nothing else changes: the item appears on the next build. `docs/CONTENT-REVIEW.md` names the file and field for every question.
 - **A new claim:** check its id and status in `research/facts.json`. If it is publish or flag but missing from `src/content/facts.ts`, add the id to `PUBLISH` or `FLAG` there. Then write the copy in the right content file with the id in its `facts` array. Hold facts never go on the site.
-- **A new page:** add its folder under `src/app/`, its copy and `meta` in a new content file, `export const metadata = pageMetadata(meta)` in the page, and its path in `ROUTES` (`src/lib/site.ts`) so the sitemap lists it. Wrap the page in `PageTransition` and give it a `PageIntro` with an `introImages` entry.
+- **A new page:** add its folder under `src/app/(site)/`, its copy and `meta` in a new content file, `export const metadata = pageMetadata(meta)` in the page, and its path in `ROUTES` (`src/lib/site.ts`) so the sitemap lists it. Wrap the page in `PageTransition` and give it a `PageIntro` with an `introImages` entry.
 
 After any change: `pnpm typecheck`, `pnpm lint`, `pnpm build`, and look at the page at 390 and 1520 px wide.
 
