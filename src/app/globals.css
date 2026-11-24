@@ -678,7 +678,19 @@
   .site-social > a { display: inline-flex; align-items: center; gap: 12px; min-height: 32px; }
   .site-social svg { flex: none; width: 20px; height: 20px; color: var(--color-ink-muted); }
   .site-footer .site-social svg,
-  .band-night .site-social svg { color: var(--color-on-night-muted); }
+  .band-night .site-social svg,
+  .site-social--night svg { color: var(--color-on-night-muted); }
+  /* Contact page rows: the handle sits under the label in a mono caption. */
+  .site-social-handle {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    line-height: var(--text-caption--line-height);
+    letter-spacing: var(--text-caption--letter-spacing);
+    color: var(--color-ink-muted);
+  }
+  .site-social--night .site-social-handle,
+  .band-night .site-social-handle { color: var(--color-on-night-muted); }
 
   /* --- Page intro and intro backdrop (spec 3.5) ------------------------ */
   .site-page-intro { position: relative; isolation: isolate; overflow: clip; background: var(--color-paper); }

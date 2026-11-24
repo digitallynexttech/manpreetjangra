@@ -1,5 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Newsreader, Geist, Geist_Mono } from "next/font/google";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { Motion } from "@/components/Motion";
+import { headerCta, navigation } from "@/content/navigation";
 import "./globals.css";
 
 // Fonts exactly as plan/design-decision.md section 3: Newsreader for display
@@ -38,9 +42,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <a className="site-skip" href="#site-content">
             Skip to content
           </a>
+          {/* The layout is a server component: it hands the links to the
+              client Header as props (spec 7.5). */}
+          <Header nav={navigation} cta={headerCta} />
           <main id="site-content" tabIndex={-1}>
             {children}
           </main>
+          <Footer />
+          <Motion />
         </div>
       </body>
     </html>

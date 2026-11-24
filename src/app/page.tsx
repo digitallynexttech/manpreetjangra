@@ -1,16 +1,22 @@
-// Stand-in home page until the home milestone builds the full hero.
+import { ContactBand } from "@/components/ContactBand";
+import { Eyebrow } from "@/components/Eyebrow";
+import PageTransition from "@/components/PageTransition";
+import { hero } from "@/content/home";
+
+// Stand-in home page inside the site chrome, until the home milestone builds
+// the full page (hero, proof row, pillars, journey, night band, hiring).
 export default function Home() {
   return (
-    <section className="site-hero">
-      <div className="site-wrap">
-        <div className="site-hero-content">
-          <p className="site-eyebrow">
-            <span className="mj-thread mj-thread--hero" aria-hidden="true" />
-            <span className="site-eyebrow-label">Chief Operating Officer · Digitally Next · New Delhi</span>
-          </p>
-          <h1>Manpreet Jangra</h1>
+    <PageTransition>
+      <section className="site-hero" aria-labelledby="home-title">
+        <div className="site-wrap">
+          <div className="site-hero-content">
+            <Eyebrow variant="hero">{hero.eyebrow}</Eyebrow>
+            <h1 id="home-title">{hero.name}</h1>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <ContactBand surface="sand" />
+    </PageTransition>
   );
 }
