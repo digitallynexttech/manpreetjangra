@@ -10,7 +10,6 @@ import { JourneyTrack } from "@/components/v2/home/JourneyTrack";
 import { PodiumStage, WorkAndWords } from "@/components/v2/home/WorkAndWords";
 import { meta } from "@/content/home";
 import { v2Metadata } from "@/lib/v2";
-import "./home.css";
 
 export const metadata = v2Metadata(meta);
 

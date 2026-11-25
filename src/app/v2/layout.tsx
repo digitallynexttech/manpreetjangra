@@ -11,6 +11,12 @@ import { introImages, podium, portrait, zari } from "@/content/images";
 import { headerCta, socialLinks } from "@/content/navigation";
 import { labels, toV2, v2Nav, wordmark } from "@/content/v2";
 import "./v2.css";
+// The page styles load with the layout, so moving between /v2 pages (and
+// the link prefetches that come before it) never fetches a stylesheet the
+// current page does not use; every rule in them is scoped to its own v2-
+// classes.
+import "./home.css";
+import "./inner.css";
 
 // The scroll edition of the site (plan/v2-spec.md 3.1): its own chrome (the
 // header with its full-screen menu, the main landmark the skip link targets,

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Plus } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
+import { RowDisclosure } from "./RowDisclosure";
 
 // Tables in big bold uppercase rows (spec 4.2, Lando's results tables):
 // hairlines between rows, columns aligned on one grid, a tint and an arrow
@@ -8,8 +9,9 @@ import type { CSSProperties, ReactNode } from "react";
 //
 // A row is one of three kinds: a link (the whole row; another site opens in a
 // new tab and says so), a disclosure (`detail`: a native <details>, so it
-// works without JavaScript; rows sharing `group` open one at a time, the
-// classic Disclosure's rule, through the details `name` attribute), or plain.
+// works without JavaScript, opened and closed smoothly by RowDisclosure, the
+// classic Disclosure's logic; rows sharing `group` open one at a time;
+// `open` starts it open), or plain.
 // The column headings are shown once above the rows and repeated to screen
 // readers inside each cell, so a row reads "Year: 2019, Title: ...".
 
@@ -27,6 +29,8 @@ export type BigRow = {
   cells: readonly ReactNode[];
   href?: string;
   detail?: ReactNode;
+  /** A detail row that starts open. */
+  open?: boolean;
   /** A row-specific wrapper class (the venture preview hooks into it). */
   className?: string;
 };
@@ -74,13 +78,18 @@ export function BigRows({
           let inner: ReactNode;
           if (row.detail) {
             inner = (
-              <details name={group}>
-                <summary className="v2-row-inner">
-                  {cells(row)}
-                  <Plus className="v2-row-arrow" size={22} strokeWidth={2} aria-hidden="true" />
-                </summary>
-                <div className="v2-row-detail">{row.detail}</div>
-              </details>
+              <RowDisclosure
+                group={group}
+                defaultOpen={row.open}
+                summary={
+                  <>
+                    {cells(row)}
+                    <Plus className="v2-row-arrow" size={22} strokeWidth={2} aria-hidden="true" />
+                  </>
+                }
+              >
+                {row.detail}
+              </RowDisclosure>
             );
           } else if (row.href && external) {
             inner = (

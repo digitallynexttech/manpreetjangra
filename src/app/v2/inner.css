@@ -1,0 +1,318 @@
+/* The inner /v2 pages (plan/v2-spec.md 4.2 to 4.4), Lando's "On Track" page
+   in Manpreet's content: imported by each inner page. As in v2.css, every
+   rule is scoped to a `v2-` class (the one exception is the classic copy
+   button inside the About bio card, restyled only inside that v2 card), so
+   nothing here can reach the classic pages even if Next keeps this file
+   loaded after a visit. Colours are the classic tokens through the theme
+   variables of v2.css.
+
+   Order: shared inner patterns (sections, heads, links, quotes, manifesto,
+   big figure), then About, then Work. */
+
+/* --- Shared ---------------------------------------------------------------- */
+.v2-inner-section {
+  position: relative;
+  overflow: clip;
+  isolation: isolate;
+  padding-block: clamp(80px, 14vh, 168px);
+}
+.v2-inner-section > .v2-wrap { position: relative; z-index: 1; }
+.v2-inner-eyebrow { margin-bottom: clamp(14px, 2.2vh, 24px); }
+
+/* A section head: label and heading on the left, a short lede on the right
+   that sits on the heading's last line (Lando's "F1 result highlights"). */
+.v2-inner-head {
+  display: grid;
+  gap: 20px clamp(32px, 5vw, 96px);
+  margin-bottom: clamp(36px, 7vh, 84px);
+}
+.v2-inner-head-lede { max-width: 34rem; color: var(--v2-muted); text-wrap: pretty; }
+@media (width >= 64rem) {
+  .v2-inner-head { grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); align-items: end; }
+  .v2-inner-head-lede { justify-self: end; padding-bottom: 0.4em; }
+}
+/* Heading column and content column (education, bio). */
+.v2-inner-split { display: grid; gap: 32px clamp(32px, 5vw, 96px); }
+@media (width >= 64rem) {
+  .v2-inner-split { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; }
+}
+.v2-inner-split--rule { border-top: 1px solid var(--v2-rule); padding-top: clamp(40px, 6vh, 72px); }
+
+/* A small text link: bold uppercase in the theme's text accent. */
+.v2-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--v2-accent);
+  text-decoration: none;
+}
+.v2-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+.v2-link svg { flex: none; transition: translate 0.45s var(--v2-ease); }
+.v2-link:hover svg { translate: 2px 0; }
+@media (pointer: coarse) {
+  .v2-link { min-height: 44px; }
+}
+
+/* Her quotations (QuoteFigure). */
+.v2-quotefig { margin: 0; display: grid; justify-items: start; gap: 14px; }
+.v2-quotefig-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--v2-fg);
+  text-wrap: pretty;
+}
+.v2-quotefig--card .v2-quotefig-text { font-size: clamp(1.375rem, 1rem + 1vw, 2.125rem); line-height: 1.16; }
+.v2-quotefig--large .v2-quotefig-text { font-size: clamp(1.625rem, 1rem + 2.1vw, 3.25rem); line-height: 1.12; }
+
+/* The night manifesto (About story, Work ADAC): a label under a small
+   thread mark, then the text set huge and centred, lighting up word by word. */
+.v2-inner-manifesto { overflow: clip; isolation: isolate; }
+.v2-inner-manifesto-inner {
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(88px, 16vh, 184px) clamp(56px, 10vh, 120px);
+}
+.v2-inner-manifesto-head {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  margin-bottom: clamp(28px, 5vh, 56px);
+  text-align: center;
+}
+.v2-inner-mark { display: block; width: 64px; height: 40px; color: var(--v2-stroke); }
+.v2-inner-mark path { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.v2-inner-manifesto-text { max-width: 76rem; margin-inline: auto; }
+.v2-inner-manifesto-text.v2-size-title { font-size: clamp(2rem, 4.7vw, 5.25rem); line-height: 0.93; }
+.v2-inner-manifesto-after {
+  max-width: 40rem;
+  margin: clamp(28px, 5vh, 56px) auto 0;
+  text-align: center;
+  color: var(--v2-muted);
+}
+
+/* Lando's "49 PODIUMS": the giant number and its label (BigFigure). */
+.v2-inner-figure { position: relative; z-index: 1; padding-bottom: clamp(72px, 12vh, 150px); }
+
+/* --- About: her story ---------------------------------------------------- */
+.v2-about-story-rest {
+  overflow: clip;
+  isolation: isolate;
+  padding-block: clamp(80px, 14vh, 168px);
+}
+.v2-about-story-grid { position: relative; z-index: 1; display: grid; gap: 48px; align-items: start; }
+.v2-about-story-photo figure { margin: 0; width: min(100%, 26rem); }
+.v2-about-story-photo figcaption { margin-top: 22px; }
+.v2-about-story-text.v2-body {
+  max-width: 42rem;
+  font-size: clamp(1.125rem, 1rem + 0.45vw, 1.375rem);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+.v2-about-story-text.v2-body p + p { margin-top: 1.1em; }
+@media (width >= 48rem) {
+  .v2-about-story-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: clamp(32px, 6vw, 120px); }
+  .v2-about-story-text.v2-body { padding-top: clamp(24px, 8vh, 96px); }
+}
+@media (width < 48rem) {
+  .v2-about-story-photo figure { width: min(82%, 22rem); }
+}
+
+/* --- About: journey ------------------------------------------------------ */
+.v2-about-journey > .v2-threadfield { opacity: 0.8; }
+.v2-about-journey-rows .v2-cell:first-child { color: var(--v2-muted); }
+.v2-about-journey-rows .v2-row-detail { padding-top: 4px; }
+.v2-about-journey-text.v2-body { max-width: 40rem; color: var(--v2-muted); }
+.v2-about-journey-sources { display: flex; flex-wrap: wrap; gap: 0 24px; margin-top: 10px; }
+@media (width >= 48rem) {
+  /* The details sit under the milestone, not under the year. */
+  .v2-about-journey-rows .v2-row-detail { margin-inline-start: calc(clamp(6.5rem, 15vw, 15rem) + clamp(12px, 2vw, 32px)); }
+}
+
+/* --- About: what drives her ---------------------------------------------- */
+.v2-about-beliefs-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: clamp(20px, 3vh, 32px);
+  text-align: center;
+}
+/* INDEPENDENCE is one long word: on small phones the heading shrinks so it
+   fits the width. */
+.v2-about-beliefs .v2-mixed.v2-size-display { font-size: min(11vw, clamp(2.75rem, 8.4vw, 9.5rem)); }
+.v2-about-beliefs-inner > .v2-inner-eyebrow { margin-bottom: 0; }
+/* "IN THE MIND." stays one line, so no word of it is left alone on a phone. */
+.v2-about-beliefs .v2-mixed .v2-serif { white-space: nowrap; }
+.v2-about-beliefs-quote { max-width: 54rem; margin-top: clamp(12px, 3vh, 40px); }
+.v2-about-beliefs .v2-quotefig { justify-items: center; }
+.v2-about-beliefs-line { width: min(22rem, 64%); margin-block: -2px 2px; }
+.v2-about-beliefs-summary.v2-body { max-width: 40rem; color: var(--v2-muted); text-wrap: pretty; }
+
+/* --- About: education (Lando's list with laurels) ------------------------ */
+/* Education and the bio read as one closing block: less room between them,
+   the bio's hairline marks the turn. */
+.v2-about-education.v2-inner-section { padding-bottom: clamp(48px, 8vh, 88px); }
+.v2-about-bio.v2-inner-section { padding-top: 0; }
+.v2-about-edu { margin: 0; padding: 0; list-style: none; display: grid; gap: 28px clamp(24px, 3vw, 48px); }
+@media (width >= 40rem) {
+  .v2-about-edu { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (width >= 64rem) {
+  .v2-about-edu { padding-top: 0.6em; }
+}
+.v2-about-edu-item {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  column-gap: 16px;
+  row-gap: 10px;
+  align-content: start;
+  padding-top: 22px;
+  border-top: 1px solid var(--v2-rule);
+}
+.v2-about-edu-mark { grid-row: 1 / span 2; width: 48px; height: 30px; }
+.v2-about-edu-degree { font-size: clamp(1.5rem, 2.6vw, 2.75rem); line-height: 0.94; }
+.v2-about-edu-detail { grid-column: 2; }
+
+/* --- About: bio for organisers ------------------------------------------- */
+.v2-about-bio-card { display: grid; justify-items: start; gap: 22px; padding: clamp(24px, 3vw, 48px); }
+.v2-about-bio-text { max-width: 46rem; font-size: clamp(1.125rem, 1rem + 0.5vw, 1.4375rem); line-height: 1.5; text-wrap: pretty; }
+/* The classic copy button (CopyButton), in the v2 pill's type and shape. */
+.v2-about-bio-card .site-copy { gap: 10px 18px; }
+.v2-about-bio-card .site-copy-button {
+  min-height: 40px;
+  padding-inline: 16px;
+  gap: 8px;
+  border-radius: 6px;
+  font: 700 0.8125rem/1 var(--font-sans);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.v2-about-bio-card .site-copy-button::before { border: 1.5px solid currentColor; }
+.v2-about-bio-card .site-copy-button svg { width: 16px; height: 16px; }
+.v2-about-bio-card .site-copy-status {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--v2-muted);
+}
+@media (pointer: coarse) {
+  .v2-about-bio-card .site-copy-button { min-height: 44px; }
+}
+
+/* --- Work: operations and the markets ------------------------------------ */
+.v2-work-lines .v2-cell--small { color: var(--v2-accent); }
+.v2-work-lines .v2-cell--big { font-size: clamp(1.375rem, 3vw, 3.25rem); line-height: 0.95; }
+.v2-work-lines .v2-row-inner { align-items: center; }
+.v2-work-markets { margin-top: clamp(64px, 12vh, 150px); padding-bottom: 0; }
+.v2-work-markets-text { display: grid; gap: 16px; max-width: 40rem; margin-top: clamp(28px, 5vh, 56px); }
+.v2-work-markets-text .v2-lede { text-wrap: pretty; }
+@media (width >= 64rem) {
+  .v2-work-markets-text { margin-inline-start: auto; }
+}
+
+/* --- Work: talent ---------------------------------------------------------- */
+.v2-work-talent-grid { display: grid; gap: 56px; }
+.v2-work-talent-text { display: grid; justify-items: start; gap: 24px; }
+.v2-work-talent-text > .v2-inner-eyebrow { margin-bottom: -8px; }
+.v2-work-talent-para.v2-lede { max-width: 38rem; }
+.v2-work-talent-card .v2-notch { padding: clamp(28px, 3.2vw, 52px); }
+@media (width >= 64rem) {
+  .v2-work-talent-grid {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    column-gap: clamp(40px, 6vw, 120px);
+    align-items: center;
+  }
+}
+
+/* --- Work: the AI Decision and Acceleration Center ----------------------- */
+.v2-work-adac-title { max-width: 70rem; }
+/* The thread runs under the title, clear of its letters. */
+.v2-work-adac-loop { width: min(54rem, 100%); margin: clamp(-24px, -2vh, -8px) auto clamp(14px, 2.4vh, 28px); }
+.v2-work-adac-body { display: grid; gap: 16px; max-width: 46rem; margin: 0 auto; text-align: center; }
+.v2-work-adac-body .v2-lede { text-wrap: pretty; }
+.v2-work-adac-roles.v2-body { color: var(--v2-muted); }
+
+/* --- Work: partners, not vendors ----------------------------------------- */
+.v2-work-how-cards { display: grid; gap: 20px; }
+.v2-work-how-card .v2-notch {
+  display: grid;
+  padding: clamp(26px, 3.2vw, 52px);
+}
+/* The quote at the top of the card, its source and link at the foot. */
+.v2-work-how-card .v2-quotefig { grid-template-rows: 1fr auto auto; }
+@media (width >= 64rem) {
+  .v2-work-how-card .v2-notch { min-height: clamp(260px, 40vh, 440px); }
+}
+.v2-work-how-card--paper .v2-notch { background: var(--color-paper); }
+@media (width >= 48rem) {
+  .v2-work-how-cards { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; }
+  .v2-work-how-card--raised { grid-column: 1 / span 6; }
+  .v2-work-how-card--paper { grid-column: 7 / span 6; margin-top: clamp(64px, 16vh, 200px); }
+}
+@media (width >= 64rem) {
+  .v2-work-how-card--raised { grid-column: 1 / span 5; }
+  .v2-work-how-card--paper { grid-column: 7 / span 5; }
+}
+
+/* --- Work: a client story -------------------------------------------------- */
+.v2-work-client-grid { display: grid; gap: 56px; }
+.v2-work-client-text { display: grid; justify-items: start; gap: 22px; }
+.v2-work-client-text > .v2-inner-eyebrow { margin-bottom: -6px; }
+.v2-work-client-lede.v2-body { max-width: 34rem; color: var(--v2-muted); }
+.v2-work-client-quote { margin-top: 14px; }
+.v2-work-client-line { width: min(18rem, 70%); margin-block: -4px 0; }
+.v2-work-client-stats {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.6vw, 24px);
+}
+.v2-work-client-stats > li { display: grid; }
+.v2-work-client-card { display: grid; align-content: start; }
+.v2-work-client-card .v2-counter-value { font-size: clamp(3rem, 7vw, 8rem); }
+@media (width < 48rem) {
+  .v2-work-client-card { padding: 18px 16px; }
+  .v2-work-client-card .v2-counter-label { font-size: 0.875rem; }
+}
+@media (width >= 64rem) {
+  .v2-work-client-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: clamp(40px, 6vw, 120px); align-items: start; }
+  .v2-work-client-card { min-height: clamp(180px, 30vh, 330px); }
+  /* The right column of numbers sits a step lower, Lando's offset grid. */
+  .v2-work-client-stats { padding-bottom: 10vh; }
+  .v2-work-client-stats > li:nth-child(even) { translate: 0 10vh; }
+}
+
+/* --- Work: where I work (VentureRows) ------------------------------------- */
+.v2-ventures .v2-row-inner { align-items: center; }
+.v2-venture-name.v2-cell--big { font-size: clamp(1.75rem, 3.8vw, 4.25rem); line-height: 0.92; transition: translate 0.45s var(--v2-ease); }
+a.v2-row-inner:hover .v2-venture-name { translate: 8px 0; }
+.v2-venture-toggle { display: none; }
+@media (hover: none), (width < 48rem) {
+  .v2-venture-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin: -8px 0 10px;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: 600 0.875rem/1.2 var(--font-sans);
+    color: var(--v2-fg);
+    cursor: pointer;
+  }
+}
+@media (hover: none) {
+  a.v2-row-inner:hover .v2-venture-name { translate: none; }
+}

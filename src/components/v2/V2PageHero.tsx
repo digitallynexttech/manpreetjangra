@@ -7,7 +7,8 @@ import { ThreadField } from "./ThreadField";
 // title as one giant line across the full width (bold sans, with a serif
 // word where the copy allows and a scribble drawn over one word on load),
 // a meta row of three short facts in bold uppercase, then the intro lede
-// with its last phrase in the serif voice. Paper with the thread field, or
+// (under an optional small mono line) with its last phrase in the serif
+// voice. Paper with the thread field, or
 // night (Writing and Contact).
 //
 // The title's size follows its number of letters so it nearly fills one
@@ -20,6 +21,7 @@ export function V2PageHero({
   meta,
   lede,
   accent,
+  ledeLabel,
   theme = "paper",
   as = "h1",
   fit = 1,
@@ -34,6 +36,9 @@ export function V2PageHero({
   lede: string;
   /** The last phrase of the lede, set in the serif voice (must end `lede`). */
   accent?: string;
+  /** A small mono line over the lede (Lando's label above his intro), such
+   *  as the classic page's intro title. */
+  ledeLabel?: string;
   theme?: "paper" | "night";
   as?: ElementType;
   /** Multiplies the estimated letter width (1 = default). */
@@ -61,16 +66,19 @@ export function V2PageHero({
             <li key={item}>{item}</li>
           ))}
         </ul>
-        <p className="v2-lede v2-page-lede">
-          {at < 0 || !accent ? (
-            lede
-          ) : (
-            <>
-              {lede.slice(0, at)}
-              <span className="v2-serif-italic">{lede.slice(at)}</span>
-            </>
-          )}
-        </p>
+        <div className="v2-page-lede">
+          {ledeLabel ? <p className="v2-label v2-page-lede-label">{ledeLabel}</p> : null}
+          <p className="v2-lede">
+            {at < 0 || !accent ? (
+              lede
+            ) : (
+              <>
+                {lede.slice(0, at)}
+                <span className="v2-serif-italic">{lede.slice(at)}</span>
+              </>
+            )}
+          </p>
+        </div>
         {children}
       </div>
     </section>

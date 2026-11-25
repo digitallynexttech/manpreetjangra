@@ -28,8 +28,12 @@ export function BigCounter({
       const mm = gsap.matchMedia();
       mm.add(MEDIA.motion, () => {
         const counter = { n: 0 };
+        // Plays once and never reverses. Not `once: true`: a timeline's
+        // trigger measures itself a tick late, so a page opened scrolled
+        // past it (a link from far down another page) killed it from inside
+        // a newer trigger's first refresh, which broke that refresh.
         const timeline = gsap.timeline({
-          scrollTrigger: { trigger: node, start: "top 88%", once: true },
+          scrollTrigger: { trigger: node, start: "top 88%", toggleActions: "play none none none" },
           onComplete: () => {
             shown.textContent = value;
           },

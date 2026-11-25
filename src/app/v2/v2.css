@@ -71,9 +71,11 @@ html.v2-scroll-locked { overflow: hidden; }
   color: var(--v2-fg);
 }
 .v2-surface { position: relative; background: var(--v2-bg); }
-.v2-surface--sand { --v2-bg: var(--color-sand); --v2-card: var(--color-paper); }
-.v2-surface--blush { --v2-bg: var(--color-blush); --v2-card: var(--color-paper); }
-.v2-surface--raised { --v2-bg: var(--color-night-raised); --v2-card: var(--color-night); }
+/* As specific as the theme rules above and after them, so a variant wins on
+   the element that also names its theme. */
+.v2 .v2-surface--sand { --v2-bg: var(--color-sand); --v2-card: var(--color-paper); }
+.v2 .v2-surface--blush { --v2-bg: var(--color-blush); --v2-card: var(--color-paper); }
+.v2 .v2-surface--raised { --v2-bg: var(--color-night-raised); --v2-card: var(--color-night); }
 
 .v2 :focus-visible {
   outline: 2px solid var(--v2-focus, var(--color-vermilion-ink));
@@ -390,7 +392,10 @@ a.v2-row-inner:hover .v2-row-arrow,
 a.v2-row-inner:focus-visible .v2-row-arrow { opacity: 1; translate: 4px 0; color: var(--v2-accent); }
 summary.v2-row-inner { cursor: pointer; list-style: none; }
 summary.v2-row-inner::-webkit-details-marker { display: none; }
-details[open] > summary .v2-row-arrow { rotate: 45deg; opacity: 1; color: var(--v2-accent); }
+summary.v2-row-inner:hover .v2-row-arrow,
+summary.v2-row-inner:focus-visible .v2-row-arrow { opacity: 1; }
+/* A closing row is still [open] until its panel has shrunk (RowDisclosure). */
+details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opacity: 1; color: var(--v2-accent); }
 .v2-row-detail { padding: 0 0 clamp(16px, 2vw, 28px); max-width: 44rem; }
 @media (width < 48rem) {
   .v2-rows-head { display: none; }
@@ -400,6 +405,9 @@ details[open] > summary .v2-row-arrow { rotate: 45deg; opacity: 1; color: var(--
 }
 
 /* --- Field portrait (the cut-out on its vermilion field) ----------------- */
+/* The box holds the marigold plate, so the plate never spreads to the
+   nearest positioned ancestor (a section) when nothing else moves the box. */
+.v2-field-box { position: relative; }
 .v2-field {
   position: relative;
   aspect-ratio: 4 / 5;
@@ -591,6 +599,7 @@ details[open] > summary .v2-row-arrow { rotate: 45deg; opacity: 1; color: var(--
 .v2-menu-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .v2-menu-tile--mono img { filter: grayscale(1) sepia(0.18) brightness(0.92); transition: filter 0.6s var(--v2-ease), scale 0.9s var(--v2-ease); }
 .v2-menu-tile--mono:hover img { filter: none; scale: 1.03; }
+.v2-menu-tile .v2-field-box { position: static; }
 .v2-menu-tile .v2-field { position: absolute; inset: 0; aspect-ratio: auto; border-radius: 0; }
 /* Open: the links rise one after another (60 ms apart). */
 .v2-menu-links > li { overflow: clip; padding-block: 0.02em; }
@@ -754,13 +763,14 @@ details[open] > summary .v2-row-arrow { rotate: 45deg; opacity: 1; color: var(--
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 6px 24px;
-  margin: clamp(16px, 2.4vh, 28px) 0 0;
+  margin: clamp(20px, 3.4vh, 36px) 0 0;
   padding: 0;
   list-style: none;
   font-size: clamp(0.9375rem, 1.3vw, 1.25rem);
   line-height: 1.1;
 }
 .v2-page-lede { margin-top: clamp(40px, 8vh, 96px); max-width: 40rem; margin-inline-start: auto; }
+.v2-page-lede-label { margin-bottom: 14px; max-width: 34rem; }
 @media (width < 64rem) {
   .v2-page-lede { margin-inline-start: 0; }
 }
