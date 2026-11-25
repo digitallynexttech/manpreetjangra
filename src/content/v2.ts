@@ -62,6 +62,12 @@ export const labels = {
   serviceLine: "Service line",
   organisation: "Organisation",
   field: "Field",
+  /** Writing: the article rows (date, article, where it was published). */
+  date: "Date",
+  article: "Article",
+  outlet: "Outlet",
+  /** Careers: the role rows (the role's title, its department). */
+  department: "Department",
   /** Opens in a new tab, for screen readers (the classic site says the same). */
   newTab: " (opens in a new tab)",
   // The website preview of the Work ventures (the classic VentureList says

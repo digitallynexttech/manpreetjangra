@@ -8,13 +8,17 @@ import type { HeadingSize } from "./MixedHeading";
 // The words are split with aria "none" into plain inline spans, so the text
 // still reads as one sentence; nothing is dimmed before the script runs or
 // with reduced motion. `accent` (a phrase inside `text`) is set in the serif
-// voice and the theme's accent colour.
+// voice and the theme's accent colour. `voice="quote"` sets the text as one
+// of her quotations instead: the serif italic in curly marks (drawn by CSS),
+// for a pull quote that lights up the same way.
 export function WordReveal({
   text,
   accent,
   as: Tag = "p",
   size = "manifesto",
   align = "center",
+  voice = "display",
+  dim = 0.18,
   id,
   className,
 }: {
@@ -23,6 +27,10 @@ export function WordReveal({
   as?: ElementType;
   size?: HeadingSize;
   align?: "start" | "center";
+  /** display: the two voices of the headings; quote: her words in the serif italic. */
+  voice?: "display" | "quote";
+  /** The opacity a word starts from (0.4 keeps large text above 3:1 on night). */
+  dim?: number;
   id?: string;
   className?: string;
 }) {
@@ -37,7 +45,7 @@ export function WordReveal({
         const split = SplitText.create(node, { type: "words", wordsClass: "v2-word", tag: "span", aria: "none" });
         gsap.fromTo(
           split.words,
-          { opacity: 0.18 },
+          { opacity: dim },
           {
             opacity: 1,
             ease: "none",
@@ -49,12 +57,14 @@ export function WordReveal({
       });
       return () => mm.revert();
     },
-    { scope: root },
+    { scope: root, dependencies: [dim] },
   );
 
   const at = accent ? text.indexOf(accent) : -1;
   const content =
-    at < 0 || !accent ? (
+    voice === "quote" ? (
+      <q className="v2-quote">{text}</q>
+    ) : at < 0 || !accent ? (
       <span className="v2-sans">{text}</span>
     ) : (
       <>
@@ -65,7 +75,7 @@ export function WordReveal({
     );
 
   return (
-    <Tag ref={root} id={id} className={["v2-mixed", `v2-size-${size}`, `v2-mixed--${align}`, "v2-reveal", className].filter(Boolean).join(" ")}>
+    <Tag ref={root} id={id} className={["v2-mixed", `v2-size-${size}`, `v2-mixed--${align}`, "v2-reveal", voice === "quote" && "v2-reveal--quote", className].filter(Boolean).join(" ")}>
       {content}
     </Tag>
   );
