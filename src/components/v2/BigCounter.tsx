@@ -54,7 +54,9 @@ export function BigCounter({
               text.data = value;
             },
           });
-          timeline.from(shown, { scale: 0.6, opacity: 0.4, duration: 1.2, ease: EASE_IN }, 0);
+          // From nothing, not a faint 0: a slot waiting near the foot of the
+          // screen shows its label, never a false "0".
+          timeline.from(shown, { scale: 0.6, opacity: 0, duration: 1.2, ease: EASE_IN }, 0);
           if (counts) {
             timeline.to(
               counter,

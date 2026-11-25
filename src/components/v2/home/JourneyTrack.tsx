@@ -1,16 +1,17 @@
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { ParaText } from "@/components/ParaText";
 import type { CSSProperties, ReactNode } from "react";
 import { journey } from "@/content/home";
 import { podium, portrait } from "@/content/images";
 import { stage } from "@/content/writing";
 import { isConfirmed } from "@/content/types";
-import { toV2 } from "@/content/v2";
+import { toV2, v2Nav } from "@/content/v2";
 import { ventures } from "@/content/work";
 import { quoteView, timelineView } from "@/lib/views";
 import { CaptionLabel } from "../CaptionLabel";
 import { FieldPortrait } from "../FieldPortrait";
-import { PillButton } from "../PillButton";
 import { ThreadDraw } from "../ThreadDraw";
 import { ThreadField } from "../ThreadField";
 import { TrackScene } from "./HomeScenes";
@@ -116,6 +117,8 @@ function Website({ id, index }: { id: string; index: number }) {
 export function JourneyTrack() {
   const quote = quoteView("trust");
   const hasDirector = journey.entries.some((entry) => entry.id === "2024");
+  // The page the end link opens (About), named from the navigation copy.
+  const endPage = v2Nav.find((item) => toV2(journey.link.href).split("#")[0] === item.href);
   const podiumCaption = [stage.eyebrow, isConfirmed(stage.photoEvent) ? stage.photoEvent : null];
   return (
     <section className="v2-track" data-v2-theme="night" aria-labelledby="v2-journey-title">
@@ -164,10 +167,18 @@ export function JourneyTrack() {
             {hasDirector ? <Entry id="2024" /> : null}
             <Entry id="now" />
             <Website id="dn" index={0} />
+            {/* The track ends on a display link (not a small pill alone in
+                the paper): the page's name over the words, with an arrow. */}
             <Item id="end" className="v2-track-end">
-              <PillButton href={toV2(journey.link.href)} size="large">
+              {endPage ? (
+                <p className="v2-label" aria-hidden="true">
+                  {endPage.label}
+                </p>
+              ) : null}
+              <Link className="v2-track-end-link v2-sans v2-size-title" href={toV2(journey.link.href)}>
                 {journey.link.label}
-              </PillButton>
+                <ArrowRight className="v2-track-end-arrow" size="0.8em" strokeWidth={2.5} aria-hidden="true" />
+              </Link>
             </Item>
           </div>
         </div>

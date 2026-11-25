@@ -51,6 +51,14 @@
 .v2-hero-now-role { margin-top: 10px; font-size: 1.0625rem; line-height: 0.95; letter-spacing: -0.02em; text-wrap: balance; }
 .v2-hero-now-org { margin-top: 3px; font-size: 1.0625rem; line-height: 1; }
 .v2-hero-now .v2-notch-caption { margin-top: 14px; padding-top: 10px; font-size: 0.6875rem; }
+/* The smallest phones: a wider, shorter-reaching card, so the role and the
+   agency keep their lines and the card's foot stays on the first screen. */
+@media (width < 26rem) {
+  .v2-hero-now { width: min(70%, 15rem); margin-top: -4.5rem; }
+  .v2-hero-now-role,
+  .v2-hero-now-org { font-size: 0.9375rem; }
+  .v2-hero-now .v2-notch-caption { gap: 8px; white-space: nowrap; letter-spacing: 0.04em; }
+}
 .v2-hero-cue {
   display: none;
   align-items: center;
@@ -127,7 +135,7 @@
   position: relative;
   width: min(100%, 60rem);
   margin: 0;
-  padding: clamp(32px, 6vh, 72px) clamp(22px, 6vw, 88px) clamp(140px, 22vh, 220px);
+  padding: clamp(32px, 6vh, 72px) clamp(22px, 6vw, 88px) clamp(72px, 12vh, 120px);
   border-radius: 10px;
   background: var(--color-night-raised);
   text-align: center;
@@ -151,7 +159,7 @@
   position: absolute;
   left: -4%;
   width: 108%;
-  bottom: clamp(-170px, -18vh, -48px);
+  bottom: clamp(-120px, -12vh, -40px);
   height: auto;
 }
 @media (width < 64rem) {
@@ -270,7 +278,20 @@
   text-wrap: balance;
 }
 .v2-track-quote-mark { width: 8.5rem; margin: 12px 0 14px; }
-.v2-track-end { display: flex; align-items: center; }
+.v2-track-end { display: grid; align-content: center; justify-items: start; gap: 12px; }
+.v2-track-end-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22em;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--v2-fg);
+  text-decoration: none;
+}
+.v2-track-end-arrow { flex: none; color: var(--v2-accent); transition: translate 0.4s var(--v2-ease); }
+.v2-track-end-link:hover .v2-track-end-arrow,
+.v2-track-end-link:focus-visible .v2-track-end-arrow { translate: 0.12em 0; }
 @media (width >= 64rem) {
   .v2-track.is-horizontal {
     height: calc(100vh + var(--v2-track-distance, 190vw));
@@ -307,7 +328,8 @@
     margin: var(--y) 0 0 var(--gap);
     justify-self: auto;
   }
-  .v2-track.is-horizontal .v2-track-end { width: auto; }
+  /* Centred in the stage, whatever its place in the scatter. */
+  .v2-track.is-horizontal .v2-track-end { width: auto; align-self: center; margin-top: 0; }
 }
 .v2-track-layer { position: absolute; inset: 0; opacity: 0; }
 .v2-track-layer--sand { background: var(--color-sand); }
@@ -315,6 +337,8 @@
 
 /* --- 5. The Work / Her Words ---------------------------------------------- */
 .v2-split { overflow: clip; isolation: isolate; }
+/* Inside the section, so its faded edges show instead of a straight cut. */
+.v2-split > .v2-threadfield { inset: 0; }
 .v2-split-grid {
   position: relative;
   z-index: 1;
@@ -329,7 +353,15 @@
 .v2-split-block { display: grid; justify-items: start; gap: 18px; }
 .v2-split-lede { max-width: 32ch; font-size: 0.9375rem; line-height: 1.45; color: var(--v2-fg); text-wrap: pretty; }
 @media (width >= 48rem) {
-  .v2-split-grid { grid-template-columns: repeat(2, minmax(0, max-content)); column-gap: clamp(40px, 6vw, 120px); }
+  /* The two blocks share three rows (heading, lede, button), so their ledes
+     and buttons line up, and the gap keeps THE WORK and HER WORDS apart. */
+  .v2-split-grid {
+    grid-template-columns: repeat(2, minmax(0, max-content));
+    grid-template-rows: auto auto auto;
+    column-gap: clamp(72px, 11vw, 200px);
+    row-gap: 18px;
+  }
+  .v2-split-block { grid-row: span 3; grid-template-rows: subgrid; align-content: start; }
   .v2-split-block--end { justify-items: end; text-align: end; }
   .v2-split-block--end .v2-mixed { text-align: end; }
 }
@@ -569,6 +601,18 @@
 }
 .v2-hiring-pill,
 .v2-hiring-title { position: relative; z-index: 1; }
+/* The shared hiring pill in v2's pill style (6 px corners, bold uppercase,
+   the theme's ink on its tint); only the dot stays vermilion. */
+.v2 .v2-hiring-pill {
+  border-radius: 6px;
+  padding: 8px 12px;
+  font: 700 0.75rem/1 var(--font-sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--v2-fg);
+  background: var(--v2-tint);
+  box-shadow: inset 0 0 0 1px var(--v2-rule);
+}
 .v2-hiring-title { max-width: 14ch; }
 .v2-hiring-side { position: relative; z-index: 1; display: grid; align-content: end; gap: 24px; }
 .v2-hiring-lede { max-width: 40ch; font-size: clamp(1rem, 0.94rem + 0.3vw, 1.1875rem); line-height: 1.5; }
@@ -595,6 +639,9 @@
 /* The page ends on marigold, so the footer starts there too: FooterFrom
    marks the footer (data-from), see v2.css. */
 .v2-feed-title.v2-size-display { font-size: clamp(2.5rem, 1.6rem + 3.6vw, 5.5rem); }
+/* FEED in ink: the Hiring flourish and LEARN. above already spend the
+   screen's reds. */
+.v2-feed-title .v2-serif { color: var(--v2-fg); }
 .v2-fan-wrap { --fan: 1; }
 .v2-fan { margin: 0; padding: 0; list-style: none; }
 .v2-fan-card {
@@ -619,7 +666,7 @@
   padding: 24px 20px 16px;
 }
 .v2-fan-quote { font-family: var(--font-display); font-size: 1.125rem; line-height: 1.32; letter-spacing: -0.005em; text-wrap: pretty; }
-.v2-fan-card--short .v2-fan-quote { font-size: clamp(1.5rem, 1rem + 1.1vw, 2rem); line-height: 1.12; }
+.v2-fan-card--short .v2-fan-quote { font-size: clamp(1.25rem, 0.9rem + 0.6vw, 1.5rem); line-height: 1.16; }
 .v2-fan-meta { display: grid; gap: 4px; padding-top: 12px; border-top: 1px solid var(--v2-rule); }
 .v2-fan-link {
   display: inline-flex;
@@ -636,8 +683,9 @@
 @media (pointer: coarse) {
   .v2-fan-link { min-height: 44px; }
 }
-/* Phones and tablets: a sideways row that snaps card by card. */
-@media (width < 64rem) {
+/* Phones, tablets and laptops: a sideways row that snaps card by card
+   (below 90rem the fan cannot open wide enough to show every quote whole). */
+@media (width < 90rem) {
   .v2-fan {
     display: flex;
     gap: 12px;
@@ -650,12 +698,13 @@
     scrollbar-width: none;
   }
   .v2-fan::-webkit-scrollbar { display: none; }
-  .v2-fan-card { flex: none; width: min(70vw, 300px); min-height: min(96vw, 400px); scroll-snap-align: center; }
+  .v2-fan-card { flex: none; width: min(76vw, 300px); min-height: min(96vw, 400px); scroll-snap-align: center; }
 }
-/* Desktop: a fan. `--fan` is 1 open, 0 stacked (FanScene scrubs it). */
-@media (width >= 64rem) {
+/* Desktop: a fan. `--fan` is 1 open, 0 stacked (FanScene scrubs it). The
+   step is 0.86 of a card, so each neighbour covers only the card's margin. */
+@media (width >= 90rem) {
   .v2-fan {
-    --card-w: clamp(196px, 14.6vw, 264px);
+    --card-w: clamp(188px, 12.6vw, 240px);
     --card-h: calc(var(--card-w) * 1.72);
     position: relative;
     height: calc(var(--card-h) + 130px);
@@ -670,14 +719,19 @@
     height: var(--card-h);
     transform-origin: 50% 100%;
     transform:
-      translateX(calc(var(--k) * 11.2vw * var(--fan)))
+      translateX(calc(var(--k) * var(--card-w) * 0.86 * var(--fan)))
       translateY(calc(var(--k2) * 12px * var(--fan) + (1 - var(--fan)) * 56px))
-      rotate(calc(var(--k) * 6.5deg * var(--fan)));
+      rotate(calc(var(--k) * 5.5deg * var(--fan)));
     transition: translate 0.5s var(--v2-ease), box-shadow 0.5s var(--v2-ease);
     /* Each shadowed card on its own layer: the scrubbed fan then moves the
        layers instead of painting every card again on every frame. */
     will-change: transform;
   }
+  /* The attribution keeps its words together (no-break spaces, 7.3), so in
+     the narrower fan cards it is set a size smaller to stay inside them. */
+  .v2-fan-figure { padding-inline: 16px; }
+  .v2-fan-quote { font-size: 1.0625rem; }
+  .v2-fan-meta { font-size: 0.625rem; letter-spacing: 0.02em; }
   .v2-fan-card:hover,
   .v2-fan-card:focus-within { z-index: 20; translate: 0 -18px; box-shadow: 0 30px 60px rgb(28 24 22 / 0.24); }
 }

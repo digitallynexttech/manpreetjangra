@@ -171,7 +171,11 @@ html.lenis.lenis-stopped.v2-scroll-locked { overflow: hidden; background-color: 
 .v2-caption { display: block; }
 /* The dot carries a space on each side (0.68em in Geist Mono with the label
    tracking); the margins bring each gap back to 0.5em. */
-.v2-caption .v2-caption-dot { white-space: pre; margin-inline: -0.18em; }
+.v2-caption .v2-caption-dot { white-space: pre-wrap; margin-inline: -0.18em; }
+/* A short part stays on one line ("DIGITALLY NEXT"), so the line breaks
+   after a dot (the dot's own spaces stay breakable, pre-wrap). Long parts
+   (CaptionLabel marks only short ones) still wrap inside narrow boxes. */
+.v2-caption-keep { white-space: nowrap; }
 .v2-body { font-family: var(--font-sans); font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem); line-height: 1.55; }
 .v2-body p + p { margin-top: 1em; }
 .v2-lede {
@@ -309,7 +313,8 @@ html.lenis.lenis-stopped.v2-scroll-locked { overflow: hidden; background-color: 
   height: auto;
 }
 .v2-mark--underline { top: 72%; }
-.v2-mark--circle { top: -22%; left: -10%; width: 120%; height: 140%; }
+/* Wide and tall enough to ring the word without crossing its letters. */
+.v2-mark--circle { top: -30%; left: -14%; width: 128%; height: 160%; }
 
 /* --- Marquee (spec 3.4) --------------------------------------------------- */
 .v2-marquee { position: relative; overflow: clip; }
@@ -473,7 +478,7 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
    the two buttons stay (Lando's phone header). Desktop: a soft scrim in the
    colour of the surface under the header (`--v2-header-ground`, set by the
    script; the theme's ground until then). */
-.v2-wordmark { transition: opacity 0.3s var(--v2-ease), visibility 0s 0s; }
+.v2-wordmark { transition: color 0.4s var(--v2-ease), opacity 0.3s var(--v2-ease), visibility 0s 0s; }
 .v2-header::before {
   content: "";
   position: absolute;
@@ -488,7 +493,7 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
   .v2-header.is-away .v2-wordmark {
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s var(--v2-ease), visibility 0s 0.3s;
+    transition: color 0.4s var(--v2-ease), opacity 0.3s var(--v2-ease), visibility 0s 0.3s;
   }
 }
 @media (width >= 64rem) {
@@ -639,8 +644,10 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
     grid-template-rows: 1fr 1fr;
     gap: clamp(24px, 3.4vw, 52px);
     min-height: 0;
-    padding-top: 0;
+    /* Below the bar, so the wordmark sits on night, not on a picture. */
+    padding-top: var(--v2-header);
   }
+  .v2-menu-tile--tall { grid-column: 2; grid-row: 1 / span 2; }
   .v2-menu-nav { align-items: center; text-align: center; padding-top: var(--v2-header); }
   .v2-menu-link { font-size: clamp(2.75rem, 4.4vw, 4.5rem); line-height: 0.98; }
   .v2-menu-foot { justify-items: center; }
@@ -708,6 +715,11 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
   translate: -54% 0;
   z-index: -1;
 }
+/* Tablets: a smaller loop and more room under it, so it never runs through
+   the link columns' labels. */
+@media (width < 64rem) {
+  .v2-footer-flourish { width: min(22rem, 60%); translate: -50% 0; }
+}
 /* Phones: the two link columns side by side, the portrait under them. */
 .v2-footer-grid {
   position: relative;
@@ -715,7 +727,7 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px 16px;
-  margin-top: clamp(72px, 12vw, 96px);
+  margin-top: clamp(96px, 16vw, 132px);
 }
 .v2-footer-col { display: grid; align-content: start; gap: 8px; text-align: center; }
 .v2-footer-col ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; }
@@ -759,6 +771,11 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
   font-size: clamp(1.25rem, 2.2vw, 2rem);
   --v2-marquee-gap: clamp(2rem, 4vw, 4rem);
   --v2-marquee-duration: 36s;
+}
+/* One copy of the names is narrower than the card: each copy fills at least
+   a screen, so the loop never shows an empty stretch. */
+@media (prefers-reduced-motion: no-preference) {
+  .v2-footer-marquee .v2-marquee-group { min-width: 100vw; justify-content: space-around; }
 }
 .v2-footer-cta { position: relative; z-index: 3; display: flex; justify-content: center; padding-bottom: 28px; }
 .v2-footer-bar {
@@ -827,10 +844,23 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
   font-size: clamp(0.9375rem, 1.3vw, 1.25rem);
   line-height: 1.1;
 }
+/* Phones: one item per line (three never fit, and two plus one leaves the
+   third alone on the left). */
+@media (width < 48rem) {
+  .v2-meta-row { flex-direction: column; justify-content: flex-start; gap: 4px; }
+}
 .v2-page-lede { margin-top: clamp(40px, 8vh, 96px); max-width: 40rem; margin-inline-start: auto; }
-.v2-page-lede-label { margin-bottom: 14px; max-width: 34rem; }
+.v2-page-lede-label { margin-bottom: 14px; max-width: 34rem; text-wrap: balance; }
 @media (width < 64rem) {
   .v2-page-lede { margin-inline-start: 0; }
+}
+/* Desktop: the hero fills the first screen (as Lando's inner pages do), so
+   the next section never peeks in under the fold. The title and meta row
+   stay at the top and the lede sits on the fold. */
+@media (width >= 64rem) {
+  .v2-page-hero { min-height: 100svh; display: flex; }
+  .v2-page-hero > .v2-wrap { flex: 1; display: flex; flex-direction: column; width: 100%; }
+  .v2-page-lede { margin-top: auto; padding-top: clamp(40px, 8vh, 96px); }
 }
 
 /* --- Motion helpers and reduced motion ------------------------------------ */

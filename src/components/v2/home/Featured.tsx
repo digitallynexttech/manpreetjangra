@@ -38,7 +38,7 @@ export function Featured() {
         </div>
         <ParallaxGroup className="v2-feature-collage" small={0.35}>
           <div className="v2-feature-zari" data-v2-speed="0.15" aria-hidden="true">
-            <Image src={zari.src} alt="" width={zari.width} height={zari.height} sizes="(min-width: 1024px) 24vw, 60vw" />
+            <Image src={zari.src} alt="" width={zari.width} height={zari.height} sizes="(min-width: 1024px) 62vw, 120vw" />
           </div>
           {[first, second].map((quote, index) =>
             quote ? (

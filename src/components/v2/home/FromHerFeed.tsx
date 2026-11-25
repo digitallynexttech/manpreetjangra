@@ -15,7 +15,8 @@ import { FanScene } from "./HomeScenes";
 // and her two profiles. The paper here fades into marigold, where the footer
 // card sits.
 
-/** Left to right; the middle card is the front one. */
+/** Left to right. Each card lies over the one on its left (a spread deck),
+ *  so every card's left edge, where its left-aligned text starts, shows. */
 const FEED: readonly QuoteId[] = [
   "language",
   "reel-babysit",
@@ -59,7 +60,7 @@ export function FromHerFeed() {
                 key={id}
                 className={`v2-fan-card v2-fan-card--${ground}${quote.text.length < 70 ? " v2-fan-card--short" : ""}`}
                 data-v2-theme={dark ? "night" : "paper"}
-                style={{ "--k": k, "--k2": k * k, "--z": 10 - Math.abs(k) } as CSSProperties}
+                style={{ "--k": k, "--k2": k * k, "--z": index } as CSSProperties}
               >
                 <figure className="v2-fan-figure">
                   <blockquote>

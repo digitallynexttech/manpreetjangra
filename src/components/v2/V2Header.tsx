@@ -49,9 +49,9 @@ function MenuGlyph() {
   );
 }
 
-function Wordmark({ first, last, label }: { first: string; last: string; label: string }) {
+function Wordmark({ first, last, label, theme }: { first: string; last: string; label: string; theme?: Theme }) {
   return (
-    <Link href="/v2" className="v2-wordmark" aria-label={label}>
+    <Link href="/v2" className="v2-wordmark" aria-label={label} data-v2-theme={theme}>
       {/* The space keeps the two words apart for screen readers and copy;
           as a grid item it takes no room. */}
       <span className="v2-serif">{first}</span> <span className="v2-sans">{last}</span>
@@ -87,11 +87,20 @@ export function V2Header({
   // loading alone would fetch them on every first desktop load.
   const [tilesReady, setTilesReady] = useState(false);
   const readyTiles = () => setTilesReady(true);
-  const [view, setView] = useState<{ pathname: string; hidden: boolean; away: boolean; theme: Theme }>({
+  const [view, setView] = useState<{
+    pathname: string;
+    hidden: boolean;
+    away: boolean;
+    theme: Theme;
+    brand: Theme;
+    actions: Theme;
+  }>({
     pathname,
     hidden: false,
     away: false,
     theme: "paper",
+    brand: "paper",
+    actions: "paper",
   });
   const header = useRef<HTMLElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
@@ -125,14 +134,28 @@ export function V2Header({
       const probeY = el.offsetHeight / 2;
       let theme: Theme = "paper";
       const away = y > 120;
+      // The two ends of the header: the wordmark and the buttons.
+      const gutter = Number.parseFloat(getComputedStyle(el).paddingLeft) || 16;
+      const brandX = gutter + 40;
+      const actionsX = window.innerWidth - gutter - 60;
+      const brandHits = document.elementsFromPoint(brandX, probeY);
+      const actionsHits = document.elementsFromPoint(actionsX, probeY);
       // Desktop scrim: the first solid background under the header's
       // middle (paper, sand, blush, night), read only away from the top.
       let ground = "";
       for (const node of document.elementsFromPoint(window.innerWidth / 2, probeY)) {
         if (el.contains(node) || dialog.current?.contains(node)) continue;
         // Only a surface that spans the page counts (not a pill or a card
-        // that happens to sit under the middle of the header).
-        if (away && !ground && node.getBoundingClientRect().width >= window.innerWidth * 0.9) {
+        // that happens to sit under the middle of the header), and only where
+        // it shows under both ends too: a box clipped to an inset window
+        // (the podium frame) keeps its full width but not its full surface.
+        if (
+          away &&
+          !ground &&
+          node.getBoundingClientRect().width >= window.innerWidth * 0.9 &&
+          brandHits.includes(node) &&
+          actionsHits.includes(node)
+        ) {
           const style = getComputedStyle(node);
           const colour = style.backgroundColor;
           const solid = colour && colour !== "transparent" && !/^rgba\(.*,\s*0\)$/.test(colour);
@@ -146,6 +169,21 @@ export function V2Header({
         }
       }
       if (ground && el.style.getPropertyValue("--v2-header-ground") !== ground) el.style.setProperty("--v2-header-ground", ground);
+      // The wordmark and the buttons each follow the surface right under
+      // them: an inset window (the podium frame) can be night in the middle
+      // while both ends of the header still sit on paper. On desktop, away
+      // from the top, they sit on the scrim, so they take its theme.
+      const themeAt = (hits: Element[]): Theme => {
+        for (const node of hits) {
+          if (el.contains(node) || dialog.current?.contains(node)) continue;
+          const surface = node.closest<HTMLElement>("[data-v2-theme]");
+          if (surface) return surface.dataset.v2Theme === "night" ? "night" : "paper";
+        }
+        return theme;
+      };
+      const onScrim = Boolean(ground) && window.matchMedia("(min-width: 1024px)").matches;
+      const brand = onScrim ? theme : themeAt(brandHits);
+      const actions = onScrim ? theme : themeAt(actionsHits);
       setView((current) => {
         const samePage = current.pathname === pathname;
         const hidden =
@@ -154,9 +192,14 @@ export function V2Header({
             : Math.abs(y - directionStartY) >= 8
               ? direction > 0
               : samePage && current.hidden;
-        return samePage && current.hidden === hidden && current.away === away && current.theme === theme
+        return samePage &&
+          current.hidden === hidden &&
+          current.away === away &&
+          current.theme === theme &&
+          current.brand === brand &&
+          current.actions === actions
           ? current
-          : { pathname, hidden, away, theme };
+          : { pathname, hidden, away, theme, brand, actions };
       });
     };
     const schedule = () => {
@@ -228,6 +271,8 @@ export function V2Header({
   };
   const samePage = view.pathname === pathname;
   const theme: Theme = samePage ? view.theme : "paper";
+  const brandTheme: Theme = samePage ? view.brand : "paper";
+  const actionsTheme: Theme = samePage ? view.actions : "paper";
   const hidden = samePage && view.hidden && !open;
   const away = samePage && view.away && !open;
 
@@ -239,8 +284,8 @@ export function V2Header({
         data-v2-theme={theme}
         onFocusCapture={() => setView((current) => (current.hidden ? { ...current, hidden: false } : current))}
       >
-        <Wordmark {...wordmark} />
-        <div className="v2-header-actions">
+        <Wordmark {...wordmark} theme={brandTheme} />
+        <div className="v2-header-actions" data-v2-theme={actionsTheme}>
           <PillButton
             href={contact.href}
             icon="mail"

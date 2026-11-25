@@ -163,7 +163,9 @@ export function TrackScene({ children, className }: { children: ReactNode; class
             setTheme(this.progress() > 0.28 ? "paper" : "night");
           },
         });
-        if (layers[0]) ground.fromTo(layers[0], { opacity: 0 }, { opacity: 1, duration: 0.07 }, 0.245);
+        // A quick change around the midpoint (0.28, where the text switches):
+        // a long cross-fade passes through a muddy grey with low contrast.
+        if (layers[0]) ground.fromTo(layers[0], { opacity: 0 }, { opacity: 1, duration: 0.03 }, 0.265);
         if (layers[1]) ground.fromTo(layers[1], { opacity: 0 }, { opacity: 1, duration: 0.14 }, 0.64);
         items.forEach((item) => {
           const speed = Number(item.dataset.speed) || 0;
@@ -310,18 +312,19 @@ export function FanScene({ children, className }: { children: ReactNode; classNa
       const node = root.current;
       if (!node) return;
       const mm = gsap.matchMedia();
-      mm.add(MEDIA.desktop, () => {
+      // The fan opens from 90rem (home.css); below that the cards are a row.
+      mm.add("(min-width: 1440px) and (prefers-reduced-motion: no-preference)", () => {
         gsap.fromTo(
           node,
           { "--fan": 0 },
           { "--fan": 1, ease: "none", scrollTrigger: { trigger: node, start: "top 88%", end: "center 52%", scrub: SCRUB_FREE } },
         );
       });
-      // Phones and tablets: the cards are a scroll-snap row, which does not
+      // Below 1440 px the cards are a scroll-snap row, which does not
       // follow keyboard focus by itself; Tab brings the focused card to the
       // middle (at once with reduced motion).
       const reduce = window.matchMedia(MEDIA.reduce);
-      const wide = window.matchMedia("(min-width: 1024px)");
+      const wide = window.matchMedia("(min-width: 1440px)");
       const onFocus = (event: FocusEvent) => {
         if (wide.matches) return;
         const card = (event.target as HTMLElement).closest<HTMLElement>(".v2-fan-card");

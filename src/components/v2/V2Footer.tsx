@@ -8,6 +8,7 @@ import { labels, toV2, v2Nav } from "@/content/v2";
 import { ventures } from "@/content/work";
 import { ClassicLink } from "./ClassicLink";
 import { FieldPortrait } from "./FieldPortrait";
+import { FooterCta } from "./FooterCta";
 import { Marquee } from "./Marquee";
 import { MixedHeading } from "./MixedHeading";
 import { PillButton } from "./PillButton";
@@ -80,11 +81,11 @@ export function V2Footer() {
           label={labels.group}
           items={ventures.map((venture) => venture.name)}
         />
-        <div className="v2-footer-cta">
+        <FooterCta href={toV2(hero.primary.href)}>
           <PillButton href={toV2(hero.primary.href)} size="large">
             {hero.primary.label}
           </PillButton>
-        </div>
+        </FooterCta>
       </div>
       <div className="v2-footer-bar v2-label">
         <p className="v2-footer-credit">{credit}</p>

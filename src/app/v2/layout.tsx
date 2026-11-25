@@ -8,7 +8,7 @@ import { SmoothScroll } from "@/components/v2/SmoothScroll";
 import { V2Footer } from "@/components/v2/V2Footer";
 import { V2Header } from "@/components/v2/V2Header";
 import { hero } from "@/content/home";
-import { introImages, podium, portrait, zari } from "@/content/images";
+import { podium, portrait, zari } from "@/content/images";
 import { headerCta, socialLinks } from "@/content/navigation";
 import { labels, toV2, v2Nav, wordmark } from "@/content/v2";
 import "./v2.css";
@@ -28,30 +28,31 @@ import "./inner.css";
 // search results (each page's canonical link names its classic page) and out
 // of the sitemap.
 
-/** The thread-paper texture behind the classic Careers intro (1600 x 900, as every texture). */
-const threadPaper = { src: introImages.careers.src, width: 1600, height: 900 };
-
 export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-/** The four pictures of the open menu (Lando's grid of four photographs):
- *  her portrait on its field, then the podium photograph, the zari texture
- *  and the thread-paper texture in warm monochrome (colour on hover).
+/** The three pictures of the open menu (after Lando's photo grid): her
+ *  portrait on its field, then the podium photograph (two rows tall) and the
+ *  zari texture in warm monochrome (colour on hover). A blank texture tile
+ *  read as a missing picture, so there is none.
  *  Decorative: the menu's links carry the meaning. */
 function MenuTiles() {
   const sizes = "(min-width: 1024px) 22vw, 1px";
-  const tile = (index: number, child: ReactNode, mono = true) => (
-    <div key={index} className={`v2-menu-tile${mono ? " v2-menu-tile--mono" : ""}`} style={{ "--i": index } as CSSProperties}>
+  const tile = (index: number, child: ReactNode, mono = true, tall = false) => (
+    <div
+      key={index}
+      className={`v2-menu-tile${mono ? " v2-menu-tile--mono" : ""}${tall ? " v2-menu-tile--tall" : ""}`}
+      style={{ "--i": index } as CSSProperties}
+    >
       {child}
     </div>
   );
   return (
     <>
       {tile(0, <FieldPortrait portrait={portrait} sizes={sizes} decorative />, false)}
-      {tile(1, <Image src={podium.src} alt="" width={podium.width} height={podium.height} sizes={sizes} />)}
+      {tile(1, <Image src={podium.src} alt="" width={podium.width} height={podium.height} sizes={sizes} />, true, true)}
       {tile(2, <Image src={zari.src} alt="" width={zari.width} height={zari.height} sizes={sizes} />)}
-      {tile(3, <Image src={threadPaper.src} alt="" width={threadPaper.width} height={threadPaper.height} sizes={sizes} />)}
     </>
   );
 }

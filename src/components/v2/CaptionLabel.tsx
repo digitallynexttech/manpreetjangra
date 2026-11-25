@@ -20,7 +20,8 @@ export function CaptionLabel({
   return (
     <Tag id={id} className={["v2-label v2-caption", small && "v2-label--small", className].filter(Boolean).join(" ")}>
       {shown.map((part, index) => (
-        <span key={index}>
+        // Short parts never break inside (see .v2-caption-keep in v2.css).
+        <span key={index} className={part.length <= 24 ? "v2-caption-keep" : undefined}>
           {index > 0 ? (
             // Real spaces around the dot, so screen readers and copied text
             // keep the words apart; v2.css pulls the gap back to its look.

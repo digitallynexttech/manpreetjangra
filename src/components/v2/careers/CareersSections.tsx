@@ -1,9 +1,8 @@
 import type { CSSProperties } from "react";
-import { HiringPill } from "@/components/HiringPill";
 import { ParaText } from "@/components/ParaText";
 import { apply, criteria, faq, intro, mentorship, rolesSection } from "@/content/careers";
 import { hero as homeHero } from "@/content/home";
-import { fullTime, hasRoles, internships, roles } from "@/content/roles";
+import { hasRoles, roles } from "@/content/roles";
 import { hiringPill } from "@/content/shared";
 import { labels } from "@/content/v2";
 import { ventures } from "@/content/work";
@@ -38,13 +37,9 @@ const titleId = (id: string) => `v2-${id}-title`;
  *  Hiring pill. */
 export function CareersHero() {
   const agency = ventures[0];
-  const meta = hasRoles
-    ? [
-        agency.name,
-        ...(fullTime.length ? [plural(fullTime.length, "One full-time role", "{n} full-time roles")] : []),
-        ...(internships.length ? [plural(internships.length, "one internship", "{n} internships")] : []),
-      ]
-    : agency.category.split(" · ");
+  // The agency's own line (as on Work): the role counts follow at once in
+  // the big figure and the roles heading, so the hero does not repeat them.
+  const meta = agency.category.split(" · ");
   return (
     <V2PageHero
       id="v2-careers-title"
@@ -56,9 +51,7 @@ export function CareersHero() {
       lede={intro.lede}
       accent="what I look for."
       fitWide={0.877}
-    >
-      {hasRoles ? <HiringPill count={roles.length} className="v2-careers-pill" /> : null}
-    </V2PageHero>
+    />
   );
 }
 
