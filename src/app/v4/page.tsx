@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { ParaText } from "@/components/ParaText";
 import { ChapterHead } from "@/components/v4/ChapterHead";
-import { Marked } from "@/components/v4/Mark";
+import { Marked, MarkedPara } from "@/components/v4/Mark";
 import { Note, NoteLink, NoteRef } from "@/components/v4/Note";
 import { ScrubCanvas } from "@/components/v4/ScrubCanvas";
 import { lede } from "@/components/v4/lede";
@@ -15,7 +15,6 @@ import { socialLinks } from "@/content/navigation";
 import { quotes } from "@/content/quotes";
 import { hasRoles, roles } from "@/content/roles";
 import { hiringPill } from "@/content/shared";
-import type { Para } from "@/content/types";
 import { labels, toV4 } from "@/content/v4";
 import { operations } from "@/content/work";
 import { SEQUENCES, posterSrc } from "@/lib/sequences";
@@ -51,21 +50,6 @@ const MARKS = {
   pullQuote: "vision with empathy",
   hiring: "always willing to learn",
 } as const;
-
-/** A paragraph whose quoted fragment carries a highlighter mark. */
-function MarkedPara({ para, phrase }: { para: Pick<Para, "parts">; phrase: string }) {
-  return (
-    <>
-      {para.parts.map((part, i) =>
-        "quote" in part ? (
-          <q key={i}>{part.quote.includes(phrase) ? <Marked text={part.quote} phrase={phrase} /> : part.quote}</q>
-        ) : (
-          <Fragment key={i}>{part.text}</Fragment>
-        ),
-      )}
-    </>
-  );
-}
 
 export default function V4Home() {
   const wer = quotes["wer-empathy"];
@@ -393,9 +377,9 @@ export default function V4Home() {
 
       {/* --- IV. Hiring: the classifieds panel ---------------------------- */}
       <section id={hiring.id} className="v4-section v4-wrap" aria-labelledby={`${hiring.id}-title`}>
-        <div className="v4-classifieds">
-          <div className="v4-classifieds-bar">
-            <p className="v4-classifieds-chapter">
+        <div className="v4-panel v4-classifieds">
+          <div className="v4-panel-bar">
+            <p className="v4-panel-kicker">
               <span className="v4-sr-only">
                 {labels.chapter} {labels.chapters.hiring.numeral}:{" "}
               </span>
@@ -404,11 +388,11 @@ export default function V4Home() {
               </span>
               {labels.chapters.hiring.name}
             </p>
-            <p className="v4-classifieds-label" aria-hidden="true">
+            <p className="v4-panel-label" aria-hidden="true">
               {labels.classifieds}
             </p>
             {hasRoles ? (
-              <p className="v4-classifieds-count">
+              <p className="v4-panel-count">
                 <span className="v4-live-dot" aria-hidden="true" />
                 {hiringPill.prefix}
                 {plural(roles.length, hiringPill.one, hiringPill.many)}

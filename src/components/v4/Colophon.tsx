@@ -12,8 +12,19 @@ import { lede } from "./lede";
 // role, the pages, her profiles, the typefaces, the footage credit, the way
 // back to the editions index, and the copyright line.
 
-/** The frame sequences this edition draws (home cover and chapter divider). */
-export const V4_SEQUENCES = [SEQUENCES["thread-spool"], SEQUENCES.marigold] as const;
+/** The frame sequences this edition draws: the home cover and chapter
+ *  divider, and the one figure of About, Work, Writing and Careers. */
+export const V4_SEQUENCES = [
+  SEQUENCES["thread-spool"],
+  SEQUENCES.marigold,
+  SEQUENCES["bronze-silk"],
+  SEQUENCES["vermilion-silk"],
+  SEQUENCES["needle-thread"],
+] as const;
+
+/** The pages that end with their own call to action, or are its target:
+ *  no contact band above the colophon there (as on the classic site). */
+const NO_NOTICE = ["/writing", "/careers", "/contact"].map((path) => toV4(path));
 
 /** The classic credit line, without its sentence on the generated textures:
  *  /v4 shows none of them (its only pictures are the portrait, the podium
@@ -31,7 +42,7 @@ export function Colophon() {
   const providers = footageProviders(V4_SEQUENCES).join(", ");
   return (
     <footer className="v4-colophon">
-      <HiddenOn path={toV4(contactBand.primary.href)}>
+      <HiddenOn paths={NO_NOTICE}>
         <section className="v4-notice" aria-labelledby="v4-notice-title">
           <div className="v4-wrap v4-notice-inner">
             <p className="v4-kicker">{contactBand.eyebrow}</p>

@@ -13,27 +13,11 @@
 
 @media (width >= 64rem) {
   .v4-cover,
-  .v4-section,
   .v4-opening-grid {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: var(--v4-gap);
   }
-  .v4-section > * { grid-column: 1 / -1; }
-}
-.v4-section { padding-top: var(--v4-section); }
-
-/* A vertical column rule between two grid areas (on the later one). */
-.v4-colrule { position: relative; }
-.v4-colrule::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(var(--v4-gap) / -2);
-  width: 1px;
-  background: var(--v4-hair);
-  transform-origin: 50% 0;
 }
 
 /* --- Cover ------------------------------------------------------------------ */
@@ -96,38 +80,6 @@
   letter-spacing: -0.02em;
   font-variation-settings: "opsz" 72;
 }
-.v4-columns { margin-top: 1.5rem; max-width: 38em; }
-.v4-columns p { hyphens: auto; }
-.v4-columns p + p { text-indent: 1.4em; }
-.v4-dropcap::first-letter {
-  float: left;
-  margin: 0.06em 0.1em 0 0;
-  font-weight: 500;
-  font-size: 4.6em;
-  line-height: 0.8;
-  color: var(--v4-red);
-  font-variation-settings: "opsz" 72;
-}
-@supports (initial-letter: 3) or (-webkit-initial-letter: 3) {
-  .v4-dropcap::first-letter {
-    float: none;
-    margin: 0 0.12em 0 0;
-    font-size: 1em;
-    line-height: inherit;
-    -webkit-initial-letter: 3;
-    initial-letter: 3;
-  }
-}
-.v4 .v4-jump { text-indent: 0; margin-top: 1rem; font-style: italic; font-size: 1.0625rem; break-inside: avoid; }
-.v4-jump a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  color: var(--v4-red);
-  text-decoration: none;
-}
-.v4-jump a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
-
 .v4-inside {
   align-self: start;
   border-top: 3px solid var(--v4-ink);
@@ -185,16 +137,6 @@
   .v4-opening-story { grid-column: 1 / span 9; }
   .v4-inside { grid-column: 10 / -1; margin-top: 0.3rem; }
 }
-@media (width >= 80rem) {
-  .v4-columns {
-    max-width: none;
-    columns: 2;
-    column-gap: calc(var(--v4-gap) * 1.5);
-    column-rule: 1px solid var(--v4-hair);
-    text-align: justify;
-  }
-}
-
 /* --- I. The work: pillars as three newspaper columns ---------------------------- */
 .v4-pillars { display: grid; }
 .v4-pillar { display: flex; flex-direction: column; padding-block: 1.5rem; }
@@ -331,33 +273,6 @@
   }
 }
 
-.v4-pullquote {
-  margin-top: clamp(3rem, 2rem + 4vw, 6.5rem);
-  text-align: center;
-}
-.v4-pullquote-text { padding-block: clamp(1.75rem, 1rem + 2.5vw, 3.25rem) 1.1rem; transform-origin: 50% 40%; }
-.v4-pullquote-text p {
-  max-width: 21em;
-  margin-inline: auto;
-  font-style: italic;
-  font-weight: 500;
-  font-size: clamp(1.75rem, 0.85rem + 3vw, 3.9rem);
-  line-height: 1.14;
-  letter-spacing: -0.018em;
-  font-variation-settings: "opsz" 72;
-}
-.v4-pullquote-text p::before { content: open-quote; color: var(--v4-red); }
-.v4-pullquote-text p::after { content: close-quote; color: var(--v4-red); }
-.v4-pullquote-by {
-  padding-bottom: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
-  font-family: var(--v4-mono);
-  font-size: 0.6875rem;
-  line-height: 1.55;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--v4-muted);
-}
-
 .v4-words-body {
   display: grid;
   gap: 2.25rem;
@@ -430,45 +345,6 @@
 }
 
 /* --- IV. Hiring: the classifieds panel -------------------------------------------- */
-.v4-classifieds {
-  background: var(--v4-sand);
-  border: 1px solid var(--v4-ink);
-  /* A double rule round the panel: ink, sand, ink. */
-  box-shadow: inset 0 0 0 4px var(--v4-sand), inset 0 0 0 5px var(--v4-ink);
-  padding: clamp(1.25rem, 0.6rem + 2.4vw, 2.75rem);
-}
-.v4-classifieds-bar {
-  display: grid;
-  justify-items: center;
-  gap: 0.5rem;
-  padding-bottom: 1.1rem;
-  border-bottom: 1px solid var(--v4-ink);
-  text-align: center;
-}
-.v4-classifieds-chapter {
-  font-weight: 600;
-  font-size: 1.0625rem;
-  line-height: 1.2;
-  font-variant-caps: all-small-caps;
-  letter-spacing: 0.11em;
-  color: var(--v4-red);
-}
-.v4-classifieds-label {
-  font-weight: 500;
-  font-size: clamp(2.1rem, 1.3rem + 2.8vw, 3.9rem);
-  line-height: 1;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-variation-settings: "opsz" 72;
-}
-.v4-classifieds-count {
-  font-family: var(--v4-mono);
-  font-size: 0.6875rem;
-  line-height: 1.4;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--v4-red);
-}
 .v4-classifieds-grid { display: grid; gap: 2.25rem; padding-top: 1.75rem; }
 .v4-classifieds-title {
   font-size: clamp(2rem, 1.15rem + 2.6vw, 3.5rem);
@@ -485,16 +361,6 @@
   margin-top: 1.5rem;
 }
 .v4-classifieds-actions .v4-link { display: inline-flex; align-items: center; min-height: 2.75rem; }
-.v4-ads-title {
-  margin-bottom: 1rem;
-  padding-bottom: 0.6rem;
-  border-bottom: 1px solid var(--v4-ink);
-  font-weight: 600;
-  font-size: 1.0625rem;
-  line-height: 1.2;
-  font-variant-caps: all-small-caps;
-  letter-spacing: 0.1em;
-}
 .v4-ads ul { display: grid; gap: 0.85rem; }
 .v4-ad {
   padding: 1rem 1.1rem 1.05rem;
@@ -555,15 +421,6 @@
   white-space: nowrap;
 }
 .v4-note--panel { margin-top: 1.25rem; }
-@media (width >= 48rem) {
-  .v4-classifieds-bar {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    align-items: center;
-    text-align: left;
-  }
-  .v4-classifieds-chapter { justify-self: start; }
-  .v4-classifieds-count { justify-self: end; text-align: right; }
-}
 /* 1024 to 1279 px: the lead across the panel, the ads and the teams side
    by side under it. From 1280 px: three columns. */
 @media (width >= 64rem) {
@@ -602,57 +459,13 @@
 }
 
 /* --- V. Numbers: the stats table -------------------------------------------------- */
-.v4-table { width: 100%; border-collapse: collapse; }
-.v4-table thead th {
-  padding: 0 1rem 0.6rem 0;
-  border-bottom: 1px solid var(--v4-ink);
-  text-align: left;
-  font-family: var(--v4-mono);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  line-height: 1.4;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--v4-muted);
-}
-.v4-table tbody tr { border-bottom: 1px solid var(--v4-hair-strong); }
-.v4-table-figure {
-  width: 1%;
-  padding: 1rem clamp(1rem, 3vw, 3rem) 1rem 0;
-  text-align: left;
-  vertical-align: baseline;
-  white-space: nowrap;
-  font-weight: 500;
-  font-size: clamp(2.75rem, 1.6rem + 4.2vw, 6.5rem);
-  line-height: 1;
-  letter-spacing: -0.035em;
-  font-variant-numeric: lining-nums tabular-nums;
-  font-variation-settings: "opsz" 72;
-  color: var(--v4-red);
-}
-.v4-table-measure {
-  padding: 1rem 0;
-  vertical-align: baseline;
-  font-size: clamp(1.15rem, 1rem + 0.55vw, 1.55rem);
-  line-height: 1.3;
-}
-.v4-table-link { font-size: 1.0625rem; white-space: nowrap; }
-.v4-table-note {
-  margin-top: 1rem;
-  font-family: var(--v4-mono);
-  font-size: 0.6875rem;
-  line-height: 1.6;
-  color: var(--v4-muted);
-}
-
 /* --- Motion (home) ---------------------------------------------------------------
    The same scroll-driven technique as v4.css: margin years and table
    figures slide in (they carry text, so they only move), column rules grow
    down, the pull quote scales up slightly. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .v4-entry-year,
-    .v4-table-figure {
+    .v4-entry-year {
       animation: v4-nudge-in linear both;
       animation-timeline: view();
       animation-range: entry 0% cover 32%;
@@ -663,11 +476,6 @@
       animation: v4-grow-y linear both;
       animation-timeline: view();
       animation-range: entry 0% cover 40%;
-    }
-    .v4-pullquote-text {
-      animation: v4-quote-up linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 50%;
     }
   }
 }

@@ -86,6 +86,51 @@ export const labels = {
   tableMeasure: "What it counts",
   tableNote: "Table note",
 
+  // Inner pages: each is a section of the paper with its own section front.
+  /** Before the section letter on a section front ("Section B"). */
+  section: "Section",
+  /** The letter of each section, in the order of the section bar (the front
+   *  page is section A, as in a printed paper). */
+  sectionLetters: { about: "B", work: "C", writing: "D", careers: "E", contact: "F" },
+  /** The index of a section's articles under its front, as anchor links. */
+  inSection: "In this section",
+  /** Figure captions on the inner pages. They describe the stock footage only. */
+  aboutCaption: "Dark orange silk. The frames move as the page scrolls.",
+  workCaption: "Red silk. The frames move as the page scrolls.",
+  writingCaption: "Marigolds. The frames move as the page scrolls.",
+  careersCaption: "A needle being threaded. The frames turn as the page scrolls.",
+
+  // About: the journey table and the bio panel.
+  tableYear: "Year",
+  tableMilestone: "Milestone",
+  /** The spec's name for the boxed bio panel on About. */
+  forOrganisers: "For organisers",
+
+  // Work: the directory of the group's organisations, with website previews
+  // (the control names of the classic VentureList).
+  directoryName: "Organisation",
+  directorySite: "Website",
+  previewWebsite: "Preview website",
+  /** "{name}" is replaced by the organisation's name. */
+  previewThe: "Preview the {name} website",
+  previewWindow: "{name} website preview",
+  closePreview: "Close website preview",
+  visit: "Visit {name}",
+
+  /** Over the list of the agency's five service lines. */
+  serviceLines: "Service lines",
+
+  // Writing.
+  /** Over the featured block, the lead story of the Writing section. */
+  leadStory: "The lead story",
+  /** The head row of the article index (a table of contents). */
+  contents: "Contents",
+  tableDate: "Date",
+  tableArticle: "Article",
+
+  // Contact: the form panel (spec: a "Letters to the editor" panel).
+  letters: "Letters to the editor",
+
   // Colophon (footer).
   colophon: "Colophon",
   pages: "Pages",

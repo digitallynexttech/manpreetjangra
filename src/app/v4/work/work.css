@@ -1,0 +1,239 @@
+/* Work, section C of /v4 (plan/versions-spec.md, V4 inner pages:
+   "operations as a feature with sidenotes; ventures as a directory listing
+   with website previews"). Imported by src/app/v4/work/page.tsx only;
+   every rule is on a `v4-` class. Shared pieces are in v4.css and
+   inner.css. */
+
+/* --- I. Operations: the service lines, a ruled list inside the feature ------- */
+.v4-lines {
+  margin-block: 1.75rem;
+  padding: 1.1rem 1.25rem 0.6rem;
+  background: var(--v4-sand);
+  border-top: 3px solid var(--v4-ink);
+}
+.v4-lines .v4-ads-title { margin-bottom: 0.25rem; }
+.v4-line {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.75rem;
+  padding-block: 0.7rem 0.75rem;
+}
+.v4-line + .v4-line { border-top: 1px solid var(--v4-hair); }
+.v4-line-index {
+  font-family: var(--v4-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--v4-red);
+}
+.v4-line-text {
+  font-weight: 500;
+  font-size: clamp(1.2rem, 1.1rem + 0.35vw, 1.4rem);
+  line-height: 1.25;
+  letter-spacing: -0.008em;
+}
+
+/* --- IV. How I work: two posts, side by side, a column rule between -------- */
+.v4-posts { display: grid; gap: 2rem; }
+.v4-post { display: flex; flex-direction: column; }
+.v4-post blockquote p {
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.6rem, 1.05rem + 1.9vw, 2.6rem);
+  line-height: 1.16;
+  letter-spacing: -0.014em;
+  font-variation-settings: "opsz" 72;
+}
+.v4-post blockquote p::before { content: open-quote; color: var(--v4-red); }
+.v4-post blockquote p::after { content: close-quote; color: var(--v4-red); }
+.v4-post-link { margin-top: auto; padding-top: 0.6rem; font-size: 1.0625rem; }
+.v4-post-link .v4-link { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.v4-post + .v4-post { padding-top: 2rem; border-top: 1px solid var(--v4-hair); }
+@media (width >= 48rem) {
+  .v4-posts { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: calc(var(--v4-gap) * 1.5); }
+  .v4-post + .v4-post { position: relative; padding-top: 0; border-top: 0; }
+  .v4-post + .v4-post::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--v4-gap) * -0.75);
+    width: 1px;
+    background: var(--v4-hair);
+    transform-origin: 50% 0;
+  }
+}
+
+/* --- V. A client story: the short pull quote ------------------------------------- */
+.v4-pullquote--short .v4-pullquote-text p { max-width: 16em; }
+.v4-work .v4-actions--centre { margin-top: 0.5rem; }
+
+/* --- VI. The group: a directory of the organisations --------------------------- */
+.v4-dir { border-top: 3px solid var(--v4-ink); }
+.v4-dir-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.6rem 0.55rem;
+  border-bottom: 1px solid var(--v4-ink);
+  font-family: var(--v4-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--v4-muted);
+}
+.v4-dir-row { position: relative; border-bottom: 1px solid var(--v4-hair-strong); }
+.v4-dir-link {
+  display: block;
+  padding: 1.15rem 0.5rem 1.25rem 0;
+  color: var(--v4-ink);
+  text-decoration: none;
+  transition: background-color 0.2s ease, padding 0.35s var(--v4-ease);
+}
+.v4-dir-link:focus-visible { outline-offset: -2px; }
+.v4-dir-line {
+  display: flex;
+  align-items: last baseline;
+  gap: 0.6rem;
+}
+.v4-dir-name {
+  flex: 0 1 auto;
+  min-width: 0;
+  font-size: clamp(1.6rem, 1.1rem + 1.7vw, 2.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 72;
+  transition: color 0.2s ease;
+}
+.v4-dir-leader {
+  flex: 1 1 1rem;
+  min-width: 1rem;
+  border-bottom: 2px dotted var(--v4-hair-strong);
+  translate: 0 -0.3em;
+}
+.v4-dir-host {
+  flex: none;
+  font-family: var(--v4-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--v4-red);
+}
+.v4-dir-category {
+  margin-top: 0.55rem;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.3;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em;
+  color: var(--v4-muted);
+}
+.v4-dir-role { margin-top: 0.3rem; max-width: 40em; }
+@media (hover: hover) and (pointer: fine) {
+  .v4-dir-link:hover { background: var(--v4-blush); padding-left: 0.85rem; }
+  .v4-dir-link:hover .v4-dir-name { color: var(--v4-red); }
+}
+/* The "Preview website" button: on touch screens and phones only, as on
+   the classic site, where pointing at a row shows the preview instead. */
+.v4-dir-toggle { display: none; }
+@media (hover: none), (width < 48rem) {
+  .v4-dir-toggle {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    margin: -0.75rem 0 0.75rem;
+    padding: 0;
+    background: none;
+    border: 0;
+    color: var(--v4-red);
+    font-family: var(--v4-serif);
+    font-weight: 600;
+    font-size: 1.0625rem;
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.1em;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+    cursor: pointer;
+  }
+}
+@media (width < 40rem) {
+  .v4-dir-line { flex-wrap: wrap; row-gap: 0.25rem; }
+  .v4-dir-leader { display: none; }
+  .v4-dir-host { flex-basis: 100%; }
+}
+@media (width >= 64rem) {
+  .v4-dir-link { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); column-gap: var(--v4-gap); }
+  .v4-dir-line { grid-column: 1 / -1; }
+  .v4-dir-category { grid-column: 1; }
+  .v4-dir-role { grid-column: 2; grid-row: 2 / span 2; margin-top: 0.55rem; }
+}
+
+/* The website preview: a clipping in a paper frame with a mono address
+   bar. It is placed in document.body, outside the .v4 wrapper, so it uses
+   the classic tokens directly. */
+.v4-preview {
+  position: fixed;
+  z-index: 220;
+  overflow: hidden;
+  background: var(--color-paper, #faf7f2);
+  color: var(--color-ink, #1c1816);
+  border: 1px solid var(--color-ink, #1c1816);
+  box-shadow: 6px 6px 0 rgb(28 24 22 / 0.16), 0 24px 48px -24px rgb(28 24 22 / 0.4);
+  animation: v4-preview-in 180ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+@keyframes v4-preview-in {
+  from { opacity: 0; translate: 0 6px; }
+  to { opacity: 1; translate: 0 0; }
+}
+.v4-preview-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding-left: 12px;
+  border-bottom: 1px solid var(--color-ink, #1c1816);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-muted, #5c544e);
+}
+.v4-preview-bar button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-left: 1px solid rgb(28 24 22 / 0.22);
+  color: var(--color-ink, #1c1816);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.v4-preview-bar button:hover { background: var(--color-blush, #f9e4dc); }
+.v4-preview a,
+.v4-preview img { display: block; width: 100%; height: auto; }
+.v4-preview :focus-visible { outline: 2px solid var(--color-vermilion-ink, #b4220b); outline-offset: -3px; }
+@media (prefers-reduced-motion: reduce) {
+  .v4-preview { animation: none; }
+}
+
+/* --- Motion (Work) ------------------------------------------------------------------ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .v4-post + .v4-post::before {
+      animation: v4-grow-y linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+    .v4-line-index,
+    .v4-dir-host {
+      animation: v4-nudge-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 25%;
+    }
+  }
+}

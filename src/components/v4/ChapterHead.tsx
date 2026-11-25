@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
 import { labels } from "@/content/v4";
 
-// The opening of a chapter of the home profile: the Roman numeral (slides
-// in), the chapter name in small capitals after a rule that grows to the
-// column width, the headline (H2) and an optional dek. The numeral is
-// decoration; screen readers hear "Chapter I: The work" once, in the kicker.
+// The opening of a chapter of the home profile, or of an article on an inner
+// page: the Roman numeral (slides in), the chapter name in small capitals
+// after a rule that grows to the column width, the headline (H2) and an
+// optional dek. The numeral is decoration; screen readers hear "Chapter I:
+// The work" once, in the kicker. On inner pages (`label={null}`) the kicker
+// is the article's own eyebrow, and the numeral only numbers it on the page.
 
 export function ChapterHead({
   id,
@@ -13,6 +15,7 @@ export function ChapterHead({
   title,
   dek,
   className,
+  label = labels.chapter,
 }: {
   id: string;
   numeral: string;
@@ -20,6 +23,8 @@ export function ChapterHead({
   title: ReactNode;
   dek?: ReactNode;
   className?: string;
+  /** The word before the numeral in the kicker; null for none. */
+  label?: string | null;
 }) {
   return (
     <header className={className ? `v4-chapter ${className}` : "v4-chapter"}>
@@ -28,13 +33,17 @@ export function ChapterHead({
       </span>
       <div className="v4-chapter-text">
         <p className="v4-chapter-kicker">
-          <span className="v4-sr-only">
-            {labels.chapter} {numeral}:{" "}
-          </span>
-          <span aria-hidden="true">
-            {labels.chapter} {numeral}
-            <span className="v4-chapter-dot"> · </span>
-          </span>
+          {label ? (
+            <>
+              <span className="v4-sr-only">
+                {label} {numeral}:{" "}
+              </span>
+              <span aria-hidden="true">
+                {label} {numeral}
+                <span className="v4-chapter-dot"> · </span>
+              </span>
+            </>
+          ) : null}
           {name}
         </p>
         <span className="v4-rule v4-rule--grow" aria-hidden="true" />
@@ -45,4 +54,11 @@ export function ChapterHead({
       </div>
     </header>
   );
+}
+
+/** An article's kicker on an inner page: its eyebrow without a leading
+ *  section number ("01 · Operations" -> "Operations"), since the numeral in
+ *  the margin numbers it. */
+export function kickerOf(eyebrow: string): string {
+  return eyebrow.replace(/^\d+\s·\s/, "");
 }
