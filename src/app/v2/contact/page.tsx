@@ -1,9 +1,12 @@
+import type { Viewport } from "next";
 import PageTransition from "@/components/PageTransition";
 import { ContactEnquiry, ContactHero } from "@/components/v2/contact/ContactSections";
 import { meta } from "@/content/contact";
 import { v2Metadata } from "@/lib/v2";
 
 export const metadata = v2Metadata(meta);
+// The page opens on night, so the browser bar does too.
+export const viewport: Viewport = { themeColor: "#1C1816", colorScheme: "light" };
 
 // /v2/contact (plan/v2-spec.md 4.2, 4.7), in her first person. The page
 // title GET IN TOUCH with the office address and the intro (night), then

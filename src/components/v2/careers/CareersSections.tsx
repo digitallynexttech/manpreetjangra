@@ -10,6 +10,7 @@ import { ventures } from "@/content/work";
 import { plural } from "@/lib/site";
 import { BigFigure } from "../BigFigure";
 import { BigRows } from "../BigRows";
+import { FooterFrom } from "../FooterFrom";
 import { MixedHeading } from "../MixedHeading";
 import { PillButton } from "../PillButton";
 import { Reveal } from "../Reveal";
@@ -83,7 +84,10 @@ export function CareersRoles() {
       <div className="v2-wrap">
         <div className="v2-inner-head">
           <div>
-            <p className="v2-label v2-inner-eyebrow">{rolesSection.eyebrow}</p>
+            {/* With roles the giant figure above already says "open roles". */}
+            <p className="v2-label v2-inner-eyebrow" aria-hidden={hasRoles ? true : undefined}>
+              {rolesSection.eyebrow}
+            </p>
             <MixedHeading
               id={titleId(rolesSection.id)}
               size="title"
@@ -274,6 +278,7 @@ export function CareersFaq() {
 export function CareersApply() {
   return (
     <section id={apply.id} className="v2-surface v2-surface--sand v2-inner-section v2-careers-apply" data-v2-theme="paper" aria-labelledby={titleId(apply.id)}>
+      <FooterFrom tone="sand" />
       <ThreadField seed={177} count={9} />
       <div className="v2-wrap v2-careers-apply-inner">
         <p className="v2-label">{apply.eyebrow}</p>

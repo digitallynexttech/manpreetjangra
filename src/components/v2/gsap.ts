@@ -58,28 +58,4 @@ export function requestRefresh() {
   });
 }
 
-/** Calls `done` once every image inside `root` has loaded (or failed), so a
- *  pinned section can refresh its triggers with the real heights. */
-export function whenImagesLoad(root: Element, done: () => void): () => void {
-  const pending = Array.from(root.querySelectorAll("img")).filter((img) => !img.complete);
-  if (pending.length === 0) {
-    done();
-    return () => {};
-  }
-  let left = pending.length;
-  const one = () => {
-    left -= 1;
-    if (left === 0) done();
-  };
-  pending.forEach((img) => {
-    img.addEventListener("load", one, { once: true });
-    img.addEventListener("error", one, { once: true });
-  });
-  return () =>
-    pending.forEach((img) => {
-      img.removeEventListener("load", one);
-      img.removeEventListener("error", one);
-    });
-}
-
 export { gsap, ScrollTrigger, SplitText, useGSAP };

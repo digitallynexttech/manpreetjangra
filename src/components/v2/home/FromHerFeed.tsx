@@ -4,6 +4,7 @@ import { socialLinks } from "@/content/navigation";
 import { labels } from "@/content/v2";
 import { themes } from "@/content/writing";
 import { quoteView } from "@/lib/views";
+import { FooterFrom } from "../FooterFrom";
 import { MixedHeading } from "../MixedHeading";
 import { FanScene } from "./HomeScenes";
 
@@ -32,6 +33,7 @@ export function FromHerFeed() {
   const middle = (FEED.length - 1) / 2;
   return (
     <section className="v2-surface v2-feed" data-v2-theme="paper" aria-labelledby="v2-feed-title">
+      <FooterFrom tone="marigold" />
       <div className="v2-wrap v2-feed-inner">
         <MixedHeading
           id="v2-feed-title"

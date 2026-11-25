@@ -592,8 +592,8 @@
   padding-block: clamp(96px, 16vh, 180px) clamp(56px, 9vh, 110px);
   background: linear-gradient(to bottom, var(--color-paper) 0, var(--color-paper) 56%, var(--color-marigold) 100%);
 }
-/* The page ends on marigold, so the footer starts there too. */
-.v2:has(.v2-feed) .v2-footer { --v2-footer-from: var(--color-marigold); }
+/* The page ends on marigold, so the footer starts there too: FooterFrom
+   marks the footer (data-from), see v2.css. */
 .v2-feed-title.v2-size-display { font-size: clamp(2.5rem, 1.6rem + 3.6vw, 5.5rem); }
 .v2-fan-wrap { --fan: 1; }
 .v2-fan { margin: 0; padding: 0; list-style: none; }

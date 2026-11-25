@@ -2,7 +2,7 @@
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useSyncExternalStore, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { gsap, requestRefresh, ScrollTrigger } from "./gsap";
 
 // Smooth scrolling for /v2 (plan/v2-spec.md 3.2): one Lenis instance for the
@@ -13,27 +13,12 @@ import { gsap, requestRefresh, ScrollTrigger } from "./gsap";
 // `scroll-behavior: smooth` off while `html.lenis` is set, so the two never
 // fight.
 //
-// The instance lives in a tiny external store, so the header and the menu can
-// read it (`useLenis`) to stop scrolling under the open menu.
+// The instance lives in a module variable, so the menu (`lockScroll`) and
+// the scroll scenes (`getLenis`) can reach it from event handlers.
 
 let current: Lenis | null = null;
-const listeners = new Set<() => void>();
 function setLenis(next: Lenis | null) {
   current = next;
-  listeners.forEach((listener) => listener());
-}
-function subscribe(listener: () => void) {
-  listeners.add(listener);
-  return () => listeners.delete(listener);
-}
-
-/** The live Lenis instance, or null (server, reduced motion). */
-export function useLenis() {
-  return useSyncExternalStore(
-    subscribe,
-    () => current,
-    () => null,
-  );
 }
 
 /** The live Lenis instance outside React (event handlers), or null. */

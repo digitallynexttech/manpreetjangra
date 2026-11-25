@@ -21,7 +21,11 @@ export function CaptionLabel({
     <Tag id={id} className={["v2-label v2-caption", small && "v2-label--small", className].filter(Boolean).join(" ")}>
       {shown.map((part, index) => (
         <span key={index}>
-          {index > 0 ? <span className="v2-caption-dot">·</span> : null}
+          {index > 0 ? (
+            // Real spaces around the dot, so screen readers and copied text
+            // keep the words apart; v2.css pulls the gap back to its look.
+            <span className="v2-caption-dot">{" · "}</span>
+          ) : null}
           {part}
         </span>
       ))}

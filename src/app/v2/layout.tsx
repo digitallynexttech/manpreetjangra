@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
+import { ClassicLink } from "@/components/v2/ClassicLink";
 import { FieldPortrait } from "@/components/v2/FieldPortrait";
 import { SmoothScroll } from "@/components/v2/SmoothScroll";
 import { V2Footer } from "@/components/v2/V2Footer";
@@ -69,9 +70,7 @@ function MenuFoot() {
             <span className="v2-sr-only">{labels.newTab}</span>
           </a>
         ))}
-        <Link className="v2-menu-small" href="/v1">
-          {labels.classicSite}
-        </Link>
+        <ClassicLink className="v2-menu-small">{labels.classicSite}</ClassicLink>
       </div>
     </>
   );

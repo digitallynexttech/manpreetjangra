@@ -30,7 +30,7 @@ function Caption({ left, right }: { left: string; right: string }) {
   return (
     <>
       <span>{left}</span>
-      <span className="v2-numbers-index">{right}</span>
+      <span className="v2-numbers-index" aria-hidden="true">{right}</span>
     </>
   );
 }

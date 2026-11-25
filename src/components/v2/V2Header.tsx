@@ -82,6 +82,11 @@ export function V2Header({
   const [openOn, setOpenOn] = useState<string | null>(null);
   const open = openOn === pathname;
   const setOpen = (next: boolean) => setOpenOn(next ? pathname : null);
+  // The menu's pictures mount once the visitor reaches for the menu button
+  // (hover, focus, touch): the closed overlay sits in the viewport, so lazy
+  // loading alone would fetch them on every first desktop load.
+  const [tilesReady, setTilesReady] = useState(false);
+  const readyTiles = () => setTilesReady(true);
   const [view, setView] = useState<{ pathname: string; hidden: boolean; away: boolean; theme: Theme }>({
     pathname,
     hidden: false,
@@ -253,7 +258,13 @@ export function V2Header({
             aria-haspopup="dialog"
             aria-expanded={open}
             aria-controls="v2-menu"
-            onClick={() => setOpen(true)}
+            onPointerEnter={readyTiles}
+            onPointerDown={readyTiles}
+            onFocus={readyTiles}
+            onClick={() => {
+              readyTiles();
+              setOpen(true);
+            }}
           >
             <MenuGlyph />
           </button>
@@ -297,7 +308,7 @@ export function V2Header({
         </div>
         <div className="v2-menu-body">
           <div className="v2-menu-tiles" aria-hidden="true">
-            {menuTiles}
+            {tilesReady ? menuTiles : null}
           </div>
           <nav className="v2-menu-nav" aria-label={labels.menu}>
             <ul className="v2-menu-links">

@@ -6,6 +6,7 @@ import { socialLinks } from "@/content/navigation";
 import { contactBand, footer } from "@/content/shared";
 import { labels, toV2, v2Nav } from "@/content/v2";
 import { ventures } from "@/content/work";
+import { ClassicLink } from "./ClassicLink";
 import { FieldPortrait } from "./FieldPortrait";
 import { Marquee } from "./Marquee";
 import { MixedHeading } from "./MixedHeading";
@@ -90,7 +91,7 @@ export function V2Footer() {
         <p>
           <LocalTime prefix={footer.place.prefix} />
         </p>
-        <Link href="/v1">{labels.classicSite}</Link>
+        <ClassicLink>{labels.classicSite}</ClassicLink>
       </div>
     </footer>
   );

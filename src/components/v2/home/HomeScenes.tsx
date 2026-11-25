@@ -1,7 +1,7 @@
 "use client";
 import { useRef, type ReactNode } from "react";
 import { getLenis } from "../SmoothScroll";
-import { EASE_IN, MEDIA, SCRUB, SCRUB_FREE, ScrollTrigger, SplitText, gsap, onNextFrame, useGSAP } from "../gsap";
+import { EASE_IN, MEDIA, SCRUB, SCRUB_FREE, ScrollTrigger, SplitText, gsap, onNextFrame, useGSAP, type MediaFlags } from "../gsap";
 
 // The scroll scenes of the /v2 home page (plan/v2-spec.md 4.1, 3.3). Each
 // shell wraps server-rendered content and animates it by class name, so all
@@ -13,8 +13,6 @@ import { EASE_IN, MEDIA, SCRUB, SCRUB_FREE, ScrollTrigger, SplitText, gsap, onNe
 // section's own scroll range. Nothing is pinned below 1024 px or with reduced
 // motion, and nothing is hidden before the script runs: every "from" state
 // is set here, by GSAP.
-
-type Flags = { desktop?: boolean; small?: boolean };
 
 /** Hero (4.1 item 1): on the way down the portrait panel lags behind the
  *  page, the two name lines drift apart and the "now" card lifts. The
@@ -31,7 +29,7 @@ export function HeroScene({ children, className }: { children: ReactNode; classN
       const now = node.querySelector(".v2-hero-now");
       const mm = gsap.matchMedia();
       mm.add({ desktop: MEDIA.desktop, small: MEDIA.small }, (context) => {
-        const { desktop } = context.conditions as Flags;
+        const { desktop } = context.conditions as MediaFlags;
         const timeline = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: SCRUB_FREE },
@@ -82,7 +80,7 @@ export function WordsScene({ children, className }: { children: ReactNode; class
       const loop = stage.querySelector(".v2-words-loop path");
       const mm = gsap.matchMedia();
       mm.add({ desktop: MEDIA.desktop, small: MEDIA.small }, (context) => {
-        const { desktop } = context.conditions as Flags;
+        const { desktop } = context.conditions as MediaFlags;
         if (desktop) section.classList.add("is-pinned");
         const split = quote ? SplitText.create(quote, { type: "words", wordsClass: "v2-word", tag: "span", aria: "none" }) : null;
         const timeline = gsap.timeline({
@@ -272,7 +270,7 @@ export function PodiumScene({ children, className }: { children: ReactNode; clas
       const photo = stage.querySelector(".v2-podium-photo");
       const mm = gsap.matchMedia();
       mm.add({ desktop: MEDIA.desktop, small: MEDIA.small }, (context) => {
-        const { desktop } = context.conditions as Flags;
+        const { desktop } = context.conditions as MediaFlags;
         if (desktop) section.classList.add("is-pinned");
         const timeline = gsap.timeline({
           defaults: { ease: "none" },
@@ -319,7 +317,21 @@ export function FanScene({ children, className }: { children: ReactNode; classNa
           { "--fan": 1, ease: "none", scrollTrigger: { trigger: node, start: "top 88%", end: "center 52%", scrub: SCRUB_FREE } },
         );
       });
-      return () => mm.revert();
+      // Phones and tablets: the cards are a scroll-snap row, which does not
+      // follow keyboard focus by itself; Tab brings the focused card to the
+      // middle (at once with reduced motion).
+      const reduce = window.matchMedia(MEDIA.reduce);
+      const wide = window.matchMedia("(min-width: 1024px)");
+      const onFocus = (event: FocusEvent) => {
+        if (wide.matches) return;
+        const card = (event.target as HTMLElement).closest<HTMLElement>(".v2-fan-card");
+        card?.scrollIntoView({ inline: "center", block: "nearest", behavior: reduce.matches ? "auto" : "smooth" });
+      };
+      node.addEventListener("focusin", onFocus);
+      return () => {
+        node.removeEventListener("focusin", onFocus);
+        mm.revert();
+      };
     },
     { scope: root },
   );

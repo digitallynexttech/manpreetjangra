@@ -54,6 +54,17 @@ export function Reveal({
             start: "top 92%",
             onEnter: (batch) => gsap.to(batch, { y: 0, opacity: 1, duration: 0.9, ease: EASE_IN, stagger: 0.08, overwrite: true }),
           });
+          // Keyboard focus can reach a row that is still waiting below the
+          // batch start (focusing it does not scroll the page): show it at
+          // once so the focus ring is never drawn around an invisible row.
+          const onFocus = (event: FocusEvent) => {
+            const hit = targets.find((target) => target.contains(event.target as Node));
+            if (hit && Number(gsap.getProperty(hit, "opacity")) < 1) {
+              gsap.to(hit, { y: 0, opacity: 1, duration: 0.3, ease: EASE_IN, overwrite: true });
+            }
+          };
+          node.addEventListener("focusin", onFocus);
+          return () => node.removeEventListener("focusin", onFocus);
         }),
       );
       return () => mm.revert();

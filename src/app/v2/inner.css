@@ -227,7 +227,7 @@
 }
 
 /* --- Work: talent ---------------------------------------------------------- */
-.v2-work-talent-grid { display: grid; gap: 56px; }
+.v2-work-talent-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 56px; }
 .v2-work-talent-text { display: grid; justify-items: start; gap: 24px; }
 .v2-work-talent-text > .v2-inner-eyebrow { margin-bottom: -8px; }
 .v2-work-talent-para.v2-lede { max-width: 38rem; }
@@ -482,6 +482,7 @@ a.v2-row-inner:hover .v2-writing-article-title { translate: 8px 0; }
 .v2-careers-roles-side { display: grid; justify-items: start; gap: 18px; max-width: 34rem; }
 .v2-careers-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .v2-careers-actions--center { justify-content: center; }
+.v2-careers-actions--center .v2-pill { max-width: 100%; }
 @media (width >= 64rem) {
   .v2-careers-roles-side { justify-self: end; padding-bottom: 0.3em; }
 }
@@ -550,13 +551,13 @@ a.v2-row-inner:hover .v2-writing-article-title { translate: 8px 0; }
   position: relative;
   z-index: 1;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   justify-items: center;
   gap: clamp(16px, 2.6vh, 28px);
   text-align: center;
 }
-.v2-careers-apply-text.v2-lede { max-width: 36rem; }
+.v2-careers-apply-text.v2-lede { max-width: 36rem; overflow-wrap: anywhere; }
 .v2-careers-apply .v2-careers-actions { margin-top: 8px; }
-.v2:has(.v2-careers-apply) .v2-footer { --v2-footer-from: var(--color-sand); }
 
 /* --- Contact: the form and the details ------------------------------------- */
 .v2-contact.v2-inner-section { padding-top: clamp(64px, 11vh, 128px); }
