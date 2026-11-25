@@ -254,6 +254,9 @@ html.v2-scroll-locked { overflow: hidden; }
   pointer-events: none;
   color: var(--v2-thread);
   overflow: hidden;
+  /* Faded at the top and bottom, so two fields meeting at a section edge
+     never show cut threads. */
+  mask-image: linear-gradient(to bottom, transparent 0, #000 14%, #000 86%, transparent 100%);
 }
 .v2-threadfield svg { display: block; width: 100%; height: 100%; }
 .v2-threadfield .v2-thread-accent { color: var(--color-vermilion); opacity: 0.55; }

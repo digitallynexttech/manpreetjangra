@@ -69,7 +69,7 @@ export function ThreadField({
   seed?: number;
   /** One thread in vermilion. */
   accent?: boolean;
-  /** Parallax in per cent of the field's height (4 to 8). */
+  /** Parallax in per cent of the field's height (4 to 8; 0 = still). */
   drift?: number;
   className?: string;
 }) {
@@ -81,7 +81,9 @@ export function ThreadField({
     () => {
       const box = root.current;
       const host = box?.parentElement;
-      if (!box || !host) return;
+      // drift 0: a still field (inside a pinned stage, where the stage
+      // itself does the moving).
+      if (!box || !host || !drift) return;
       const mm = gsap.matchMedia();
       mm.add(MEDIA.motion, () => {
         gsap.fromTo(

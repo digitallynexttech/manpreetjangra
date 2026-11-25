@@ -1,0 +1,692 @@
+/* The /v2 home page (plan/v2-spec.md 4.1). Imported by src/app/v2/page.tsx.
+   As in v2.css, every rule is scoped to a `v2-` class, so nothing here can
+   reach the classic pages even if Next keeps this file loaded after a visit.
+   Colours are the classic tokens; the theme variables come from v2.css.
+
+   Order: registered theme colours, then the sections top to bottom (hero,
+   her words, manifesto, journey track, The Work / Her Words, podium, In
+   numbers, feature, hiring, from her feed). Pins are sticky stages that the
+   scenes in components/v2/home/HomeScenes.tsx switch on (`is-pinned`,
+   `is-horizontal`) on desktop with motion allowed; every other width and
+   reduced motion keep the plain vertical layout written first. */
+
+/* --- Theme colours that can fade ---------------------------------------- */
+/* The journey track changes theme half way along (night to paper). With
+   these registered as colours, its text, captions and rules fade with the
+   ground instead of jumping. Unregistered they would switch at once. */
+@property --v2-fg { syntax: "<color>"; inherits: true; initial-value: #1C1816; }
+@property --v2-muted { syntax: "<color>"; inherits: true; initial-value: #5C544E; }
+@property --v2-accent { syntax: "<color>"; inherits: true; initial-value: #B4220B; }
+@property --v2-stroke { syntax: "<color>"; inherits: true; initial-value: #E4270C; }
+@property --v2-rule { syntax: "<color>"; inherits: true; initial-value: #E3DBD1; }
+@property --v2-thread { syntax: "<color>"; inherits: true; initial-value: #E3DBD1; }
+
+/* --- 1. Hero -------------------------------------------------------------- */
+.v2-hero { overflow: clip; isolation: isolate; }
+.v2-hero-inner {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding-top: calc(var(--v2-header) + clamp(14px, 3.4vh, 40px));
+  padding-bottom: clamp(20px, 4vh, 44px);
+}
+.v2-hero-eyebrow { position: relative; z-index: 3; }
+.v2-hero-name { position: relative; z-index: 1; margin-top: clamp(16px, 3.2vh, 36px); }
+.v2-hero-name.v2-size-hero { font-size: clamp(3.25rem, 16vw, 10rem); }
+.v2-hero-name .v2-serif { letter-spacing: -0.04em; }
+.v2-hero-name .v2-sans { letter-spacing: -0.045em; }
+/* Phones and tablets: the panel under the name on the right, the card
+   overlapping its lower left corner. */
+.v2-hero-stage {
+  position: relative;
+  display: grid;
+  margin-top: auto;
+  padding-top: clamp(24px, 4vh, 48px);
+}
+.v2-hero-panel { width: min(86%, 26rem); justify-self: end; }
+.v2-hero-now { position: relative; z-index: 3; width: min(56%, 16rem); margin-top: -7.5rem; }
+.v2-hero-now .v2-notch { padding: 16px 18px 14px; box-shadow: 0 18px 40px rgb(28 24 22 / 0.1); }
+.v2-hero-now-role { margin-top: 10px; font-size: 1.0625rem; line-height: 0.95; letter-spacing: -0.02em; text-wrap: balance; }
+.v2-hero-now-org { margin-top: 3px; font-size: 1.0625rem; line-height: 1; }
+.v2-hero-now .v2-notch-caption { margin-top: 14px; padding-top: 10px; font-size: 0.6875rem; }
+.v2-hero-cue {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  color: var(--v2-fg);
+}
+@media (width >= 64rem) {
+  /* The name spans most of the width; the panel stands in front of the end
+     of MANPREET with its top edge across the capitals, so the tops of the
+     last letters stay readable above it and the name visibly runs on
+     behind it (depth, spec 4.1 item 1). The panel's top follows the name's
+     own box: padding, eyebrow line, gap, then a third of a line or so. */
+  .v2-hero-inner {
+    --hero-fs: clamp(3.5rem, 13.6vw, 15rem);
+    --hero-pad: clamp(14px, 3.4vh, 40px);
+    --hero-gap: clamp(16px, 3.2vh, 36px);
+    --hero-panel-top: calc(var(--v2-header) + var(--hero-pad) + 1rem + var(--hero-gap) + var(--hero-fs) * 0.36);
+    --hero-bottom: clamp(20px, 4vh, 44px);
+    --hero-panel-w: min(31vw, calc((100svh - var(--hero-panel-top) - var(--hero-bottom) - 12px) * 0.8));
+  }
+  .v2-hero-name.v2-size-hero { font-size: var(--hero-fs); }
+  .v2-hero-stage { display: contents; }
+  .v2-hero-panel {
+    position: absolute;
+    z-index: 2;
+    top: var(--hero-panel-top);
+    right: calc(var(--v2-gutter) + 14px);
+    width: var(--hero-panel-w);
+  }
+  .v2-hero-now {
+    position: absolute;
+    left: var(--v2-gutter);
+    bottom: clamp(24px, 5vh, 56px);
+    width: 16rem;
+    margin: 0;
+  }
+  /* Bottom right, beside the panel's foot. */
+  .v2-hero-cue {
+    display: inline-flex;
+    position: absolute;
+    right: calc(var(--v2-gutter) + 14px + var(--hero-panel-w) + clamp(24px, 2.4vw, 40px));
+    bottom: var(--hero-bottom);
+  }
+}
+/* Entrance: the name rises (MixedHeading), the panel settles and fades in,
+   the card slides up. CSS, so nothing waits for the script. */
+.v2-hero-panel .v2-field-box { animation: v2-hero-panel-in 1.3s var(--v2-ease) 0.3s both; }
+.v2-hero-now .v2-notch { animation: v2-hero-now-in 1s var(--v2-ease) 0.8s both; }
+.v2-hero-cue { animation: v2-hero-fade 0.8s ease-out 1.3s both; }
+@keyframes v2-hero-panel-in {
+  from { opacity: 0; scale: 1.06; }
+}
+@keyframes v2-hero-now-in {
+  from { opacity: 0; translate: 0 28px; }
+}
+@keyframes v2-hero-fade {
+  from { opacity: 0; }
+}
+
+/* --- 2. Her words (pinned on desktop) ------------------------------------- */
+.v2-words { overflow: clip; }
+.v2-words-stage {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: clamp(24px, 4.4vh, 48px);
+  padding: clamp(88px, 14vh, 150px) var(--v2-gutter) clamp(120px, 18vh, 200px);
+  overflow: clip;
+}
+.v2-words-stage > .v2-threadfield { z-index: -1; }
+.v2-words-panel {
+  position: relative;
+  width: min(100%, 60rem);
+  margin: 0;
+  padding: clamp(32px, 6vh, 72px) clamp(22px, 6vw, 88px) clamp(140px, 22vh, 220px);
+  border-radius: 10px;
+  background: var(--color-night-raised);
+  text-align: center;
+}
+.v2-words-quote {
+  max-width: 26ch;
+  margin-inline: auto;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.625rem, 1rem + 2.6vw, 3.5rem);
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  color: var(--v2-fg);
+  text-wrap: balance;
+}
+.v2-words-cite { margin-top: clamp(18px, 3vh, 28px); }
+/* The thread runs under the words, across the panel's lower edge and out
+   past both sides (Lando's signature over its frame). */
+.v2-words-loop {
+  position: absolute;
+  left: -4%;
+  width: 108%;
+  bottom: clamp(-170px, -18vh, -48px);
+  height: auto;
+}
+@media (width < 64rem) {
+  .v2-words-panel { padding-bottom: clamp(96px, 14vh, 140px); }
+  .v2-words-loop { bottom: clamp(-96px, -8vh, -56px); }
+}
+@media (width >= 64rem) {
+  .v2-words.is-pinned { height: 250vh; }
+  .v2-words.is-pinned .v2-words-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding-block: calc(var(--v2-header) + 1vh) 13vh;
+  }
+  .v2-words.is-pinned .v2-words-panel { will-change: transform; }
+}
+
+/* --- 3. Manifesto ---------------------------------------------------------- */
+.v2-manifesto { overflow: clip; isolation: isolate; }
+.v2-manifesto-inner {
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(64px, 10vh, 120px) clamp(96px, 18vh, 200px);
+}
+.v2-manifesto-head {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  margin-bottom: clamp(28px, 5vh, 56px);
+  text-align: center;
+}
+.v2-manifesto-mark { width: 64px; height: 40px; color: var(--v2-stroke); }
+.v2-manifesto-mark path { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.v2-manifesto-text { max-width: 76rem; margin-inline: auto; }
+
+/* --- 4. Journey track ------------------------------------------------------ */
+/* Without the horizontal stage (phones, tablets, reduced motion, no
+   script): a vertical collage, the first frames on night, the rest on sand
+   fading to paper, each group with its own thread field. */
+.v2-track { position: relative; }
+.v2-track-stage { position: relative; }
+.v2-track-ground,
+.v2-track-threads { display: none; }
+.v2-track-row { position: relative; z-index: 1; }
+.v2-track-group {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(48px, 8vh, 96px);
+  align-items: start;
+  padding: clamp(80px, 12vh, 140px) var(--v2-gutter);
+  background: var(--v2-bg);
+}
+.v2-track-group > .v2-threadfield { z-index: -1; }
+.v2-track-group--night {
+  padding-bottom: clamp(140px, 20vh, 220px);
+  background: linear-gradient(to bottom, var(--color-night) 0, var(--color-night) calc(100% - clamp(80px, 12vh, 140px)), var(--color-sand) 100%);
+}
+.v2-track-group--light {
+  padding-top: clamp(32px, 5vh, 56px);
+  background: linear-gradient(to bottom, var(--color-sand), var(--color-paper) 80%);
+}
+.v2-track-item { position: relative; width: var(--sw, 100%); justify-self: var(--sj, start); margin: 0; }
+@media (width >= 48rem) {
+  .v2-track-group {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(16px, 2.4vw, 40px);
+  }
+  .v2-track-item { grid-column: var(--col, 1 / -1); width: auto; justify-self: stretch; margin-top: var(--mt, 0); }
+}
+.v2-track-intro .v2-label { margin-bottom: 18px; }
+.v2-track-lede {
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 1.1rem + 2vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: var(--v2-fg);
+  text-wrap: balance;
+}
+.v2-track-entry .v2-caption { margin-bottom: 12px; }
+.v2-track-title {
+  font-size: clamp(1.75rem, 1rem + 2.2vw, 3.25rem);
+  line-height: 0.9;
+  color: var(--v2-fg);
+  text-wrap: balance;
+}
+.v2-track-entry--now .v2-track-title { font-size: clamp(2.25rem, 1rem + 3.4vw, 4.75rem); }
+.v2-track-detail {
+  margin-top: 14px;
+  max-width: 34ch;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--v2-muted);
+  text-wrap: pretty;
+}
+.v2-track-photo .v2-caption { margin-bottom: 10px; }
+.v2-track-frame { position: relative; overflow: clip; border-radius: 4px; background: var(--v2-card); }
+.v2-track-frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.v2-track-frame--site { aspect-ratio: 16 / 10; box-shadow: 0 22px 48px rgb(0 0 0 / 0.22); }
+.v2-track-frame--square { aspect-ratio: 1; }
+/* The grey copy over the podium photograph; the scene fades it out as the
+   photo reaches the centre. Without the scene the photo is in colour. */
+.v2-track-frame .v2-photo-grey { position: absolute; inset: 0; filter: grayscale(1) contrast(1.04); opacity: 0; }
+.v2-track-portrait .v2-field { border-radius: 4px; }
+.v2-track-quote-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 0.95rem + 1.1vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--v2-fg);
+  text-wrap: balance;
+}
+.v2-track-quote-mark { width: 8.5rem; margin: 12px 0 14px; }
+.v2-track-end { display: flex; align-items: center; }
+@media (width >= 64rem) {
+  .v2-track.is-horizontal {
+    height: calc(100vh + var(--v2-track-distance, 190vw));
+    transition:
+      --v2-fg 0.6s var(--v2-ease),
+      --v2-muted 0.6s var(--v2-ease),
+      --v2-accent 0.6s var(--v2-ease),
+      --v2-stroke 0.6s var(--v2-ease),
+      --v2-rule 0.6s var(--v2-ease),
+      --v2-thread 0.6s var(--v2-ease);
+  }
+  .v2-track.is-horizontal .v2-track-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: clip;
+    background: var(--color-night);
+  }
+  .v2-track.is-horizontal .v2-track-ground { display: block; position: absolute; inset: 0; }
+  .v2-track.is-horizontal .v2-track-threads { display: block; }
+  .v2-track.is-horizontal .v2-track-row {
+    display: flex;
+    align-items: flex-start;
+    width: max-content;
+    height: 100%;
+    padding-inline: 7vw 8vw;
+    will-change: transform;
+  }
+  .v2-track.is-horizontal .v2-track-group { display: contents; }
+  .v2-track.is-horizontal .v2-track-group-threads { display: none; }
+  .v2-track.is-horizontal .v2-track-item {
+    flex: none;
+    width: var(--w);
+    margin: var(--y) 0 0 var(--gap);
+    justify-self: auto;
+  }
+  .v2-track.is-horizontal .v2-track-end { width: auto; }
+}
+.v2-track-layer { position: absolute; inset: 0; opacity: 0; }
+.v2-track-layer--sand { background: var(--color-sand); }
+.v2-track-layer--paper { background: var(--color-paper); }
+
+/* --- 5. The Work / Her Words ---------------------------------------------- */
+.v2-split { overflow: clip; isolation: isolate; }
+.v2-split-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: clamp(56px, 10vh, 96px);
+  justify-content: center;
+  padding-block: clamp(64px, 12vh, 120px);
+}
+@media (width >= 48rem) {
+  .v2-split-grid { padding-block: clamp(72px, 20vh, 220px); }
+}
+.v2-split-block { display: grid; justify-items: start; gap: 18px; }
+.v2-split-lede { max-width: 32ch; font-size: 0.9375rem; line-height: 1.45; color: var(--v2-fg); text-wrap: pretty; }
+@media (width >= 48rem) {
+  .v2-split-grid { grid-template-columns: repeat(2, minmax(0, max-content)); column-gap: clamp(40px, 6vw, 120px); }
+  .v2-split-block--end { justify-items: end; text-align: end; }
+  .v2-split-block--end .v2-mixed { text-align: end; }
+}
+
+/* --- Podium: from an inset window to the full screen --------------------- */
+.v2-podium { position: relative; background: var(--color-paper); }
+.v2-podium-stage { position: relative; }
+.v2-podium-frame {
+  position: relative;
+  isolation: isolate;
+  height: min(124vw, 88svh);
+  margin: 0;
+  overflow: clip;
+  background: var(--color-night);
+}
+.v2-podium-backdrop { position: absolute; inset: -12%; z-index: 0; }
+.v2-podium-backdrop img { width: 100%; height: 100%; object-fit: cover; filter: blur(48px) saturate(1.25) brightness(0.5); }
+/* A warm spotlight: the blurred photograph glows behind the sharp one and
+   falls off to night at the edges. */
+.v2-podium-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(70% 70% at 50% 46%, rgb(28 24 22 / 0.05) 0, rgb(28 24 22 / 0.55) 62%, rgb(28 24 22 / 0.9) 100%);
+  pointer-events: none;
+}
+.v2-podium-photo {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 46%;
+  width: min(80vw, 60vh, 34rem);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  overflow: clip;
+  border-radius: 6px;
+  box-shadow: 0 30px 80px rgb(0 0 0 / 0.35);
+}
+.v2-podium-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.v2-podium-caption {
+  position: absolute;
+  z-index: 2;
+  inset: auto var(--v2-gutter) clamp(18px, 4vh, 40px);
+  text-align: center;
+}
+.v2-podium-caption .v2-label { color: var(--color-on-night); }
+@media (width >= 64rem) {
+  .v2-podium-frame { height: 100vh; }
+  .v2-podium.is-pinned { height: 185vh; }
+  .v2-podium.is-pinned .v2-podium-stage { position: sticky; top: 0; height: 100vh; }
+  .v2-podium.is-pinned .v2-podium-frame { will-change: clip-path; }
+}
+
+/* --- 6. In numbers ---------------------------------------------------------- */
+.v2-numbers { overflow: clip; isolation: isolate; }
+.v2-numbers-inner {
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(96px, 16vh, 180px) clamp(150px, 24vh, 260px);
+}
+/* The field stops at the section's foot, so its fade ends inside the night
+   and no thread is cut off by the curve below. */
+.v2-numbers > .v2-threadfield { inset: -6% 0 0; }
+.v2-numbers-grid { display: grid; gap: 20px; margin-top: clamp(40px, 7vh, 88px); align-items: start; }
+.v2-numbers-col { display: grid; gap: 20px; margin: 0; padding: 0; list-style: none; }
+.v2-numbers-col > li { display: grid; }
+/* Phones: the counters two to a row (a lone last one takes the row), the
+   three pillars one under another, so the cards take two screens, not four. */
+@media (width < 48rem) {
+  .v2-numbers-grid { gap: 12px; }
+  .v2-numbers-col:nth-child(odd) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .v2-numbers-col:nth-child(odd) > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .v2-numbers-col:nth-child(2) { gap: 12px; }
+  .v2-numbers-col:nth-child(odd) .v2-numbers-card { min-height: 0; padding: 18px 16px 14px; gap: 12px; }
+  .v2-numbers-col:nth-child(odd) .v2-counter-value { font-size: clamp(2.25rem, 11vw, 3.25rem); }
+  .v2-numbers-col:nth-child(odd) .v2-counter-label { margin-top: 10px; font-size: 0.875rem; }
+  .v2-numbers-col:nth-child(odd) .v2-notch-caption { margin-top: auto; font-size: 0.6875rem; letter-spacing: 0.06em; }
+  .v2-numbers-col:nth-child(odd) .v2-notch--tr { clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%); }
+  .v2-numbers-col:nth-child(odd) .v2-notch--bl { clip-path: polygon(0 0, 100% 0, 100% 100%, 20px 100%, 0 calc(100% - 20px)); }
+}
+@media (width >= 48rem) {
+  .v2-numbers-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .v2-numbers-col:nth-child(3) { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (width >= 64rem) {
+  .v2-numbers-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 1.6vw, 28px); }
+  .v2-numbers-col { gap: clamp(16px, 1.6vw, 28px); }
+  .v2-numbers-col:nth-child(2) { margin-top: 16vh; }
+  .v2-numbers-col:nth-child(3) { grid-column: auto; grid-template-columns: none; margin-top: 6vh; }
+}
+.v2-numbers-card {
+  min-height: clamp(220px, 34vh, 320px);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  color: var(--v2-fg);
+  text-decoration: none;
+}
+.v2-numbers-card .v2-counter-value { font-size: clamp(3.5rem, 6vw, 6.5rem); }
+.v2-numbers-card .v2-notch-caption { margin-top: auto; }
+.v2-numbers-index { color: var(--v2-accent); }
+.v2-numbers-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--v2-accent);
+  text-decoration: none;
+}
+.v2-numbers-link svg { transition: translate 0.45s var(--v2-ease); }
+.v2-numbers-link:hover svg,
+.v2-numbers-pillar:hover .v2-numbers-link svg { translate: 3px 0; }
+.v2-numbers-pillar { transition: background-color 0.35s var(--v2-ease); }
+.v2-numbers-pillar:hover { background: color-mix(in srgb, var(--color-night-raised), var(--color-on-night) 6%); }
+.v2-numbers-pillar-title { font-size: clamp(1.75rem, 2.4vw, 2.75rem); line-height: 0.92; }
+.v2-numbers-pillar-body { font-size: 0.9375rem; line-height: 1.5; color: var(--v2-muted); max-width: 38ch; }
+.v2-numbers-pillar .v2-numbers-link { margin-top: auto; }
+.v2-numbers-pillar .v2-notch-caption { margin-top: 0; }
+@media (pointer: coarse) {
+  .v2-numbers-link { min-height: 44px; }
+}
+.v2-numbers-asof { margin-top: clamp(32px, 6vh, 64px); }
+.v2-numbers-cta {
+  display: grid;
+  justify-items: center;
+  gap: 22px;
+  margin-top: clamp(96px, 18vh, 200px);
+  text-align: center;
+}
+.v2-numbers-mark { width: 9rem; }
+.v2-numbers-cta-line {
+  max-width: 26ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1rem + 1.4vw, 2.375rem);
+  line-height: 1.12;
+  color: var(--v2-fg);
+  text-wrap: balance;
+}
+
+/* --- 7. Feature (curved edge out of the night) ---------------------------- */
+.v2-feature { overflow: clip; isolation: isolate; }
+.v2-curve {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  height: clamp(40px, 7vw, 120px);
+}
+/* Night by name (the theme attribute on the curve sets the text colour). */
+.v2-curve path { fill: var(--color-night); }
+.v2-feature-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: clamp(48px, 8vh, 80px);
+  padding-block: clamp(96px, 16vh, 200px) clamp(40px, 7vh, 96px);
+}
+.v2-feature-text { display: grid; justify-items: start; align-content: center; gap: 20px; }
+.v2-feature-title.v2-size-title { font-size: clamp(2.125rem, 1rem + 3.1vw, 4.5rem); }
+.v2-feature-lede { max-width: 40ch; }
+.v2-feature-collage { position: relative; display: grid; gap: 20px; }
+.v2-feature-zari { width: 60%; justify-self: end; aspect-ratio: 4 / 5; overflow: clip; border-radius: 10px; }
+.v2-feature-zari img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.v2-feature-card { position: relative; width: min(92%, 26rem); margin: 0; padding: clamp(20px, 2vw, 28px); border-radius: 10px; }
+.v2-feature-card--paper {
+  margin-top: -22%;
+  background: var(--color-paper);
+  box-shadow: 0 0 0 1px var(--color-line), 0 24px 48px rgb(28 24 22 / 0.08);
+}
+.v2-feature-card--blush { justify-self: end; background: var(--color-blush); }
+.v2-feature-quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.0625rem, 0.95rem + 0.4vw, 1.25rem);
+  line-height: 1.42;
+}
+.v2-feature-card figcaption { margin-top: 14px; }
+/* Desktop, Lando's store collage: the zari tile in the middle, the paper
+   card over its top left corner, the blush card over its bottom right one.
+   The cards sit at opposite ends of the box, so they never cover each
+   other's words; the paper card drifts faster than the blush one, which
+   only widens the gap between them as the page moves on. */
+@media (width >= 64rem) {
+  .v2-feature-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: clamp(32px, 4vw, 80px); align-items: center; }
+  .v2-feature-collage { display: block; min-height: clamp(640px, 98vh, 840px); }
+  .v2-feature-zari { position: absolute; inset: 15% 10% 17% 20%; width: auto; aspect-ratio: auto; }
+  .v2-feature-card { position: absolute; width: min(62%, 30rem); margin: 0; }
+  .v2-feature-card--paper { left: 0; top: 0; }
+  .v2-feature-card--blush { right: 0; bottom: 0; }
+  .v2-feature-quote { font-size: clamp(1rem, 0.8rem + 0.3vw, 1.125rem); }
+}
+
+/* --- 8. Hiring ---------------------------------------------------------------- */
+.v2-hiring { overflow: clip; isolation: isolate; }
+.v2-hiring-grid {
+  position: relative;
+  display: grid;
+  gap: 40px;
+  padding-top: clamp(80px, 14vh, 200px);
+}
+@media (width >= 64rem) {
+  .v2-hiring-grid { padding-top: clamp(120px, 18vh, 220px); }
+}
+.v2-hiring-head { position: relative; display: grid; justify-items: start; gap: 22px; }
+/* The flourish trails off the end of the heading, its loops in the open
+   space to the right of the words (and above them on desktop), behind them
+   (z-index), so it never runs through a letter. */
+.v2-hiring-flourish {
+  position: absolute;
+  z-index: 0;
+  /* Measured in the heading's own size: "HIRING FOR" is about 5.5 em. */
+  font-size: clamp(2rem, 5.4vw, 6rem);
+  left: 5.8em;
+  top: 0.6em;
+  width: min(calc(100% - 5.8em), 9em);
+}
+/* Desktop up to 1440 px: the side column stands as tall as the heading,
+   so the flourish keeps to the band above the first line, from the end of
+   "HIRING FOR" (about 5.5 em of the heading's size) to the column's edge. */
+@media (width >= 64rem) {
+  .v2-hiring-flourish { left: 5.7em; top: -1.7em; width: calc(100% - 5.7em); }
+}
+/* Wide screens: room above the side column's words too, so it grows. */
+@media (width >= 90rem) {
+  .v2-hiring-flourish { left: 44%; top: -30%; width: min(92%, 60rem); }
+}
+.v2-hiring-pill,
+.v2-hiring-title { position: relative; z-index: 1; }
+.v2-hiring-title { max-width: 14ch; }
+.v2-hiring-side { position: relative; z-index: 1; display: grid; align-content: end; gap: 24px; }
+.v2-hiring-lede { max-width: 40ch; font-size: clamp(1rem, 0.94rem + 0.3vw, 1.1875rem); line-height: 1.5; }
+.v2-hiring-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+@media (width >= 64rem) {
+  .v2-hiring-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); align-items: end; column-gap: clamp(32px, 5vw, 96px); }
+}
+.v2-hiring-marquee {
+  margin-top: clamp(72px, 13vh, 150px);
+  padding-block: clamp(16px, 2.6vh, 30px);
+  border-block: 1px solid var(--v2-rule);
+  font-size: clamp(1.5rem, 1rem + 2.4vw, 3.5rem);
+  line-height: 1;
+  --v2-marquee-gap: clamp(1.5rem, 3vw, 3rem);
+}
+.v2-hiring-marquee .v2-marquee-dot { width: 10px; height: 10px; background: var(--v2-fg); }
+
+/* --- 9. From her feed (paper into marigold) -------------------------------- */
+.v2-feed {
+  overflow: clip;
+  padding-block: clamp(96px, 16vh, 180px) clamp(56px, 9vh, 110px);
+  background: linear-gradient(to bottom, var(--color-paper) 0, var(--color-paper) 56%, var(--color-marigold) 100%);
+}
+/* The page ends on marigold, so the footer starts there too. */
+.v2:has(.v2-feed) .v2-footer { --v2-footer-from: var(--color-marigold); }
+.v2-feed-title.v2-size-display { font-size: clamp(2.5rem, 1.6rem + 3.6vw, 5.5rem); }
+.v2-fan-wrap { --fan: 1; }
+.v2-fan { margin: 0; padding: 0; list-style: none; }
+.v2-fan-card {
+  --fan-bg: var(--color-sand);
+  position: relative;
+  overflow: clip;
+  border-radius: 26px;
+  background: var(--fan-bg);
+  color: var(--v2-fg);
+  box-shadow: 0 18px 44px rgb(28 24 22 / 0.16);
+}
+.v2-fan-card--blush { --fan-bg: var(--color-blush); }
+.v2-fan-card--raised { --fan-bg: var(--color-night-raised); }
+.v2-fan-card--night { --fan-bg: var(--color-night); }
+.v2-fan-figure {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 24px 20px 16px;
+}
+.v2-fan-quote { font-family: var(--font-display); font-size: 1.125rem; line-height: 1.32; letter-spacing: -0.005em; text-wrap: pretty; }
+.v2-fan-card--short .v2-fan-quote { font-size: clamp(1.5rem, 1rem + 1.1vw, 2rem); line-height: 1.12; }
+.v2-fan-meta { display: grid; gap: 4px; padding-top: 12px; border-top: 1px solid var(--v2-rule); }
+.v2-fan-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--v2-accent);
+  text-decoration: none;
+}
+.v2-fan-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+@media (pointer: coarse) {
+  .v2-fan-link { min-height: 44px; }
+}
+/* Phones and tablets: a sideways row that snaps card by card. */
+@media (width < 64rem) {
+  .v2-fan {
+    display: flex;
+    gap: 12px;
+    margin-top: clamp(28px, 5vh, 48px);
+    padding: 12px var(--v2-gutter) 28px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--v2-gutter);
+    scrollbar-width: none;
+  }
+  .v2-fan::-webkit-scrollbar { display: none; }
+  .v2-fan-card { flex: none; width: min(70vw, 300px); min-height: min(96vw, 400px); scroll-snap-align: center; }
+}
+/* Desktop: a fan. `--fan` is 1 open, 0 stacked (FanScene scrubs it). */
+@media (width >= 64rem) {
+  .v2-fan {
+    --card-w: clamp(196px, 14.6vw, 264px);
+    --card-h: calc(var(--card-w) * 1.72);
+    position: relative;
+    height: calc(var(--card-h) + 130px);
+    margin-top: clamp(28px, 5vh, 56px);
+  }
+  .v2-fan-card {
+    position: absolute;
+    top: 0;
+    left: calc(50% - var(--card-w) / 2);
+    z-index: var(--z);
+    width: var(--card-w);
+    height: var(--card-h);
+    transform-origin: 50% 100%;
+    transform:
+      translateX(calc(var(--k) * 11.2vw * var(--fan)))
+      translateY(calc(var(--k2) * 12px * var(--fan) + (1 - var(--fan)) * 56px))
+      rotate(calc(var(--k) * 6.5deg * var(--fan)));
+    transition: translate 0.5s var(--v2-ease), box-shadow 0.5s var(--v2-ease);
+  }
+  .v2-fan-card:hover,
+  .v2-fan-card:focus-within { z-index: 20; translate: 0 -18px; box-shadow: 0 30px 60px rgb(28 24 22 / 0.24); }
+}
+.v2-feed-follow { display: grid; justify-items: center; gap: 12px; margin-top: clamp(28px, 5vh, 56px); text-align: center; }
+.v2-feed-follow-line { font-family: var(--font-display); font-size: clamp(1.375rem, 1.1rem + 0.9vw, 2rem); line-height: 1.2; }
+.v2-feed-links { display: flex; gap: 28px; margin: 0; padding: 0; list-style: none; }
+.v2-feed-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--v2-fg);
+  text-decoration: none;
+}
+.v2-feed-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+@media (pointer: coarse) {
+  .v2-feed-links a { min-height: 44px; }
+}
