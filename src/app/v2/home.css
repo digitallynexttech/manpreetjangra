@@ -683,6 +683,31 @@
 @media (pointer: coarse) {
   .v2-fan-link { min-height: 44px; }
 }
+/* A picture behind the card: sharp underneath, a blurred copy over the left
+   side (masked off towards the right) and a tint of the card's ground, so
+   the text reads on the left and the picture shows on the right. Both are
+   painted once with the card's own layer, so the scrubbed fan only moves
+   them (no backdrop-filter). */
+.v2-fan-photo { position: absolute; inset: 0; pointer-events: none; }
+.v2-fan-photo img { object-fit: cover; object-position: var(--pos, 50% 50%); }
+.v2-fan-photo .v2-fan-photo-blur {
+  filter: blur(14px);
+  scale: 1.15;
+  mask-image: linear-gradient(to right, #000 0, #000 48%, transparent 92%);
+}
+.v2-fan-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    color-mix(in oklab, var(--fan-bg) 90%, transparent) 0,
+    color-mix(in oklab, var(--fan-bg) 76%, transparent) 50%,
+    color-mix(in oklab, var(--fan-bg) 18%, transparent) 100%
+  );
+}
+.v2-fan-card--photo .v2-fan-figure { position: relative; }
+.v2-fan-card--photo .v2-fan-meta { border-top-color: color-mix(in oklab, var(--v2-fg) 28%, transparent); }
 /* Phones, tablets and laptops: a sideways row that snaps card by card
    (below 90rem the fan cannot open wide enough to show every quote whole). */
 @media (width < 90rem) {

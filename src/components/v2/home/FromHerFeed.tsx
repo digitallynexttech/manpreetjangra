@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import Image from "next/image";
 import type { QuoteId } from "@/content/quotes";
 import { socialLinks } from "@/content/navigation";
 import { labels } from "@/content/v2";
@@ -26,6 +27,23 @@ const FEED: readonly QuoteId[] = [
   "interns-labels",
   "video-audience",
 ];
+
+/** A picture behind each card: the post's own image where there is one (the
+ *  reel cover, the interns' photos), else a still life in the site palette
+ *  for the LinkedIn posts. The left side, where the text sits, is blurred and
+ *  tinted with the card's ground; the picture shows sharp on the right.
+ *  `position` is the object-position that keeps the subject in view. The
+ *  intern photos need the consent of everyone pictured before launch
+ *  (CONTENT-REVIEW, F213). */
+const PHOTOS: Partial<Record<QuoteId, { src: string; position: string }>> = {
+  language: { src: "/images/feed/still-language.webp", position: "85% 50%" },
+  "reel-babysit": { src: "/images/feed/reel-why-brands-drop-agencies-2025-05-28.webp", position: "50% 30%" },
+  "video-smarter": { src: "/images/feed/still-smarter.webp", position: "85% 50%" },
+  "interns-mentor": { src: "/images/feed/interns-2025-06-29-a.webp", position: "35% 40%" },
+  "reel-vendors": { src: "/images/feed/reel-why-brands-drop-agencies-2025-05-28.webp", position: "50% 30%" },
+  "interns-labels": { src: "/images/feed/interns-2025-06-29-b.webp", position: "35% 40%" },
+  "video-audience": { src: "/images/feed/still-audience.webp", position: "85% 50%" },
+};
 
 /** Card grounds, left to right (night cards read on-night text). */
 const GROUNDS = ["blush", "raised", "sand", "night", "sand", "raised", "blush"] as const;
@@ -55,13 +73,20 @@ export function FromHerFeed() {
             const k = index - middle;
             const ground = GROUNDS[index % GROUNDS.length];
             const dark = ground === "night" || ground === "raised";
+            const photo = PHOTOS[id];
             return (
               <li
                 key={id}
-                className={`v2-fan-card v2-fan-card--${ground}${quote.text.length < 70 ? " v2-fan-card--short" : ""}`}
+                className={`v2-fan-card v2-fan-card--${ground}${quote.text.length < 70 ? " v2-fan-card--short" : ""}${photo ? " v2-fan-card--photo" : ""}`}
                 data-v2-theme={dark ? "night" : "paper"}
                 style={{ "--k": k, "--k2": k * k, "--z": index } as CSSProperties}
               >
+                {photo ? (
+                  <div className="v2-fan-photo" aria-hidden="true" style={{ "--pos": photo.position } as CSSProperties}>
+                    <Image src={photo.src} alt="" fill sizes="(min-width: 90rem) 240px, 300px" />
+                    <Image src={photo.src} alt="" fill sizes="(min-width: 90rem) 240px, 300px" className="v2-fan-photo-blur" />
+                  </div>
+                ) : null}
                 <figure className="v2-fan-figure">
                   <blockquote>
                     <p className="v2-fan-quote">
