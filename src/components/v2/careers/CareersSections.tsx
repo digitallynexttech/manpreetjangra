@@ -54,6 +54,7 @@ export function CareersHero() {
       ledeLabel={intro.title}
       lede={intro.lede}
       accent="what I look for."
+      fitWide={0.877}
     >
       {hasRoles ? <HiringPill count={roles.length} className="v2-careers-pill" /> : null}
     </V2PageHero>

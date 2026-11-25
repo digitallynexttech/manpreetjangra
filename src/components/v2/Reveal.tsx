@@ -1,6 +1,6 @@
 "use client";
 import { useRef, type CSSProperties, type ElementType, type ReactNode } from "react";
-import { EASE_IN, MEDIA, ScrollTrigger, gsap, useGSAP } from "./gsap";
+import { EASE_IN, MEDIA, ScrollTrigger, gsap, onNextFrame, useGSAP } from "./gsap";
 
 // Lifts content into place as it scrolls into view (the inner pages' rows,
 // paragraphs and cards, the way landonorris.com eases its blocks in): each
@@ -32,21 +32,30 @@ export function Reveal({
     () => {
       const node = root.current;
       if (!node) return;
-      const targets = items ? Array.from(node.querySelectorAll<HTMLElement>(items)) : [node];
-      if (targets.length === 0) return;
+      const all = items ? Array.from(node.querySelectorAll<HTMLElement>(items)) : [node];
+      if (all.length === 0) return;
       const mm = gsap.matchMedia();
-      mm.add(MEDIA.motion, () => {
-        gsap.set(targets, { y, opacity: 0 });
-        // No `once`: a batch trigger that kills itself while its siblings
-        // are still being created (a page opened mid-scroll, where the
-        // triggers above the scroll position fire at once) breaks
-        // ScrollTrigger's refresh loop. Entering again only re-runs a tween
-        // to the place the element already holds.
-        ScrollTrigger.batch(targets, {
-          start: "top 92%",
-          onEnter: (batch) => gsap.to(batch, { y: 0, opacity: 1, duration: 0.9, ease: EASE_IN, stagger: 0.08, overwrite: true }),
-        });
-      });
+      mm.add(MEDIA.motion, (context) =>
+        onNextFrame(context, () => {
+          // Only what is still below the fold waits for its entrance: content
+          // already in view or above it (a page opened at an anchor, Back to a
+          // scrolled page) stays as rendered instead of blanking and rising
+          // again.
+          const fold = window.innerHeight * 0.92;
+          const targets = all.filter((target) => target.getBoundingClientRect().top > fold);
+          if (targets.length === 0) return;
+          gsap.set(targets, { y, opacity: 0 });
+          // No `once`: a batch trigger that kills itself while its siblings
+          // are still being created (a page opened mid-scroll, where the
+          // triggers above the scroll position fire at once) breaks
+          // ScrollTrigger's refresh loop. Entering again only re-runs a tween
+          // to the place the element already holds.
+          ScrollTrigger.batch(targets, {
+            start: "top 92%",
+            onEnter: (batch) => gsap.to(batch, { y: 0, opacity: 1, duration: 0.9, ease: EASE_IN, stagger: 0.08, overwrite: true }),
+          });
+        }),
+      );
       return () => mm.revert();
     },
     { scope: root, dependencies: [items, y] },

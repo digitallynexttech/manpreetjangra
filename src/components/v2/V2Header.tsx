@@ -16,7 +16,10 @@ import { lockScroll } from "./SmoothScroll";
 // header asks which surface sits under its middle (elementsFromPoint, so a
 // pinned panel counts as well), then switches its theme with a 0.4 s colour
 // transition. It hides after 120 px of scrolling down and returns on the way
-// up; never while it holds keyboard focus or the menu is open.
+// up; never while it holds keyboard focus or the menu is open. Away from the
+// top (`is-away`) it keeps its buttons clear of the content: phones and
+// tablets drop the wordmark (Lando's two square buttons), desktop lays a
+// soft scrim of the surface's own colour under it.
 //
 // Menu: a modal dialog (role dialog, aria-modal) over the whole page, on
 // night: four pictures on the left, the pages in huge uppercase on the right
@@ -24,7 +27,9 @@ import { lockScroll } from "./SmoothScroll";
 // on the server) below. Opening it stops the page scrolling (Lenis stop, or
 // overflow hidden without Lenis), makes everything behind it inert, keeps Tab
 // inside it and moves focus to its close button; Escape or the close button
-// shuts it and puts focus back on the menu button. Links close it.
+// shuts it and puts focus back on the menu button. A link to another page
+// keeps it closed over the old page until the new one is in, then it
+// retracts over the new page; every other link closes it at once.
 //
 // The links and labels arrive as props from the server layout, so this file
 // imports no content.
@@ -72,10 +77,15 @@ export function V2Header({
   menuFoot: ReactNode;
 }) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
-  const [view, setView] = useState<{ pathname: string; hidden: boolean; theme: Theme }>({
+  // The page the menu was opened on: it is open only while that page is
+  // shown, so arriving on a new page closes it (derived, no effect).
+  const [openOn, setOpenOn] = useState<string | null>(null);
+  const open = openOn === pathname;
+  const setOpen = (next: boolean) => setOpenOn(next ? pathname : null);
+  const [view, setView] = useState<{ pathname: string; hidden: boolean; away: boolean; theme: Theme }>({
     pathname,
     hidden: false,
+    away: false,
     theme: "paper",
   });
   const header = useRef<HTMLElement>(null);
@@ -109,14 +119,28 @@ export function V2Header({
       // The surface under the middle of the header.
       const probeY = el.offsetHeight / 2;
       let theme: Theme = "paper";
+      const away = y > 120;
+      // Desktop scrim: the first solid background under the header's
+      // middle (paper, sand, blush, night), read only away from the top.
+      let ground = "";
       for (const node of document.elementsFromPoint(window.innerWidth / 2, probeY)) {
         if (el.contains(node) || dialog.current?.contains(node)) continue;
+        // Only a surface that spans the page counts (not a pill or a card
+        // that happens to sit under the middle of the header).
+        if (away && !ground && node.getBoundingClientRect().width >= window.innerWidth * 0.9) {
+          const style = getComputedStyle(node);
+          const colour = style.backgroundColor;
+          const solid = colour && colour !== "transparent" && !/^rgba\(.*,\s*0\)$/.test(colour);
+          // A fading layer (the journey track's grounds) counts once it shows.
+          if (solid && Number.parseFloat(style.opacity) > 0.5) ground = colour;
+        }
         const surface = node.closest<HTMLElement>("[data-v2-theme]");
         if (surface) {
           theme = surface.dataset.v2Theme === "night" ? "night" : "paper";
-          break;
+          if (!away || ground) break;
         }
       }
+      if (ground && el.style.getPropertyValue("--v2-header-ground") !== ground) el.style.setProperty("--v2-header-ground", ground);
       setView((current) => {
         const samePage = current.pathname === pathname;
         const hidden =
@@ -125,9 +149,9 @@ export function V2Header({
             : Math.abs(y - directionStartY) >= 8
               ? direction > 0
               : samePage && current.hidden;
-        return samePage && current.hidden === hidden && current.theme === theme
+        return samePage && current.hidden === hidden && current.away === away && current.theme === theme
           ? current
-          : { pathname, hidden, theme };
+          : { pathname, hidden, away, theme };
       });
     };
     const schedule = () => {
@@ -159,7 +183,7 @@ export function V2Header({
       if (event.key === "Escape") {
         event.preventDefault();
         returnFocus.current = true;
-        setOpen(false);
+        setOpenOn(null);
       }
     };
     document.addEventListener("keydown", escape);
@@ -200,12 +224,13 @@ export function V2Header({
   const samePage = view.pathname === pathname;
   const theme: Theme = samePage ? view.theme : "paper";
   const hidden = samePage && view.hidden && !open;
+  const away = samePage && view.away && !open;
 
   return (
     <>
       <header
         ref={header}
-        className={`v2-header${hidden ? " is-hidden" : ""}`}
+        className={`v2-header${hidden ? " is-hidden" : ""}${away ? " is-away" : ""}`}
         data-v2-theme={theme}
         onFocusCapture={() => setView((current) => (current.hidden ? { ...current, hidden: false } : current))}
       >
@@ -245,9 +270,18 @@ export function V2Header({
         data-v2-theme="night"
         inert={!open}
         onKeyDown={trap}
-        // Any link inside (the pages, the foot, the contact pill) closes it.
+        // A link to another page of this site keeps the menu over the old
+        // page while the new one loads (it closes when the new page is in);
+        // any other link (this page, a #place, a new tab, a modified click)
+        // closes it at once.
         onClickCapture={(event) => {
-          if (event.target instanceof Element && event.target.closest("a[href]")) close();
+          const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
+          if (!link) return;
+          const url = new URL(link.href, window.location.href);
+          const plain = event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+          const elsewhere =
+            plain && !link.target && url.origin === window.location.origin && url.pathname !== window.location.pathname;
+          if (!elsewhere) close();
         }}
       >
         <div className="v2-menu-bar">

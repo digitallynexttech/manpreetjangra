@@ -1,6 +1,6 @@
 "use client";
 import { useRef } from "react";
-import { MEDIA, gsap, useGSAP } from "./gsap";
+import { MEDIA, SCRUB_FREE, gsap, useGSAP } from "./gsap";
 
 // One giant number that grows as you scroll, with a bold label (spec 4.2,
 // Lando's "49 PODIUMS"). The number scales from 0.55 to full size while the
@@ -34,7 +34,7 @@ export function BigFigure({
           {
             scale: 1,
             ease: "none",
-            scrollTrigger: { trigger: node, start: "top bottom", end: desktop ? "bottom 85%" : "center 60%", scrub: 0.6 },
+            scrollTrigger: { trigger: node, start: "top bottom", end: desktop ? "bottom 85%" : "center 60%", scrub: SCRUB_FREE },
           },
         );
         gsap.fromTo(
@@ -44,7 +44,7 @@ export function BigFigure({
             xPercent: 0,
             opacity: 1,
             ease: "none",
-            scrollTrigger: { trigger: node, start: "top 70%", end: "bottom 85%", scrub: 0.6 },
+            scrollTrigger: { trigger: node, start: "top 70%", end: "bottom 85%", scrub: SCRUB_FREE },
           },
         );
       });

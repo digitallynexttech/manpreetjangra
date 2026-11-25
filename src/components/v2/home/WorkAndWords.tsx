@@ -72,7 +72,7 @@ export function PodiumStage() {
             <Image src={podium.src} alt="" width={podium.width} height={podium.height} sizes="40vw" />
           </div>
           <div className="v2-podium-photo">
-            <Image src={podium.src} alt={podium.alt} width={podium.width} height={podium.height} sizes="(min-width: 1024px) 560px, 86vw" />
+            <Image src={podium.src} alt={podium.alt} width={podium.width} height={podium.height} sizes="(min-width: 1024px) 400px, 80vw" />
           </div>
           <figcaption className="v2-podium-caption">
             <CaptionLabel as="h2" id="v2-podium-title" parts={caption} />

@@ -1,6 +1,6 @@
 "use client";
 import { useRef, type ReactNode } from "react";
-import { MEDIA, gsap, useGSAP } from "./gsap";
+import { MEDIA, SCRUB_FREE, gsap, useGSAP } from "./gsap";
 
 // The portrait in the footer card rises from the bottom edge while the card
 // comes into view (spec 4.1 item 10, Lando's helmet bust). Scrubbed; static
@@ -17,7 +17,7 @@ export function V2FooterStage({ children }: { children: ReactNode }) {
         gsap.fromTo(
           node.firstElementChild,
           { yPercent: 38 },
-          { yPercent: 0, ease: "none", scrollTrigger: { trigger: card, start: "top bottom", end: "bottom bottom", scrub: 0.6 } },
+          { yPercent: 0, ease: "none", scrollTrigger: { trigger: card, start: "top bottom", end: "bottom bottom", scrub: SCRUB_FREE } },
         );
       });
       return () => mm.revert();

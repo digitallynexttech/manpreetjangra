@@ -1,9 +1,11 @@
 import type { CSSProperties, ReactNode } from "react";
+import { MarqueeShell } from "./MarqueeShell";
 
 // A strip that runs sideways for ever (spec 3.4): CSS keyframes, two copies
 // of the items with the second hidden from screen readers, paused while the
-// pointer is over it or focus is inside it, and still (one wrapped copy) for
-// reduced motion. The strip clips itself, so it never widens the page.
+// pointer is over it, focus is inside it or it is off screen, and still (one
+// wrapped copy) for reduced motion. The strip clips itself, so it never
+// widens the page.
 export function Marquee({
   items,
   duration = 40,
@@ -37,16 +39,15 @@ export function Marquee({
     </ul>
   );
   return (
-    <div
+    <MarqueeShell
       className={["v2-marquee", reverse && "v2-marquee--reverse", className].filter(Boolean).join(" ")}
       style={{ "--v2-marquee-duration": `${duration}s` } as CSSProperties}
-      role={label ? "region" : undefined}
-      aria-label={label}
+      label={label}
     >
       <div className="v2-marquee-track">
         {group(false)}
         {group(true)}
       </div>
-    </div>
+    </MarqueeShell>
   );
 }

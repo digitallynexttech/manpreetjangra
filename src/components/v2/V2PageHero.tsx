@@ -12,8 +12,10 @@ import { ThreadField } from "./ThreadField";
 // night (Writing and Contact).
 //
 // The title's size follows its number of letters so it nearly fills one
-// line from 768 px (`--v2-chars`, `fit` nudges the estimate), and FitLine
-// then fits it exactly once the fonts are in.
+// line from 768 px (`--v2-chars`, `fit` nudges the estimate, `fitWide` from
+// 768 px), and FitLine then fits it exactly once the fonts are in. With a
+// measured `fitWide` that last step moves the title less than a pixel, so
+// the meta row and the lede never jump after the first paint.
 
 export function V2PageHero({
   id,
@@ -25,6 +27,7 @@ export function V2PageHero({
   theme = "paper",
   as = "h1",
   fit = 1,
+  fitWide = fit,
   children,
 }: {
   /** The section's heading id (aria-labelledby). */
@@ -43,6 +46,10 @@ export function V2PageHero({
   as?: ElementType;
   /** Multiplies the estimated letter width (1 = default). */
   fit?: number;
+  /** The same from 768 px, where FitLine fits the line exactly (default
+   *  `fit`): the ratio of the CSS estimate to the fitted size, which is the
+   *  same at every width. */
+  fitWide?: number;
   children?: ReactNode;
 }) {
   const chars = title.reduce((sum, part) => sum + part.text.length, 0) + Math.max(0, title.length - 1);
@@ -58,7 +65,7 @@ export function V2PageHero({
           size="title"
           rise="load"
           className="v2-page-title"
-          style={{ "--v2-chars": chars, "--v2-em": 0.62 * fit } as CSSProperties}
+          style={{ "--v2-chars": chars, "--v2-em-small": 0.62 * fit, "--v2-em-wide": 0.62 * fitWide } as CSSProperties}
         />
         <FitLine targetId={id} />
         <ul className="v2-meta-row v2-sans">

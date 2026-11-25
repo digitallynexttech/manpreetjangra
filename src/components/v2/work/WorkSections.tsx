@@ -6,6 +6,7 @@ import { BigCounter } from "../BigCounter";
 import { BigFigure } from "../BigFigure";
 import { BigRows } from "../BigRows";
 import { MixedHeading } from "../MixedHeading";
+import { NightCurve } from "../NightCurve";
 import { NotchCard } from "../NotchCard";
 import { ParallaxGroup } from "../ParallaxGroup";
 import { PillButton } from "../PillButton";
@@ -42,6 +43,7 @@ export function WorkHero() {
       // THE is a wide serif: a smaller estimate keeps the title on one line
       // on phones too (FitLine sets the exact size from 768 px).
       fit={1.22}
+      fitWide={1.093}
       ledeLabel={intro.title}
       lede={intro.lede}
       accent="where the agency sits in its group."
@@ -197,6 +199,7 @@ export function WorkClientStory() {
       data-v2-theme="paper"
       aria-labelledby={titleId(clientStory.id)}
     >
+      <NightCurve />
       <div className="v2-wrap v2-work-client-grid">
         <div className="v2-work-client-text">
           <p className="v2-label v2-inner-eyebrow">{clientStory.eyebrow}</p>

@@ -42,6 +42,7 @@ export function ContactHero() {
       ledeLabel={intro.title}
       lede={intro.lede}
       accent="marked for my attention."
+      fitWide={0.921}
     />
   );
 }

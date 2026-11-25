@@ -1,6 +1,6 @@
 "use client";
 import { useRef } from "react";
-import { MEDIA, gsap, useGSAP } from "./gsap";
+import { MEDIA, SCRUB_FREE, gsap, useGSAP } from "./gsap";
 
 // The field of long flowing threads behind a /v2 surface (spec 3.4), in place
 // of Lando's contour lines: 9 to 14 smooth cubic curves from a fixed seed, so
@@ -92,7 +92,7 @@ export function ThreadField({
           {
             yPercent: drift / 2,
             ease: "none",
-            scrollTrigger: { trigger: host, start: "top bottom", end: "bottom top", scrub: true },
+            scrollTrigger: { trigger: host, start: "top bottom", end: "bottom top", scrub: SCRUB_FREE },
           },
         );
       });

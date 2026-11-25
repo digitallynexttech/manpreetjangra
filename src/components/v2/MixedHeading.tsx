@@ -1,6 +1,6 @@
 "use client";
 import { Fragment, useRef, type CSSProperties, type ElementType } from "react";
-import { EASE_IN, MEDIA, SplitText, gsap, useGSAP } from "./gsap";
+import { EASE_IN, MEDIA, SplitText, gsap, onNextFrame, useGSAP } from "./gsap";
 import { ThreadDraw } from "./ThreadDraw";
 
 // A heading in Lando's two voices (spec 2, 3.4): parts in the bold sans
@@ -66,34 +66,39 @@ export function MixedHeading({
       const node = root.current;
       if (!node || rise !== "enter") return;
       const mm = gsap.matchMedia();
-      mm.add(MEDIA.motion, () => {
-        if (stack) {
-          gsap.from(node.querySelectorAll(":scope > .v2-rise > .v2-part"), {
-            yPercent: 105,
-            duration: 0.9,
-            stagger: 0.08,
-            ease: EASE_IN,
-            scrollTrigger: { trigger: node, start: "top 88%", once: true },
-          });
-          return;
-        }
-        const split = SplitText.create(node, {
-          type: "lines",
-          mask: "lines",
-          linesClass: "v2-line",
-          autoSplit: true,
-          aria: "auto",
-          onSplit: (self) =>
-            gsap.from(self.lines, {
+      mm.add(MEDIA.motion, (context) =>
+        onNextFrame(context, () => {
+          // A heading already past its start (a page opened mid-way, Back)
+          // stays as rendered instead of dropping out of sight and rising.
+          if (node.getBoundingClientRect().top < window.innerHeight * 0.88) return;
+          if (stack) {
+            gsap.from(node.querySelectorAll(":scope > .v2-rise > .v2-part"), {
               yPercent: 105,
               duration: 0.9,
               stagger: 0.08,
               ease: EASE_IN,
-              scrollTrigger: { trigger: node, start: "top 88%", once: true },
-            }),
-        });
-        return () => split.revert();
-      });
+              scrollTrigger: { trigger: node, start: "top 88%", toggleActions: "play none none none" },
+            });
+            return;
+          }
+          const split = SplitText.create(node, {
+            type: "lines",
+            mask: "lines",
+            linesClass: "v2-line",
+            autoSplit: true,
+            aria: "auto",
+            onSplit: (self) =>
+              gsap.from(self.lines, {
+                yPercent: 105,
+                duration: 0.9,
+                stagger: 0.08,
+                ease: EASE_IN,
+                scrollTrigger: { trigger: node, start: "top 88%", toggleActions: "play none none none" },
+              }),
+          });
+          return () => split.revert();
+        }),
+      );
       return () => mm.revert();
     },
     { dependencies: [rise, stack] },

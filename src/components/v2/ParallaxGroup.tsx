@@ -1,6 +1,6 @@
 "use client";
 import { useRef, type CSSProperties, type ElementType, type ReactNode } from "react";
-import { MEDIA, gsap, useGSAP } from "./gsap";
+import { MEDIA, SCRUB_FREE, gsap, useGSAP } from "./gsap";
 
 // Moves the elements inside it that carry `data-v2-speed` at their own pace
 // while the group crosses the viewport (spec 4.1: the In numbers columns,
@@ -41,7 +41,7 @@ export function ParallaxGroup({
             {
               y: () => -travel(),
               ease: "none",
-              scrollTrigger: { trigger: node, start: "top bottom", end: "bottom top", scrub: 0.6, invalidateOnRefresh: true },
+              scrollTrigger: { trigger: node, start: "top bottom", end: "bottom top", scrub: SCRUB_FREE, invalidateOnRefresh: true },
             },
           );
         });

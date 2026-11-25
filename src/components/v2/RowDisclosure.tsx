@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, type MouseEvent, type ReactNode } from "react";
-import { ScrollTrigger } from "./gsap";
+import { requestRefresh } from "./gsap";
 
 // A big row that opens to its details (spec 4.2, 4.3: the About journey),
 // with the classic Disclosure's behaviour (src/components/Disclosure.tsx):
@@ -25,7 +25,7 @@ function setOpen(block: HTMLDetailsElement, opening: boolean, animate: boolean) 
   if (!panel || !animate || typeof panel.animate !== "function") {
     block.open = opening;
     delete block.dataset.closing;
-    ScrollTrigger.refresh();
+    requestRefresh();
     return;
   }
   const from = block.open ? panel.getBoundingClientRect().height : 0;
@@ -50,7 +50,7 @@ function setOpen(block: HTMLDetailsElement, opening: boolean, animate: boolean) 
       block.open = false;
       delete block.dataset.closing;
     }
-    ScrollTrigger.refresh();
+    requestRefresh();
   };
 }
 

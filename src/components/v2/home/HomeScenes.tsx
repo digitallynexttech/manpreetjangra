@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useRef, type ReactNode } from "react";
-import { EASE_IN, MEDIA, ScrollTrigger, SplitText, gsap, useGSAP } from "../gsap";
+import { useRef, type ReactNode } from "react";
+import { getLenis } from "../SmoothScroll";
+import { EASE_IN, MEDIA, SCRUB, SCRUB_FREE, ScrollTrigger, SplitText, gsap, onNextFrame, useGSAP } from "../gsap";
 
 // The scroll scenes of the /v2 home page (plan/v2-spec.md 4.1, 3.3). Each
 // shell wraps server-rendered content and animates it by class name, so all
@@ -33,7 +34,7 @@ export function HeroScene({ children, className }: { children: ReactNode; classN
         const { desktop } = context.conditions as Flags;
         const timeline = gsap.timeline({
           defaults: { ease: "none" },
-          scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: 0.5 },
+          scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: SCRUB_FREE },
         });
         if (desktop && lines.length > 1) {
           timeline.to(lines[0], { xPercent: -7 }, 0).to(lines[1], { xPercent: 12 }, 0);
@@ -41,7 +42,20 @@ export function HeroScene({ children, className }: { children: ReactNode; classN
         if (panel) timeline.to(panel, { yPercent: desktop ? 20 : 8 }, 0);
         if (now && desktop) timeline.to(now, { yPercent: -45 }, 0);
       });
-      return () => mm.revert();
+      // The scroll cue loops only while it can be seen.
+      const cue = node.querySelector<HTMLElement>(".v2-cue-line");
+      const observer =
+        cue && typeof IntersectionObserver !== "undefined"
+          ? new IntersectionObserver(([entry]) => {
+              if (entry.isIntersecting) delete cue.dataset.paused;
+              else cue.dataset.paused = "";
+            })
+          : null;
+      if (cue) observer?.observe(cue);
+      return () => {
+        observer?.disconnect();
+        mm.revert();
+      };
     },
     { scope: root },
   );
@@ -74,8 +88,8 @@ export function WordsScene({ children, className }: { children: ReactNode; class
         const timeline = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: desktop
-            ? { trigger: section, start: "top top", end: "bottom bottom", scrub: 0.6 }
-            : { trigger: panel ?? stage, start: "top 80%", end: "bottom 45%", scrub: 0.6 },
+            ? { trigger: section, start: "top top", end: "bottom bottom", scrub: SCRUB }
+            : { trigger: panel ?? stage, start: "top 80%", end: "bottom 45%", scrub: SCRUB_FREE },
         });
         if (desktop && panel) timeline.fromTo(panel, { scale: 1.08 }, { scale: 0.95, duration: 1 }, 0);
         // Dimmed words start at 0.4: still above 3:1 on the raised panel (large
@@ -143,10 +157,10 @@ export function TrackScene({ children, className }: { children: ReactNode; class
           section.dataset.v2Theme = next;
         };
         const range = { trigger: section, start: "top top", end: "bottom bottom", invalidateOnRefresh: true };
-        const move = gsap.to(row, { x: () => -distance(), ease: "none", scrollTrigger: { ...range, scrub: 0.6 } });
+        const move = gsap.to(row, { x: () => -distance(), ease: "none", scrollTrigger: { ...range, scrub: SCRUB } });
         const ground = gsap.timeline({
           defaults: { ease: "none" },
-          scrollTrigger: { ...range, scrub: 0.6 },
+          scrollTrigger: { ...range, scrub: SCRUB },
           onUpdate() {
             setTheme(this.progress() > 0.28 ? "paper" : "night");
           },
@@ -162,17 +176,40 @@ export function TrackScene({ children, className }: { children: ReactNode; class
           gsap.fromTo(
             grey,
             { opacity: 1 },
-            { opacity: 0, ease: "none", scrollTrigger: { trigger: podium, containerAnimation: move, start: "left 85%", end: "center 52%", scrub: true } },
+            { opacity: 0, ease: "none", scrollTrigger: { trigger: podium, containerAnimation: move, start: "left 85%", end: "center 52%", scrub: SCRUB } },
           );
         }
         if (quote && mark) {
           gsap.fromTo(
             mark,
             { strokeDashoffset: 1.001 },
-            { strokeDashoffset: 0, ease: "none", scrollTrigger: { trigger: quote, containerAnimation: move, start: "left 78%", end: "left 42%", scrub: 0.6 } },
+            { strokeDashoffset: 0, ease: "none", scrollTrigger: { trigger: quote, containerAnimation: move, start: "left 78%", end: "left 42%", scrub: SCRUB } },
           );
         }
+        // Keyboard focus on a link far along the row (Her full story): the
+        // browser only scrolls vertically, so scroll to the point of the
+        // track where that item sits in the middle of the stage.
+        const reveal = (event: FocusEvent) => {
+          const target = event.target as HTMLElement | null;
+          const item = target?.closest<HTMLElement>(".v2-track-item");
+          const total = distance();
+          if (!item || total <= 0) return;
+          const centre = item.offsetLeft + item.offsetWidth / 2 - stage.clientWidth / 2;
+          const progress = Math.min(1, Math.max(0, centre / total));
+          const top = section.getBoundingClientRect().top + window.scrollY;
+          const y = top + progress * (section.offsetHeight - window.innerHeight);
+          const go = () => {
+            const lenis = getLenis();
+            if (lenis) lenis.scrollTo(y, { immediate: true, force: true });
+            else window.scrollTo(0, y);
+          };
+          // Now, and once more after the browser's own scroll into view.
+          go();
+          requestAnimationFrame(go);
+        };
+        row.addEventListener("focusin", reveal);
         return () => {
+          row.removeEventListener("focusin", reveal);
           ScrollTrigger.removeEventListener("refreshInit", size);
           section.classList.remove("is-horizontal");
           section.style.removeProperty("--v2-track-distance");
@@ -184,22 +221,31 @@ export function TrackScene({ children, className }: { children: ReactNode; class
         };
       });
 
-      mm.add(MEDIA.small, () => {
-        items.forEach((item) =>
-          gsap.from(item, {
-            y: 48,
-            opacity: 0,
-            duration: 0.9,
-            ease: EASE_IN,
-            scrollTrigger: { trigger: item, start: "top 92%", once: true },
-          }),
-        );
+      mm.add(MEDIA.small, (context) => {
+        // Frames already in view or above it (Back to a scrolled page) stay
+        // as rendered; the others rise in as they arrive. Decided on the next
+        // frame, once the browser has restored the scroll position.
+        const rise = onNextFrame(context, () => {
+          const fold = window.innerHeight * 0.92;
+          items
+            .filter((item) => item.getBoundingClientRect().top > fold)
+            .forEach((item) =>
+              gsap.from(item, {
+                y: 48,
+                opacity: 0,
+                duration: 0.9,
+                ease: EASE_IN,
+                scrollTrigger: { trigger: item, start: "top 92%", toggleActions: "play none none none" },
+              }),
+            );
+        });
         if (podium && grey) {
-          gsap.fromTo(grey, { opacity: 1 }, { opacity: 0, ease: "none", scrollTrigger: { trigger: podium, start: "top 85%", end: "center 50%", scrub: true } });
+          gsap.fromTo(grey, { opacity: 1 }, { opacity: 0, ease: "none", scrollTrigger: { trigger: podium, start: "top 85%", end: "center 50%", scrub: SCRUB_FREE } });
         }
         if (quote && mark) {
-          gsap.fromTo(mark, { strokeDashoffset: 1.001 }, { strokeDashoffset: 0, ease: "none", scrollTrigger: { trigger: quote, start: "top 80%", end: "bottom 60%", scrub: 0.6 } });
+          gsap.fromTo(mark, { strokeDashoffset: 1.001 }, { strokeDashoffset: 0, ease: "none", scrollTrigger: { trigger: quote, start: "top 80%", end: "bottom 60%", scrub: SCRUB_FREE } });
         }
+        return rise;
       });
       return () => mm.revert();
     },
@@ -231,8 +277,8 @@ export function PodiumScene({ children, className }: { children: ReactNode; clas
         const timeline = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: desktop
-            ? { trigger: section, start: "top 35%", end: "bottom bottom", scrub: 0.6 }
-            : { trigger: frame, start: "top bottom", end: "center 55%", scrub: 0.6 },
+            ? { trigger: section, start: "top 35%", end: "bottom bottom", scrub: SCRUB }
+            : { trigger: frame, start: "top bottom", end: "center 55%", scrub: SCRUB_FREE },
         });
         timeline.fromTo(
           frame,
@@ -270,7 +316,7 @@ export function FanScene({ children, className }: { children: ReactNode; classNa
         gsap.fromTo(
           node,
           { "--fan": 0 },
-          { "--fan": 1, ease: "none", scrollTrigger: { trigger: node, start: "top 88%", end: "center 52%", scrub: 0.6 } },
+          { "--fan": 1, ease: "none", scrollTrigger: { trigger: node, start: "top 88%", end: "center 52%", scrub: SCRUB_FREE } },
         );
       });
       return () => mm.revert();
@@ -282,14 +328,4 @@ export function FanScene({ children, className }: { children: ReactNode; classNa
       {children}
     </div>
   );
-}
-
-/** Measures every trigger again once the whole page has mounted: the scenes
- *  above change their sections' heights (pins) as they start, after some
- *  triggers inside them were measured. Renders nothing. */
-export function ScrollRefresh() {
-  useEffect(() => {
-    ScrollTrigger.refresh();
-  }, []);
-  return null;
 }

@@ -1,6 +1,6 @@
 "use client";
 import { useRef, type ElementType } from "react";
-import { MEDIA, SplitText, gsap, useGSAP } from "./gsap";
+import { MEDIA, SCRUB_FREE, SplitText, gsap, useGSAP } from "./gsap";
 import type { HeadingSize } from "./MixedHeading";
 
 // Manifesto text that lights up word by word as it scrolls through the
@@ -50,7 +50,7 @@ export function WordReveal({
             opacity: 1,
             ease: "none",
             stagger: 0.1,
-            scrollTrigger: { trigger: node, start: "top 82%", end: "bottom 45%", scrub: 0.5 },
+            scrollTrigger: { trigger: node, start: "top 82%", end: "bottom 45%", scrub: SCRUB_FREE },
           },
         );
         return () => split.revert();

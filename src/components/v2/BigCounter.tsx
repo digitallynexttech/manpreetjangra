@@ -1,6 +1,6 @@
 "use client";
 import { useRef } from "react";
-import { EASE_IN, MEDIA, gsap, useGSAP } from "./gsap";
+import { EASE_IN, MEDIA, gsap, onNextFrame, useGSAP } from "./gsap";
 
 // A big number that grows from 0.6 to full size and counts up once when it
 // comes into view (spec 3.4), like the classic Counter: the HTML holds the
@@ -26,38 +26,54 @@ export function BigCounter({
       const target = Number.parseInt(value, 10);
       const suffix = value.replace(/^\d+/, "");
       const mm = gsap.matchMedia();
-      mm.add(MEDIA.motion, () => {
-        const counter = { n: 0 };
-        // Plays once and never reverses. Not `once: true`: a timeline's
-        // trigger measures itself a tick late, so a page opened scrolled
-        // past it (a link from far down another page) killed it from inside
-        // a newer trigger's first refresh, which broke that refresh.
-        const timeline = gsap.timeline({
-          scrollTrigger: { trigger: node, start: "top 88%", toggleActions: "play none none none" },
-          onComplete: () => {
-            shown.textContent = value;
-          },
-        });
-        timeline.from(shown, { scale: 0.6, opacity: 0.4, duration: 1.2, ease: EASE_IN }, 0);
-        if (Number.isFinite(target) && /^\d/.test(value)) {
-          shown.textContent = `0${suffix}`;
-          timeline.to(
-            counter,
-            {
-              n: target,
-              duration: 1.6,
-              ease: "power3.out",
-              onUpdate: () => {
-                shown.textContent = `${Math.round(counter.n)}${suffix}`;
-              },
+      mm.add(MEDIA.motion, (context) =>
+        onNextFrame(context, () => {
+          // The count rewrites the one text node in place (`data`), never
+          // `textContent`: a new text node every frame makes the page
+          // recalculate the style of the whole /v2 tree (the classic :has()
+          // rules), which made the counting frames slow.
+          const text = shown.firstChild;
+          if (!(text instanceof Text)) return;
+          // Already in view or above it (a page opened mid-way, Back): the
+          // number stays as rendered, it never blanks and counts again.
+          if (node.getBoundingClientRect().top < window.innerHeight - 40) return;
+          const counter = { n: 0 };
+          const counts = Number.isFinite(target) && /^\d/.test(value);
+          // Plays once and never reverses. Not `once: true`: a timeline's
+          // trigger measures itself a tick late, so a page opened scrolled
+          // past it (a link from far down another page) killed it from inside
+          // a newer trigger's first refresh, which broke that refresh.
+          const timeline = gsap.timeline({
+            scrollTrigger: { trigger: node, start: "top bottom-=40", toggleActions: "play none none none" },
+            // The 0 is written when the count starts, so a number still waiting
+            // below the fold shows its value, not a 0.
+            onStart: () => {
+              if (counts) text.data = `0${suffix}`;
             },
-            0,
-          );
-        }
-        return () => {
-          shown.textContent = value;
-        };
-      });
+            onComplete: () => {
+              text.data = value;
+            },
+          });
+          timeline.from(shown, { scale: 0.6, opacity: 0.4, duration: 1.2, ease: EASE_IN }, 0);
+          if (counts) {
+            timeline.to(
+              counter,
+              {
+                n: target,
+                duration: 1.6,
+                ease: "power3.out",
+                onUpdate: () => {
+                  text.data = `${Math.round(counter.n)}${suffix}`;
+                },
+              },
+              0,
+            );
+          }
+          return () => {
+            text.data = value;
+          };
+        }),
+      );
       return () => mm.revert();
     },
     { dependencies: [value] },

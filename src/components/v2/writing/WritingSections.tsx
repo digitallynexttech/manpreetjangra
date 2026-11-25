@@ -78,6 +78,7 @@ export function WritingHero() {
       ledeLabel={intro.title}
       lede={intro.lede}
       accent="with an open invitation to speak."
+      fitWide={1.091}
     />
   );
 }
@@ -272,7 +273,7 @@ export function WritingStage() {
               <Image src={podium.src} alt="" width={podium.width} height={podium.height} sizes="40vw" />
             </div>
             <div className="v2-podium-photo">
-              <Image src={podium.src} alt={podium.alt} width={podium.width} height={podium.height} sizes="(min-width: 1024px) 560px, 86vw" />
+              <Image src={podium.src} alt={podium.alt} width={podium.width} height={podium.height} sizes="(min-width: 1024px) 400px, 80vw" />
             </div>
             <figcaption className="v2-podium-caption">
               {/* C6: the event joins the label once she names it. */}

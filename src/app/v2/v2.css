@@ -27,9 +27,15 @@
    when GSAP first reads the page, ScrollTrigger would write an inline
    `scroll-behavior: smooth` back after every refresh, which would then
    outlive /v2. While a .v2 page is mounted the rule below wins, so that
-   never happens. */
-html:has(.v2) { scroll-behavior: auto; }
-html.v2-scroll-locked { overflow: hidden; }
+   never happens.
+   The scrollbar's room is kept while the menu stops scrolling (Windows
+   shows classic scrollbars), so the page and the header never shift
+   sideways when the menu opens or closes. The lock beats lenis.css
+   (`overflow: clip` on .lenis-stopped, which would drop the gutter), and the
+   kept gutter takes the menu's night, not a strip of paper. */
+html:has(.v2) { scroll-behavior: auto; scrollbar-gutter: stable; }
+html.v2-scroll-locked,
+html.lenis.lenis-stopped.v2-scroll-locked { overflow: hidden; background-color: var(--color-night); }
 
 /* A surface names its theme; the header reads it (spec 3.3) and the theme
    sets the colours every primitive uses. Text accents: vermilion-ink on
@@ -314,7 +320,8 @@ html.v2-scroll-locked { overflow: hidden; }
 .v2-marquee-group { display: flex; flex: none; align-items: center; gap: var(--v2-marquee-gap, 3rem); padding-inline-end: var(--v2-marquee-gap, 3rem); }
 .v2-marquee-item { flex: none; white-space: nowrap; }
 .v2-marquee:hover .v2-marquee-track,
-.v2-marquee:focus-within .v2-marquee-track { animation-play-state: paused; }
+.v2-marquee:focus-within .v2-marquee-track,
+.v2-marquee[data-paused] .v2-marquee-track { animation-play-state: paused; }
 @keyframes v2-marquee {
   to { transform: translateX(-50%); }
 }
@@ -454,7 +461,34 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
     translate 0.5s var(--v2-ease);
 }
 .v2-header > * { pointer-events: auto; }
-.v2-header.is-hidden { translate: 0 -110%; }
+/* Far enough to take the scrim below it out of view too. */
+.v2-header.is-hidden { translate: 0 calc(-100% - 2rem); }
+/* Away from the top the header keeps clear of the content under it (the
+   script sets `is-away` past 120 px). Phones and tablets: the wordmark goes,
+   the two buttons stay (Lando's phone header). Desktop: a soft scrim in the
+   colour of the surface under the header (`--v2-header-ground`, set by the
+   script; the theme's ground until then). */
+.v2-wordmark { transition: opacity 0.3s var(--v2-ease), visibility 0s 0s; }
+.v2-header::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -24px;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(to bottom, var(--v2-header-ground, var(--v2-bg)) 50%, transparent);
+  transition: opacity 0.3s var(--v2-ease);
+}
+@media (width < 64rem) {
+  .v2-header.is-away .v2-wordmark {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s var(--v2-ease), visibility 0s 0.3s;
+  }
+}
+@media (width >= 64rem) {
+  .v2-header.is-away::before { opacity: 0.92; }
+}
 .v2-header .v2-pill,
 .v2-header .v2-menu-button { transition-duration: 0.4s; }
 .v2-wordmark {
@@ -488,6 +522,16 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
 }
 :root:active-view-transition .v2-header { view-transition-name: v2-header; }
 ::view-transition-group(v2-header) { z-index: 100; }
+/* A page link in the open menu: the menu stays over the old page until the
+   new one is in, then retracts over it. During the page change the menu is
+   its own layer above the pages (and the header, as on screen), shown live
+   (no snapshot of the old state, no cross-fade), and its retract waits a
+   moment so it uncovers the new page, not the old one fading out. */
+:root:active-view-transition .v2-menu { view-transition-name: v2-menu; }
+:root:active-view-transition .v2-menu:not(.is-open) { transition-delay: 0.1s, 0.65s; }
+::view-transition-group(v2-menu) { z-index: 110; animation: none; }
+::view-transition-old(v2-menu) { display: none; }
+::view-transition-new(v2-menu) { animation: none; }
 
 /* --- Menu (spec 3.4: full-screen dialog, Lando's layout) ----------------- */
 .v2-menu {
@@ -749,6 +793,7 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
 .v2-page-hero { overflow: clip; isolation: isolate; }
 .v2-page-hero > .v2-wrap { position: relative; z-index: 1; padding-block: calc(var(--v2-header) + clamp(24px, 4vh, 56px)) clamp(56px, 10vh, 120px); }
 .v2-page-title {
+  --v2-em: var(--v2-em-small, 0.62);
   margin: 0;
   /* One line from 768 px: the size follows the number of letters. */
   font-size: clamp(3rem, calc((100vw - 2 * var(--v2-gutter)) / (var(--v2-chars, 8) * var(--v2-em, 0.7))), 22rem);
@@ -756,7 +801,9 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
   font-weight: 400;
 }
 @media (width >= 48rem) {
-  .v2-page-title { white-space: nowrap; }
+  /* From 768 px the wide estimate (V2PageHero `fitWide`), measured against
+     FitLine's exact fit, so fitting after hydration moves nothing. */
+  .v2-page-title { white-space: nowrap; --v2-em: var(--v2-em-wide, var(--v2-em-small, 0.62)); }
 }
 .v2-meta-row {
   display: flex;
@@ -776,13 +823,15 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
 }
 
 /* --- Motion helpers and reduced motion ------------------------------------ */
-/* Scroll cue: a small line that runs down. */
+/* Scroll cue: a small line that runs down. Scale and translate only (the
+   bottom half moves the top edge down instead of flipping the origin), so
+   the compositor can run it; the home hero pauses it once it is off screen. */
 .v2-cue-line { display: inline-block; width: 1px; height: 28px; background: currentColor; transform-origin: top; animation: v2-cue 1.8s var(--v2-ease) infinite; }
+.v2-cue-line[data-paused] { animation-play-state: paused; }
 @keyframes v2-cue {
-  0% { scale: 1 0; transform-origin: top; }
-  50% { scale: 1 1; transform-origin: top; }
-  51% { transform-origin: bottom; }
-  100% { scale: 1 0; transform-origin: bottom; }
+  0% { scale: 1 0; translate: 0 0; }
+  50% { scale: 1 1; translate: 0 0; }
+  100% { scale: 1 0; translate: 0 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .v2 *,

@@ -1,6 +1,6 @@
 "use client";
 import { useRef, type CSSProperties } from "react";
-import { MEDIA, gsap, useGSAP } from "./gsap";
+import { MEDIA, SCRUB_FREE, gsap, useGSAP } from "./gsap";
 
 // One bold stroke drawn by the scroll, on load or on hover (spec 3.4): the
 // /v2 stand-in for Lando's signature and scribbles. It is a pure path (no
@@ -91,7 +91,7 @@ export function ThreadDraw({
           {
             strokeDashoffset: 0,
             ease: "none",
-            scrollTrigger: { trigger: host, start, end, scrub: 0.6 },
+            scrollTrigger: { trigger: host, start, end, scrub: SCRUB_FREE },
           },
         );
       });

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { ScrollTrigger } from "./gsap";
+import { requestRefresh } from "./gsap";
 
 // Makes a one-line title fill its box exactly (spec 4.2: the page title as
 // one line across the full width). CSS sizes the title from its number of
@@ -26,7 +26,7 @@ export function FitLine({ targetId, max = 352 }: { targetId: string; max?: numbe
       const next = Math.min(max, (size * room * 0.995) / natural);
       heading.style.fontSize = `${next.toFixed(2)}px`;
       // The hero's height changed: triggers below it measure again.
-      if (Math.abs(next - size) > 1) ScrollTrigger.refresh();
+      if (Math.abs(next - size) > 1) requestRefresh();
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(fit);

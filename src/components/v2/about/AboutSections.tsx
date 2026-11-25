@@ -13,6 +13,7 @@ import { BigRows } from "../BigRows";
 import { CaptionLabel } from "../CaptionLabel";
 import { FieldPortrait } from "../FieldPortrait";
 import { MixedHeading } from "../MixedHeading";
+import { NightCurve } from "../NightCurve";
 import { NotchCard } from "../NotchCard";
 import { ParallaxGroup } from "../ParallaxGroup";
 import { PillButton } from "../PillButton";
@@ -54,6 +55,7 @@ export function AboutHero() {
       ledeLabel={intro.title}
       lede={intro.lede}
       accent="building its AI Decision and Acceleration Center."
+      fitWide={0.992}
     />
   );
 }
@@ -186,6 +188,7 @@ export function AboutBeliefs() {
       data-v2-theme="paper"
       aria-labelledby={titleId(beliefs.id)}
     >
+      <NightCurve />
       <div className="v2-wrap v2-about-beliefs-inner">
         <p className="v2-label v2-inner-eyebrow">{beliefs.eyebrow}</p>
         <MixedHeading id={titleId(beliefs.id)} size="display" align="center" parts={mixParts(beliefs.title, ["in the mind."])} />

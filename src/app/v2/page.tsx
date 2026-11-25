@@ -4,7 +4,6 @@ import { FromHerFeed } from "@/components/v2/home/FromHerFeed";
 import { HerWords, Manifesto } from "@/components/v2/home/HerWords";
 import { Hiring } from "@/components/v2/home/Hiring";
 import { HomeHero } from "@/components/v2/home/HomeHero";
-import { ScrollRefresh } from "@/components/v2/home/HomeScenes";
 import { InNumbers } from "@/components/v2/home/InNumbers";
 import { JourneyTrack } from "@/components/v2/home/JourneyTrack";
 import { PodiumStage, WorkAndWords } from "@/components/v2/home/WorkAndWords";
@@ -35,7 +34,6 @@ export default function V2Home() {
       <Featured />
       <Hiring />
       <FromHerFeed />
-      <ScrollRefresh />
     </PageTransition>
   );
 }

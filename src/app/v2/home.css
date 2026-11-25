@@ -255,6 +255,8 @@
 .v2-track-frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .v2-track-frame--site { aspect-ratio: 16 / 10; box-shadow: 0 22px 48px rgb(0 0 0 / 0.22); }
 .v2-track-frame--square { aspect-ratio: 1; }
+/* The podium photograph is 400 px wide: never shown larger. */
+.v2-track-podium { max-width: 25rem; }
 /* The grey copy over the podium photograph; the scene fades it out as the
    photo reaches the centre. Without the scene the photo is in colour. */
 .v2-track-frame .v2-photo-grey { position: absolute; inset: 0; filter: grayscale(1) contrast(1.04); opacity: 0; }
@@ -343,16 +345,21 @@
   overflow: clip;
   background: var(--color-night);
 }
-.v2-podium-backdrop { position: absolute; inset: -12%; z-index: 0; }
+/* Its own layer: the frame's scrubbed clip-path then only clips it, instead
+   of painting the blurred picture again on every frame. */
+.v2-podium-backdrop { position: absolute; inset: -12%; z-index: 0; will-change: transform; }
 .v2-podium-backdrop img { width: 100%; height: 100%; object-fit: cover; filter: blur(48px) saturate(1.25) brightness(0.5); }
 /* A warm spotlight: the blurred photograph glows behind the sharp one and
-   falls off to night at the edges. */
+   falls off to night at the edges; the foot melts into the night of In
+   numbers below, so no band or line shows where the frame ends. */
 .v2-podium-frame::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: radial-gradient(70% 70% at 50% 46%, rgb(28 24 22 / 0.05) 0, rgb(28 24 22 / 0.55) 62%, rgb(28 24 22 / 0.9) 100%);
+  background:
+    linear-gradient(to bottom, transparent 78%, var(--color-night)),
+    radial-gradient(70% 70% at 50% 46%, rgb(28 24 22 / 0.05) 0, rgb(28 24 22 / 0.55) 62%, rgb(28 24 22 / 1) 100%);
   pointer-events: none;
 }
 .v2-podium-photo {
@@ -360,7 +367,8 @@
   z-index: 1;
   left: 50%;
   top: 46%;
-  width: min(80vw, 60vh, 34rem);
+  /* Never wider than the 400 px photograph, which would look soft. */
+  width: min(80vw, 56vh, 25rem);
   aspect-ratio: 1;
   translate: -50% -50%;
   overflow: clip;
@@ -379,7 +387,6 @@
   .v2-podium-frame { height: 100vh; }
   .v2-podium.is-pinned { height: 185vh; }
   .v2-podium.is-pinned .v2-podium-stage { position: sticky; top: 0; height: 100vh; }
-  .v2-podium.is-pinned .v2-podium-frame { will-change: clip-path; }
 }
 
 /* --- 6. In numbers ---------------------------------------------------------- */
@@ -667,6 +674,9 @@
       translateY(calc(var(--k2) * 12px * var(--fan) + (1 - var(--fan)) * 56px))
       rotate(calc(var(--k) * 6.5deg * var(--fan)));
     transition: translate 0.5s var(--v2-ease), box-shadow 0.5s var(--v2-ease);
+    /* Each shadowed card on its own layer: the scrubbed fan then moves the
+       layers instead of painting every card again on every frame. */
+    will-change: transform;
   }
   .v2-fan-card:hover,
   .v2-fan-card:focus-within { z-index: 20; translate: 0 -18px; box-shadow: 0 30px 60px rgb(28 24 22 / 0.24); }
