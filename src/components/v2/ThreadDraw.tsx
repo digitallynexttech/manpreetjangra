@@ -14,8 +14,8 @@ import { MEDIA, SCRUB_FREE, gsap, useGSAP } from "./gsap";
 //
 // Variants:
 // - loop: a long looping line across a panel (the "message" section);
-// - underline: a quick underline ("line") or ring ("circle") around a word,
-//   Lando's "ON" scribble;
+// - underline: a quick underline ("line"), ring ("circle") around a word,
+//   Lando's "ON" scribble, or a squiggle ("wave") under a whole quote;
 // - word: a big looping flourish behind a heading, Lando's "Collabs".
 
 const SHAPES = {
@@ -33,6 +33,13 @@ const SHAPES = {
     viewBox: "0 0 400 60",
     width: 7,
     d: "M 6 40 C 80 30 200 22 330 24 C 362 25 388 28 394 34 C 398 40 340 45 252 47",
+  },
+  // A squiggle under a whole quote: it stretches to the quote's width, so
+  // the humps widen a little on wide quotes, the stroke stays the same.
+  wave: {
+    viewBox: "0 0 608 30",
+    width: 3.5,
+    d: "M 4 16 q 10 -11 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0 t 20 0",
   },
   circle: {
     viewBox: "0 0 400 160",
@@ -52,12 +59,14 @@ export function ThreadDraw({
   end = "bottom 35%",
   on = "self",
   delay = 0.35,
+  stretch,
   className,
   style,
 }: {
   variant: ThreadDrawVariant;
-  /** For `underline`: a line under the word or a ring around it. */
-  shape?: "line" | "circle";
+  /** For `underline`: a line under the word, a ring around it, or a
+   *  squiggle under a quote. */
+  shape?: "line" | "circle" | "wave";
   /** scroll (scrubbed), load (once, on mount), hover (CSS, on the nearest
    *  .v2-draw-host), manual (drawn; the caller animates .v2-draw path).
    *  Defaults: underline draws on load, loop and word on scroll. */
@@ -71,12 +80,16 @@ export function ThreadDraw({
   on?: "self" | "section";
   /** Seconds before a `load` stroke starts. */
   delay?: number;
+  /** Fill the box in both directions (the stroke keeps its width) instead of
+   *  keeping the shape's proportions. Default: on for a ring and a squiggle. */
+  stretch?: boolean;
   className?: string;
   style?: CSSProperties;
 }) {
   const svg = useRef<SVGSVGElement>(null);
   const mode = trigger ?? (variant === "underline" ? "load" : "scroll");
   const spec = variant === "underline" ? SHAPES[shape] : SHAPES[variant];
+  const fill = stretch ?? (variant === "underline" && shape !== "line");
 
   useGSAP(
     () => {
@@ -118,14 +131,15 @@ export function ThreadDraw({
       className={classes}
       style={mode === "load" ? ({ ...style, "--v2-draw-delay": `${delay}s` } as CSSProperties) : style}
       viewBox={spec.viewBox}
-      // A ring stretches to its box so it surrounds the whole word; the stroke keeps its width.
-      preserveAspectRatio={variant === "underline" && shape === "circle" ? "none" : undefined}
+      // A ring stretches to its box so it surrounds the whole word, a squiggle
+      // to its quote's width; the stroke keeps its width.
+      preserveAspectRatio={fill ? "none" : undefined}
       aria-hidden="true" focusable="false">
       <path
         d={spec.d}
         pathLength={1000}
         strokeWidth={spec.width}
-        vectorEffect={variant === "underline" && shape === "circle" ? "non-scaling-stroke" : undefined}
+        vectorEffect={fill ? "non-scaling-stroke" : undefined}
       />
     </svg>
   );

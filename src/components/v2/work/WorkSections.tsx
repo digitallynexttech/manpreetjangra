@@ -206,7 +206,7 @@ export function WorkClientStory() {
           <MixedHeading id={titleId(clientStory.id)} size="title" parts={mixParts(clientStory.title, ["first Israeli client."])} />
           {typeof clientStory.lede === "string" ? <p className="v2-body v2-work-client-lede">{clientStory.lede}</p> : null}
           <QuoteFigure quote={quoteView(clientStory.quote.quote, clientStory.quote.linkLabel)} size="large" className="v2-work-client-quote">
-            <ThreadDraw variant="underline" shape="line" trigger="scroll" start="top 85%" end="top 50%" className="v2-work-client-line" />
+            <ThreadDraw variant="underline" shape="wave" trigger="scroll" start="top 85%" end="top 50%" className="v2-work-client-line" />
           </QuoteFigure>
           <PillButton href={clientStory.link.href} newTabLabel={labels.newTab}>
             {clientStory.link.label}

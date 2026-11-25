@@ -194,7 +194,7 @@ export function AboutBeliefs() {
         <MixedHeading id={titleId(beliefs.id)} size="display" align="center" parts={mixParts(beliefs.title, ["in the mind."])} />
         <Reveal className="v2-about-beliefs-quote">
           <QuoteFigure quote={quoteView(beliefs.quote.quote, beliefs.quote.linkLabel)} size="large">
-            <ThreadDraw variant="underline" shape="line" trigger="scroll" start="top 85%" end="top 45%" className="v2-about-beliefs-line" />
+            <ThreadDraw variant="underline" shape="wave" trigger="scroll" start="top 85%" end="top 45%" className="v2-about-beliefs-line" />
           </QuoteFigure>
         </Reveal>
         <p className="v2-body v2-about-beliefs-summary">{beliefs.paraphrase.text}</p>

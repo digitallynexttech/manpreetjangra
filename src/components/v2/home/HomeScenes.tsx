@@ -260,7 +260,8 @@ export function TrackScene({ children, className }: { children: ReactNode; class
 
 /** The podium photograph (4.1 item 5): on desktop the section pins and the
  *  frame opens from an inset window to the full screen while the picture
- *  inside grows; phones get the same opening as the frame scrolls in. */
+ *  inside grows and the rows of words behind it drift apart; phones get the
+ *  same opening as the frame scrolls in. */
 export function PodiumScene({ children, className }: { children: ReactNode; className?: string }) {
   const root = useRef<HTMLDivElement>(null);
   useGSAP(
@@ -270,6 +271,8 @@ export function PodiumScene({ children, className }: { children: ReactNode; clas
       const frame = stage?.querySelector(".v2-podium-frame");
       if (!stage || !section || !frame) return;
       const photo = stage.querySelector(".v2-podium-photo");
+      const rows = Array.from(stage.querySelectorAll(".v2-podium-row"));
+      const foot = Array.from(stage.querySelectorAll(".v2-podium-caption > *"));
       const mm = gsap.matchMedia();
       mm.add({ desktop: MEDIA.desktop, small: MEDIA.small }, (context) => {
         const { desktop } = context.conditions as MediaFlags;
@@ -287,6 +290,14 @@ export function PodiumScene({ children, className }: { children: ReactNode; clas
           0,
         );
         if (photo) timeline.fromTo(photo, { scale: desktop ? 0.78 : 0.9 }, { scale: 1, duration: 0.82 }, 0);
+        // The two rows of words drift apart across the whole scene (on top of
+        // their own running loop), and the caption, her line and the button
+        // rise in as the frame reaches full screen.
+        rows.forEach((row, index) => {
+          const side = index % 2 ? 1 : -1;
+          timeline.fromTo(row, { xPercent: -6 * side }, { xPercent: 6 * side, duration: 1 }, 0);
+        });
+        if (foot.length) timeline.fromTo(foot, { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: 0.14, stagger: 0.05 }, desktop ? 0.6 : 0.5);
         timeline.set({}, {}, 1);
         return () => section.classList.remove("is-pinned");
       });

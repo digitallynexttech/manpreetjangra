@@ -7,7 +7,9 @@ import { labels, toV2 } from "@/content/v2";
 import { meta as workMeta } from "@/content/work";
 import { meta as writingMeta, stage } from "@/content/writing";
 import { CaptionLabel } from "../CaptionLabel";
+import { Marquee } from "../Marquee";
 import { MixedHeading } from "../MixedHeading";
+import { PillButton } from "../PillButton";
 import { RoundArrowButton } from "../RoundArrowButton";
 import { ThreadField } from "../ThreadField";
 import { PodiumScene } from "./HomeScenes";
@@ -16,7 +18,9 @@ import { PodiumScene } from "./HomeScenes";
 // by side on paper, THE (serif) over WORK (sans) and HER over WORDS, each
 // with one line of existing copy and a square arrow button. Hovering a block
 // (or focusing its button) draws a vermilion ring around the serif word.
-// Then the podium photograph opens from an inset window to the full screen.
+// Then the podium photograph opens from an inset window to the full screen,
+// over two giant rows of "Talks, Panels, Conversations" running in opposite
+// directions, with the invitation to speak along the foot of the frame.
 
 export function WorkAndWords() {
   const blocks = [
@@ -71,11 +75,18 @@ export function PodiumStage() {
           <div className="v2-podium-backdrop" aria-hidden="true">
             <Image src={podium.src} alt="" width={podium.width} height={podium.height} sizes="40vw" />
           </div>
+          {/* Decorative: the same words are the caption's title below. */}
+          <div className="v2-podium-words" aria-hidden="true">
+            <Marquee items={labels.stageWords} duration={48} className="v2-podium-row" itemClassName="v2-podium-word" />
+            <Marquee items={labels.stageWords} duration={56} reverse className="v2-podium-row v2-podium-row--serif" itemClassName="v2-podium-word" />
+          </div>
           <div className="v2-podium-photo">
             <Image src={podium.src} alt={podium.alt} width={podium.width} height={podium.height} sizes="(min-width: 1024px) 400px, 80vw" />
           </div>
           <figcaption className="v2-podium-caption">
             <CaptionLabel as="h2" id="v2-podium-title" parts={caption} />
+            <p className="v2-podium-line">{stage.paragraph}</p>
+            <PillButton href={toV2(stage.button.href)}>{stage.button.label}</PillButton>
           </figcaption>
         </figure>
       </PodiumScene>

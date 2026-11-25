@@ -29,7 +29,7 @@ export function HerWords() {
             </p>
           </blockquote>
           <figcaption className="v2-label v2-words-cite">{quote.attribution}</figcaption>
-          <ThreadDraw variant="loop" trigger="manual" tone="marigold" className="v2-words-loop" />
+          <ThreadDraw variant="loop" trigger="manual" tone="marigold" stretch className="v2-words-loop" />
         </figure>
       </WordsScene>
     </section>

@@ -221,7 +221,7 @@ export function CareersMentorship() {
                 </p>,
               ])}
             </blockquote>
-            <ThreadDraw variant="underline" shape="line" trigger="scroll" start="top 85%" end="top 45%" className="v2-careers-lines-mark" />
+            <ThreadDraw variant="underline" shape="wave" trigger="scroll" start="top 85%" end="top 45%" className="v2-careers-lines-mark" />
             <figcaption className="v2-label v2-quotefig-cite">{mentorship.attribution}</figcaption>
             <PillButton href={mentorship.link.href} variant="outline" newTabLabel={labels.newTab}>
               {mentorship.link.label}

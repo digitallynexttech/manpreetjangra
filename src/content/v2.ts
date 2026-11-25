@@ -52,6 +52,9 @@ export const labels = {
   herWords: { serif: "Her", sans: "Words" },
   fromHerFeed: { sans: "From her", serif: "feed" },
   followManpreet: "Follow Manpreet",
+  /** The podium photo's running words: the three formats of "Talks, panels
+   *  and conversations." (writing.ts, stage.title). */
+  stageWords: ["Talks", "Panels", "Conversations"],
   // Column headings of big rows (spec 4.2), read to screen readers per cell.
   year: "Year",
   role: "Role",

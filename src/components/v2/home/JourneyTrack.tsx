@@ -154,7 +154,7 @@ export function JourneyTrack() {
                   <q className="v2-quote">{quote.text}</q>
                 </p>
               </blockquote>
-              <ThreadDraw variant="underline" shape="line" trigger="manual" tone="vermilion" className="v2-track-quote-mark" />
+              <ThreadDraw variant="underline" shape="wave" trigger="manual" tone="vermilion" className="v2-track-quote-mark" />
               <figcaption className="v2-label">{quote.attribution}</figcaption>
             </Item>
             <Item id="podium" as="figure" className="v2-track-photo v2-track-podium">

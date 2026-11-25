@@ -160,7 +160,7 @@
 .v2-about-beliefs .v2-mixed .v2-serif { white-space: nowrap; }
 .v2-about-beliefs-quote { max-width: 54rem; margin-top: clamp(12px, 3vh, 40px); }
 .v2-about-beliefs .v2-quotefig { justify-items: center; }
-.v2-about-beliefs-line { width: min(22rem, 64%); margin-block: -2px 2px; }
+.v2-about-beliefs-line { width: min(100%, 40rem); height: 16px; margin-block: 2px 4px; }
 .v2-about-beliefs-summary.v2-body { max-width: 40rem; color: var(--v2-muted); text-wrap: pretty; }
 
 /* --- About: education (Lando's list with laurels) ------------------------ */
@@ -276,7 +276,7 @@
 .v2-work-client-text > .v2-inner-eyebrow { margin-bottom: -6px; }
 .v2-work-client-lede.v2-body { max-width: 34rem; color: var(--v2-muted); }
 .v2-work-client-quote { margin-top: 14px; }
-.v2-work-client-line { width: min(18rem, 70%); margin-block: -4px 0; }
+.v2-work-client-line { width: 100%; height: 16px; margin-block: 2px 4px; }
 .v2-work-client-stats {
   margin: 0;
   padding: 0;
@@ -535,7 +535,7 @@ a.v2-row-inner:hover .v2-writing-article-title { translate: 8px 0; }
 .v2-careers-mentorship-lede.v2-body { margin-top: 18px; max-width: 30rem; color: var(--v2-muted); }
 .v2-careers-lines blockquote { display: grid; gap: 0.3em; }
 .v2-careers-gap { margin-block: 0.15em 0.05em; font-family: var(--font-display); font-size: clamp(2rem, 1.2rem + 2.4vw, 4rem); line-height: 0.5; color: var(--v2-muted); }
-.v2-careers-lines-mark { width: min(20rem, 64%); margin-block: -2px 2px; }
+.v2-careers-lines-mark { width: min(100%, 34rem); height: 16px; margin-block: 4px 6px; }
 .v2-careers-lines .v2-pill { margin-top: 6px; }
 
 /* --- Careers: questions and apply -------------------------------------------- */
