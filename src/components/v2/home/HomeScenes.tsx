@@ -93,7 +93,7 @@ export function WordsScene({ children, className }: { children: ReactNode; class
         // Dimmed words start at 0.4: still above 3:1 on the raised panel (large
         // text), so the quote stays readable at every point of the scrub.
         if (split) timeline.fromTo(split.words, { opacity: 0.4 }, { opacity: 1, duration: 0.16, stagger: 0.42 / split.words.length }, 0.02);
-        if (loop) timeline.fromTo(loop, { strokeDashoffset: 1.001 }, { strokeDashoffset: 0, duration: 0.5 }, desktop ? 0.42 : 0.3);
+        if (loop) timeline.fromTo(loop, { strokeDashoffset: 1001 }, { strokeDashoffset: 0, duration: 0.5 }, desktop ? 0.42 : 0.3);
         timeline.set({}, {}, 1);
         return () => {
           split?.revert();
@@ -182,7 +182,7 @@ export function TrackScene({ children, className }: { children: ReactNode; class
         if (quote && mark) {
           gsap.fromTo(
             mark,
-            { strokeDashoffset: 1.001 },
+            { strokeDashoffset: 1001 },
             { strokeDashoffset: 0, ease: "none", scrollTrigger: { trigger: quote, containerAnimation: move, start: "left 78%", end: "left 42%", scrub: SCRUB } },
           );
         }
@@ -243,7 +243,7 @@ export function TrackScene({ children, className }: { children: ReactNode; class
           gsap.fromTo(grey, { opacity: 1 }, { opacity: 0, ease: "none", scrollTrigger: { trigger: podium, start: "top 85%", end: "center 50%", scrub: SCRUB_FREE } });
         }
         if (quote && mark) {
-          gsap.fromTo(mark, { strokeDashoffset: 1.001 }, { strokeDashoffset: 0, ease: "none", scrollTrigger: { trigger: quote, start: "top 80%", end: "bottom 60%", scrub: SCRUB_FREE } });
+          gsap.fromTo(mark, { strokeDashoffset: 1001 }, { strokeDashoffset: 0, ease: "none", scrollTrigger: { trigger: quote, start: "top 80%", end: "bottom 60%", scrub: SCRUB_FREE } });
         }
         return rise;
       });

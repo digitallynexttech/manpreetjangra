@@ -371,7 +371,7 @@ export function V2Header({
                         <svg className="v2-draw v2-menu-strike" viewBox="0 0 400 40" aria-hidden="true" focusable="false">
                           <path
                             d="M 4 22 C 40 22 52 12 86 12 C 120 12 128 28 164 28 C 200 28 210 14 244 14 C 278 14 290 26 324 26 C 352 26 372 20 396 18"
-                            pathLength={1}
+                            pathLength={1000}
                             strokeWidth={5}
                           />
                         </svg>

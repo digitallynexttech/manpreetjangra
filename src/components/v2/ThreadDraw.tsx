@@ -5,8 +5,9 @@ import { MEDIA, SCRUB_FREE, gsap, useGSAP } from "./gsap";
 // One bold stroke drawn by the scroll, on load or on hover (spec 3.4): the
 // /v2 stand-in for Lando's signature and scribbles. It is a pure path (no
 // letters, no signature), vermilion on paper and marigold on night unless a
-// tone is given. Every path has pathLength 1, so drawing it is one number:
-// stroke-dashoffset from 1.001 (hidden) to 0 (drawn). A scroll stroke is
+// tone is given. Every path has pathLength 1000, so drawing it is one number:
+// stroke-dashoffset from 1001 (hidden) to 0 (drawn); 1000 steps, since GSAP
+// rounds px values to whole numbers. A scroll stroke is
 // drawn by a scrubbed GSAP tween; a load stroke by a CSS animation (so it
 // never flashes before the script runs); a hover stroke by a CSS transition.
 // Without JavaScript or with reduced motion the stroke is simply there.
@@ -87,7 +88,7 @@ export function ThreadDraw({
         const host = on === "section" ? (node.closest("section") ?? node) : node;
         gsap.fromTo(
           path,
-          { strokeDashoffset: 1.001 },
+          { strokeDashoffset: 1001 },
           {
             strokeDashoffset: 0,
             ease: "none",
@@ -117,7 +118,7 @@ export function ThreadDraw({
       className={classes}
       style={mode === "load" ? ({ ...style, "--v2-draw-delay": `${delay}s` } as CSSProperties) : style}
       viewBox={spec.viewBox} aria-hidden="true" focusable="false">
-      <path d={spec.d} pathLength={1} strokeWidth={spec.width} />
+      <path d={spec.d} pathLength={1000} strokeWidth={spec.width} />
     </svg>
   );
 }
