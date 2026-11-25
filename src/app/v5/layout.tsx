@@ -4,6 +4,7 @@ import { MotionRoot } from "@/components/v5/MotionRoot";
 import { V5Footer } from "@/components/v5/V5Footer";
 import { THEME_KEY, V5_BASE, labels, v5Nav } from "@/content/v5";
 import "./v5.css";
+import "./inner.css";
 
 // The "Studio" edition (plan/versions-spec.md 3, V5): bento tiles on sand,
 // a floating dock at the bottom, a footer tile, and a light and a dark

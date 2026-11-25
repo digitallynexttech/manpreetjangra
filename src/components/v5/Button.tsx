@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Mail } from "lucide-react";
 import type { ReactNode } from "react";
 import { labels } from "@/content/v5";
 import { Magnetic } from "./Magnetic";
@@ -10,7 +10,8 @@ import { Magnetic } from "./Magnetic";
 // - secondary: a hairline outline in the tile's own text colour;
 // - quiet: text and arrow only, for links inside tiles.
 // Internal addresses use next/link; other sites open in a new tab with
-// rel="noopener noreferrer" and say so to screen readers. Primary and
+// rel="noopener noreferrer" and say so to screen readers; a mailto: address
+// is a plain link with the Mail icon. Primary and
 // secondary buttons are magnetic unless `magnetic={false}`.
 
 export function V5Button({
@@ -29,7 +30,7 @@ export function V5Button({
   className?: string;
 }) {
   const classes = ["v5-button", `v5-button--${variant}`, className].filter(Boolean).join(" ");
-  const Arrow = external ? ArrowUpRight : ArrowRight;
+  const Arrow = external ? ArrowUpRight : href.startsWith("mailto:") ? Mail : ArrowRight;
   const inner = (
     <>
       <span>{children}</span>

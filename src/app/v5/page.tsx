@@ -15,15 +15,15 @@ import {
   UsersRound,
   Waypoints,
 } from "lucide-react";
-import { Fragment, type ReactNode } from "react";
-import type { Para } from "@/content/types";
 import { LocalTime } from "@/components/LocalTime";
 import { ParaText } from "@/components/ParaText";
+import { Accented, HeadTile, ledeOf } from "@/components/v5/Heads";
 import { V5Button } from "@/components/v5/Button";
 import { BrandIcon, Chip, MonogramMark } from "@/components/v5/Chip";
 import { QuoteCarousel, type CarouselQuote } from "@/components/v5/QuoteCarousel";
 import { RoleDots } from "@/components/v5/RoleDots";
 import { SilkTile } from "@/components/v5/SilkTile";
+import { SocialList } from "@/components/v5/SocialList";
 import { SpringNumber } from "@/components/v5/SpringNumber";
 import { StackCards, type StackCard } from "@/components/v5/StackCards";
 import { Tile, type Tone } from "@/components/v5/Tile";
@@ -48,68 +48,6 @@ export const metadata = v5Metadata(meta);
 // footer tile and the dock come from the layout. All copy comes from the
 // classic content files (home, shared, careers, contact, quotes, roles);
 // /v5 adds only neutral labels (src/content/v5.ts).
-
-/** A section lede: plain text, or a paragraph with quoted parts. */
-function ledeOf(lede: string | Para | undefined): ReactNode {
-  return typeof lede === "string" ? lede : lede ? <ParaText para={lede} /> : undefined;
-}
-
-/** A handle may break after a slash ("linkedin.com/in/" then the name),
- *  never inside the name. The handle itself stays verbatim. */
-function breakAfterSlashes(handle: string) {
-  return handle.split("/").map((part, index, parts) => (
-    <Fragment key={index}>
-      {part}
-      {index < parts.length - 1 ? (
-        <>
-          /<wbr />
-        </>
-      ) : null}
-    </Fragment>
-  ));
-}
-
-/** A heading with its accent phrase in the accent colour. */
-function Accented({ text, accent }: { text: string; accent?: string }) {
-  const parts = splitAccent(text, accent);
-  return (
-    <>
-      {parts.before}
-      {parts.accent ? <span className="v5-accent">{parts.accent}</span> : null}
-      {parts.after}
-    </>
-  );
-}
-
-/** A section head inside a tile: chip, H2 and lede. */
-function HeadTile({
-  id,
-  icon,
-  eyebrow,
-  title,
-  accent,
-  lede,
-  children,
-}: {
-  id: string;
-  icon: ReactNode;
-  eyebrow: string;
-  title: string;
-  accent?: string;
-  lede?: ReactNode;
-  children?: ReactNode;
-}) {
-  return (
-    <div className="v5-headtile">
-      <Chip icon={icon}>{eyebrow}</Chip>
-      <h2 id={id} className="v5-title">
-        <Accented text={title} accent={accent} />
-      </h2>
-      {lede ? <p className="v5-lede">{lede}</p> : null}
-      {children}
-    </div>
-  );
-}
 
 // The hero's eyebrow ("Chief Operating Officer · Digitally Next · New Delhi")
 // as three tags, and its credential line as its two parts: the talent
@@ -298,23 +236,7 @@ export default function V5Home() {
 
           <Tile tone="paper" tileClassName="v5-social-tile">
             <Chip icon={<AtSign size={14} strokeWidth={2} aria-hidden="true" />}>{footer.elsewhereHeading}</Chip>
-            <ul className="v5-social-list">
-              {socialLinks.map((link) => (
-                <li key={link.key}>
-                  <a className="v5-social" href={link.href} target="_blank" rel="noopener noreferrer">
-                    <span className="v5-social-icon">
-                      <BrandIcon name={link.key} size={18} />
-                    </span>
-                    <span className="v5-social-text">
-                      <span className="v5-social-label">{link.label}</span>
-                      <span className="v5-social-handle">{breakAfterSlashes(link.handle)}</span>
-                    </span>
-                    <ArrowUpRight className="v5-social-arrow" size={18} strokeWidth={2} aria-hidden="true" />
-                    <span className="v5-sr">{labels.newTab}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <SocialList />
           </Tile>
 
           {linkedinStats.slice(1).map((stat) => (

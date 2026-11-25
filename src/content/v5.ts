@@ -48,7 +48,13 @@ export const v5Nav: readonly (NavItem & { icon: DockIcon })[] = footerNav.map((i
 /** The frame sequences /v5 shows (public/sequences; provenance in
  *  src/content/sources.json). The footer's footage credit lists the
  *  providers of exactly these, so add a sequence here when a page uses one. */
-export const v5Sequences: readonly FrameSequence[] = [SEQUENCES["bronze-silk"]];
+export const v5Sequences: readonly FrameSequence[] = [
+  // Home, "What I lead": the tall tile scrubbed by the scroll.
+  SEQUENCES["bronze-silk"],
+  // Careers, beside "Apply": a needle being threaded (hiring as threading
+  // people together, assets/sequences/README.md).
+  SEQUENCES["needle-thread"],
+];
 
 /** The footer credit for the footage ("Motion footage: Mixkit"). */
 export const footage = {
@@ -83,4 +89,11 @@ export const labels = {
   backToTop: "Back to top",
   /** Opens in a new tab, for screen readers (the classic site says the same). */
   newTab: " (opens in a new tab)",
+  // Work, "Where I work": the venture tiles turn over to show the website.
+  // The same words the classic VentureList uses; "{name}" is the venture.
+  previewWebsite: "Preview website",
+  previewThe: "Preview the {name} website",
+  previewWindow: "{name} website preview",
+  closePreview: "Close website preview",
+  visit: "Visit {name}",
 } as const;

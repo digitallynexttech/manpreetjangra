@@ -31,10 +31,12 @@ function Card({
   card: StackCard;
 }) {
   // A card starts to shrink and dim once the next card begins to slide over
-  // it (a little after it has stuck), and ends at 4 % smaller per card above.
+  // it (a little after it has stuck), and ends at 4 % smaller per card above
+  // (never below 84 %, so a long list such as the About journey does not
+  // shrink its first cards to nothing).
   const below = count - 1 - index;
   const start = Math.min(1, (index + 0.55) / count);
-  const scale = useTransform(progress, [start, 1], [1, 1 - below * 0.04]);
+  const scale = useTransform(progress, [start, 1], [1, Math.max(0.84, 1 - below * 0.04)]);
   const shade = useTransform(progress, [start, 1], [0, Math.min(0.42, below * 0.085)]);
   return (
     <li className="v5-stack-slot" style={{ "--i": index } as CSSProperties}>
