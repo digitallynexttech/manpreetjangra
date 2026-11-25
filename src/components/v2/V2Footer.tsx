@@ -90,7 +90,7 @@ export function V2Footer() {
         <p>
           <LocalTime prefix={footer.place.prefix} />
         </p>
-        <Link href="/">{labels.classicSite}</Link>
+        <Link href="/v1">{labels.classicSite}</Link>
       </div>
     </footer>
   );

@@ -107,5 +107,52 @@
       "source": "https://cutshort.io/company/digitally-next-47-LkawMqgJ",
       "note": "Posted by Manpreet Jangra, 2023-2024"
     }
+  ],
+  "sequences": [
+    {
+      "folder": "public/sequences/vermilion-silk/",
+      "files": "<width>/0001.webp to <width>/0121.webp, widths 1600 and 800 (1600x900 and 800x450)",
+      "generated": false,
+      "what": "Red silk fabric waving (scroll frame sequence, 16:9)",
+      "source": "Mixkit, \"Red wavy fabric texture\" (40213), https://mixkit.co/free-stock-video/red-wavy-fabric-texture-40213/",
+      "licence": "Mixkit Stock Video Free License, https://mixkit.co/license/#videoFree. Free use, including commercial use and modification; attribution not required (credited here and in the footer of each edition that uses it)",
+      "processing": "Frames sampled from the clip with ffmpeg 7 and libwebp: ffmpeg -i <clip>.mp4 -vf \"fps=6,scale=<width>:-2\" -c:v libwebp -quality 60 -compression_level 6 -preset photo <out>/%04d.webp, once per width (1600 and 800 px wide); 121 frames (6 fps over 20.1 s), numbered 0001 upward with no gaps. Made 2026-11-24 (assets/sequences/README.md); the original MP4 is kept out of the repository (.work/video/raw/), since neither licence allows passing on the unmodified clip"
+    },
+    {
+      "folder": "public/sequences/needle-thread/",
+      "files": "<width>/0001.webp to <width>/0091.webp, widths 1600 and 800 (1600x900 and 800x450)",
+      "generated": false,
+      "what": "A needle being threaded in close-up (scroll frame sequence, 16:9)",
+      "source": "Pexels, \"Close-up of needle threading in sewing process\" (35166550), https://www.pexels.com/video/close-up-of-needle-threading-in-sewing-process-35166550/",
+      "licence": "Pexels License, https://www.pexels.com/license/. Free use, including commercial use and modification; attribution not required (credited here and in the footer of each edition that uses it)",
+      "processing": "Frames sampled from the clip with ffmpeg 7 and libwebp: ffmpeg -i <clip>.mp4 -vf \"fps=6,scale=<width>:-2\" -c:v libwebp -quality 60 -compression_level 6 -preset photo <out>/%04d.webp, once per width (1600 and 800 px wide); 91 frames (6 fps over 15.2 s), numbered 0001 upward with no gaps. Made 2026-11-24 (assets/sequences/README.md); the original MP4 is kept out of the repository (.work/video/raw/), since neither licence allows passing on the unmodified clip"
+    },
+    {
+      "folder": "public/sequences/bronze-silk/",
+      "files": "<width>/0001.webp to <width>/0123.webp, widths 900 and 540 (900x1600 and 540x960)",
+      "generated": false,
+      "what": "Dark orange silk fabric waving (scroll frame sequence, 9:16 portrait)",
+      "source": "Mixkit, \"Bright dark orange fabric waving\" (40226), https://mixkit.co/free-stock-video/bright-dark-orange-fabric-waving-40226/",
+      "licence": "Mixkit Stock Video Free License, https://mixkit.co/license/#videoFree. Free use, including commercial use and modification; attribution not required (credited here and in the footer of each edition that uses it)",
+      "processing": "Frames sampled from the clip with ffmpeg 7 and libwebp: ffmpeg -i <clip>.mp4 -vf \"fps=6,scale=<width>:-2\" -c:v libwebp -quality 60 -compression_level 6 -preset photo <out>/%04d.webp, once per width (900 and 540 px wide); 123 frames (6 fps over 20.5 s), numbered 0001 upward with no gaps. Made 2026-11-24 (assets/sequences/README.md); the original MP4 is kept out of the repository (.work/video/raw/), since neither licence allows passing on the unmodified clip"
+    },
+    {
+      "folder": "public/sequences/thread-spool/",
+      "files": "<width>/0001.webp to <width>/0079.webp, widths 1600 and 800 (1600x900 and 800x450)",
+      "generated": false,
+      "what": "A spool of white thread in close-up (scroll frame sequence, 16:9)",
+      "source": "Pexels, \"A close-up of a spool of white thread\" (26569054), https://www.pexels.com/video/a-close-up-of-a-spool-of-white-thread-26569054/",
+      "licence": "Pexels License, https://www.pexels.com/license/. Free use, including commercial use and modification; attribution not required (credited here and in the footer of each edition that uses it)",
+      "processing": "Frames sampled from the clip with ffmpeg 7 and libwebp: ffmpeg -i <clip>.mp4 -vf \"fps=8,scale=<width>:-2\" -c:v libwebp -quality 60 -compression_level 6 -preset photo <out>/%04d.webp, once per width (1600 and 800 px wide); 79 frames (8 fps over 9.9 s), numbered 0001 upward with no gaps. Made 2026-11-24 (assets/sequences/README.md); the original MP4 is kept out of the repository (.work/video/raw/), since neither licence allows passing on the unmodified clip"
+    },
+    {
+      "folder": "public/sequences/marigold/",
+      "files": "<width>/0001.webp to <width>/0078.webp, widths 1600 and 800 (1600x900 and 800x450)",
+      "generated": false,
+      "what": "Marigold flowers in close-up (scroll frame sequence, 16:9)",
+      "source": "Pexels, \"Close-up shot of marigold flowers\" (3976813), https://www.pexels.com/video/close-up-shot-of-marigold-flowers-3976813/",
+      "licence": "Pexels License, https://www.pexels.com/license/. Free use, including commercial use and modification; attribution not required (credited here and in the footer of each edition that uses it)",
+      "processing": "Frames sampled from the clip with ffmpeg 7 and libwebp: ffmpeg -i <clip>.mp4 -vf \"fps=5,scale=<width>:-2\" -c:v libwebp -quality 60 -compression_level 6 -preset photo <out>/%04d.webp, once per width (1600 and 800 px wide); 78 frames (5 fps over 15.6 s), numbered 0001 upward with no gaps. Made 2026-11-24 (assets/sequences/README.md); the original MP4 is kept out of the repository (.work/video/raw/), since neither licence allows passing on the unmodified clip"
+    }
   ]
 }

@@ -69,7 +69,7 @@ function MenuFoot() {
             <span className="v2-sr-only">{labels.newTab}</span>
           </a>
         ))}
-        <Link className="v2-menu-small" href="/">
+        <Link className="v2-menu-small" href="/v1">
           {labels.classicSite}
         </Link>
       </div>

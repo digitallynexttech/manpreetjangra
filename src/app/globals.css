@@ -7,6 +7,26 @@
 @source not "../components/v2";
 @source not "../content/v2.ts";
 @source not "../lib/v2.ts";
+/* The same for the editions V3 to V5 (plan/versions-spec.md 2), the editions
+   index at / and the shared frame-sequence and edition-address helpers. */
+@source not "./v3";
+@source not "./v4";
+@source not "./v5";
+@source not "../components/v3";
+@source not "../components/v4";
+@source not "../components/v5";
+@source not "../content/v3.ts";
+@source not "../content/v4.ts";
+@source not "../content/v5.ts";
+@source not "../lib/v3.ts";
+@source not "../lib/v4.ts";
+@source not "../lib/v5.ts";
+@source not "./page.tsx";
+@source not "../components/editions";
+@source not "../content/editions.ts";
+@source not "../lib/sequences.ts";
+@source not "../lib/useFrameSequence.ts";
+@source not "../lib/versions.ts";
 
 /* One stylesheet for the whole site, in this order:
    1. motion tokens (verbatim from the sibling Deepak Goel site)

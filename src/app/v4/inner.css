@@ -1,0 +1,293 @@
+/* The inner pages of /v4 (plan/versions-spec.md, V4 inner pages): About,
+   Work, Writing, Careers and Contact, each a section of the paper. Imported
+   by those five pages; every rule is on a `v4-` class. This file holds what
+   they share: the section front (section letter and flag, double rule,
+   headline, standfirst, figure) with its "In this section" index, the
+   frame shapes of their figures, and the text column of an article. Each
+   page adds its own file (about.css, work.css, ...). Tokens, chapter heads,
+   notes, panels, tables, pull quotes and the motion are in v4.css. */
+
+/* --- Section front ------------------------------------------------------------ */
+.v4-front { padding-top: clamp(1.25rem, 0.75rem + 2vw, 2.75rem); }
+.v4-front-flagline {
+  display: grid;
+  gap: 0.4rem;
+  padding-bottom: 0.55rem;
+}
+.v4-front-letter {
+  font-family: var(--v4-mono);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--v4-red);
+}
+/* The section flag: the page's name, set like the flag of a printed
+   section, at the nameplate's optical size. */
+.v4-front-flag {
+  margin-left: -0.04em;
+  font-weight: 500;
+  font-size: clamp(3.5rem, 1rem + 10.5vw, 11.5rem);
+  line-height: 0.84;
+  letter-spacing: -0.045em;
+  font-variation-settings: "opsz" 72;
+  color: var(--v4-ink);
+}
+.v4-front > .v4-double-rule { margin-bottom: clamp(1.25rem, 0.75rem + 1.6vw, 2.25rem); }
+.v4-front-grid { display: grid; gap: 2rem; }
+.v4-front-title {
+  font-size: clamp(2rem, 1.1rem + 2.5vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.022em;
+  font-variation-settings: "opsz" 72;
+}
+.v4-front-standfirst {
+  max-width: 36em;
+  margin-top: 1.1rem;
+  font-style: italic;
+  font-size: clamp(1.2rem, 1.05rem + 0.45vw, 1.5rem);
+  line-height: 1.42;
+  color: var(--v4-muted);
+}
+.v4-front-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.6rem;
+  margin-top: 1.5rem;
+}
+.v4-front-actions .v4-link { display: inline-flex; align-items: center; min-height: 2.75rem; font-size: 1.125rem; }
+/* A live count under the standfirst (Careers). */
+.v4-front-count {
+  margin-top: 1.25rem;
+  font-family: var(--v4-mono);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v4-red);
+}
+@media (width >= 48rem) {
+  .v4-front-flagline {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+  .v4-front-letter { order: 2; padding-bottom: 0.7em; text-align: right; }
+}
+@media (width >= 64rem) {
+  .v4-front-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--v4-gap);
+    align-items: start;
+  }
+  .v4-front-text { grid-column: 1 / span 7; padding-right: 0.5rem; }
+  .v4-front-figure { grid-column: 8 / -1; padding-left: 0.25rem; }
+  /* A front without a figure: the headline runs wider and larger. */
+  .v4-front:not(.v4-front--figure) .v4-front-text { grid-column: 1 / span 10; }
+  .v4-front:not(.v4-front--figure) .v4-front-title { font-size: clamp(2.75rem, 0.9rem + 3.6vw, 5.25rem); }
+}
+
+/* --- In this section: the page's articles, as anchor links ------------------------ */
+.v4-insection {
+  margin-top: clamp(2.25rem, 1.5rem + 2.5vw, 3.75rem);
+  border-top: 3px solid var(--v4-ink);
+  border-bottom: 1px solid var(--v4-ink);
+}
+.v4-insection-title {
+  padding-block: 0.6rem 0.55rem;
+  border-bottom: 1px solid var(--v4-ink);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  line-height: 1.2;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.14em;
+}
+.v4-insection-list { display: grid; }
+.v4-insection-list li { min-width: 0; }
+.v4-insection-list li + li { border-top: 1px solid var(--v4-hair); }
+.v4-insection-list a {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 0.75rem;
+  height: 100%;
+  padding: 0.75rem 0.5rem 0.8rem 0;
+  color: var(--v4-ink);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+@media (hover: hover) {
+  .v4-insection-list a:hover { background: var(--v4-blush); }
+  .v4-insection-list a:hover .v4-insection-name { color: var(--v4-red); }
+}
+.v4-insection-numeral {
+  font-weight: 500;
+  font-size: 1.45rem;
+  line-height: 1;
+  text-align: right;
+  color: var(--v4-red);
+  font-variation-settings: "opsz" 72;
+}
+.v4-insection-name {
+  display: block;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  line-height: 1.2;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+}
+.v4-insection-teaser {
+  display: block;
+  margin-top: 0.2rem;
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.35;
+  color: var(--v4-muted);
+}
+@media (width >= 40rem) and (width < 64rem) {
+  .v4-insection-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--v4-gap); }
+  .v4-insection-list li + li { border-top: 0; }
+  .v4-insection-list li:nth-child(n + 3) { border-top: 1px solid var(--v4-hair); }
+}
+@media (width >= 64rem) {
+  .v4-insection {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--v4-gap);
+  }
+  .v4-insection-title {
+    grid-column: 1 / span 2;
+    padding-top: 0.85rem;
+    border-bottom: 0;
+  }
+  .v4-insection-list {
+    grid-column: 3 / -1;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+  }
+  .v4-insection-list li { position: relative; }
+  .v4-insection-list li + li { border-top: 0; }
+  /* Column rules: before the list, and between its entries. */
+  .v4-insection-list li::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--v4-gap) / -4);
+    width: 1px;
+    background: var(--v4-hair);
+  }
+  .v4-insection-list a {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    padding: 0.85rem 0.75rem 0.95rem calc(var(--v4-gap) / 4 + 0.35rem);
+  }
+  .v4-insection-numeral { text-align: left; font-size: 1.6rem; }
+}
+/* The numeral, name and teaser sit at the top of each entry, whatever the
+   height of the tallest one. */
+.v4-insection-list a { align-content: start; }
+.v4-insection-name { overflow-wrap: break-word; }
+/* Six articles (Work) from 1024 to 1279 px: two rows of three, so a long
+   name ("AI Decision and Acceleration Center") keeps inside its column. */
+@media (width >= 64rem) and (width < 80rem) {
+  .v4-insection-list:has(> li:nth-child(6)) {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .v4-insection-list:has(> li:nth-child(6)) > li:nth-child(n + 4) { border-top: 1px solid var(--v4-hair); }
+}
+
+/* --- Figures of the inner pages --------------------------------------------- */
+.v4-frame--front { aspect-ratio: 3 / 2; }
+@media (width >= 64rem) {
+  .v4-frame--front { aspect-ratio: 16 / 10; }
+}
+
+/* --- Articles ------------------------------------------------------------------ */
+/* From 1024 px an article's text sits in the chapter head's text columns
+   (3 to 9), or runs on to the edge (3 to 12). */
+@media (width >= 64rem) {
+  .v4-section > .v4-col-text { grid-column: 3 / span 7; }
+  .v4-section > .v4-col-wide { grid-column: 3 / -1; }
+}
+.v4-section > .v4-col-text,
+.v4-section > .v4-col-wide { min-width: 0; }
+
+/* A paragraph after a chapter head, in body text. */
+.v4-prose p + p { margin-top: 1rem; }
+.v4-prose p { hyphens: auto; }
+
+/* Actions under an article: a button and a link, or links. */
+.v4-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.6rem;
+  margin-top: 1.5rem;
+}
+.v4-actions .v4-link { display: inline-flex; align-items: center; min-height: 2.75rem; font-size: 1.0625rem; }
+
+/* A quote's attribution, in Geist Mono capitals. */
+.v4-by {
+  margin-top: 0.85rem;
+  font-family: var(--v4-mono);
+  font-size: 0.6875rem;
+  line-height: 1.55;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v4-muted);
+}
+
+/* Dot leaders between a name and its detail (education, directory, contents). */
+.v4-leader {
+  flex: 1 1 1rem;
+  min-width: 1rem;
+  border-bottom: 2px dotted var(--v4-hair-strong);
+  translate: 0 -0.28em;
+}
+
+/* A body with sidenotes whose text starts under the chapter head's text
+   (column 3), not at the page edge. */
+@media (width >= 64rem) {
+  .v4-body--margin.v4-body--indent > :first-child { grid-column: 3 / span 7; }
+}
+/* The first paragraph of a short article, a size up from body text. */
+.v4 .v4-lead-para {
+  font-size: clamp(1.25rem, 1.1rem + 0.45vw, 1.5rem);
+  line-height: 1.45;
+}
+.v4-actions--centre { justify-content: center; }
+.v4-by a {
+  color: var(--v4-red);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+.v4-by a:hover { color: var(--v4-red-deep); }
+
+/* A quotation set in a box with a vermilion rule (a line from a job post,
+   a line from a post). */
+.v4-boxquote {
+  margin-top: 1.75rem;
+  padding: 1.15rem 1.35rem 1.25rem;
+  background: var(--v4-sand);
+  border-left: 3px solid var(--v4-red);
+}
+.v4-boxquote blockquote p {
+  font-style: italic;
+  font-size: 1.2rem;
+  line-height: 1.45;
+  hyphens: auto;
+}
+.v4-boxquote blockquote p::before { content: open-quote; }
+.v4-boxquote blockquote p::after { content: close-quote; }
+
+/* A panel bar with its label alone (About "For organisers", Contact
+   "Letters to the editor"): one centred line, a size down from the home
+   page's "Classifieds", so the longer labels keep to one line on desktop. */
+.v4-panel-bar.v4-panel-bar--single { display: block; text-align: center; }
+.v4-panel-bar--single .v4-panel-label {
+  font-size: clamp(1.5rem, 0.95rem + 2.1vw, 3rem);
+  letter-spacing: 0.06em;
+  text-wrap: balance;
+}

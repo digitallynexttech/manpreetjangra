@@ -1,0 +1,219 @@
+/* Careers, section E of /v4 (plan/versions-spec.md, V4 inner pages: "roles
+   as a classifieds page grouped by team, criteria as a numbered list,
+   FAQ"). Imported by src/app/v4/careers/page.tsx only; every rule is on a
+   `v4-` class, and the classic Disclosure is restyled only inside
+   `.v4-faq`. Shared pieces are in v4.css and inner.css. */
+
+/* --- I. Open roles: the classifieds page --------------------------------------- */
+.v4-roles-lead {
+  display: grid;
+  gap: 1.25rem 2rem;
+  padding-block: 1.6rem 1.5rem;
+  border-bottom: 1px solid var(--v4-ink);
+}
+.v4-roles-title {
+  font-size: clamp(1.9rem, 1.1rem + 2.5vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.022em;
+  font-variation-settings: "opsz" 72;
+}
+.v4-roles-empty { margin-top: 0.85rem; }
+.v4-roles-apply .v4-table-note { margin-top: 0; max-width: 34rem; }
+.v4-roles-apply .v4-actions { margin-top: 1rem; }
+@media (width >= 64rem) {
+  .v4-roles-lead { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: end; }
+}
+
+/* The roles, grouped by team, in newspaper columns with column rules. */
+.v4-roles-columns { padding-top: 1.5rem; }
+@media (width >= 48rem) {
+  .v4-roles-columns {
+    columns: 2;
+    column-gap: calc(var(--v4-gap) * 1.25);
+    column-rule: 1px solid var(--v4-hair-strong);
+  }
+}
+@media (width >= 80rem) {
+  .v4-roles-columns { columns: 3; }
+}
+.v4-roles-group + .v4-roles-group { margin-top: 1.75rem; }
+.v4-roles-group-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: last baseline;
+  gap: 0.75rem;
+  padding-block: 0.55rem 0.5rem;
+  border-top: 3px solid var(--v4-ink);
+  border-bottom: 1px solid var(--v4-ink);
+  break-inside: avoid;
+  break-after: avoid;
+}
+.v4-roles-group-title {
+  font-weight: 600;
+  font-size: 1.0625rem;
+  line-height: 1.25;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.09em;
+}
+.v4-roles-group-count {
+  flex: none;
+  font-family: var(--v4-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  color: var(--v4-red);
+}
+.v4-role { break-inside: avoid; }
+.v4-role + .v4-role { border-top: 1px solid var(--v4-hair); }
+.v4-role a {
+  display: grid;
+  gap: 0.15rem;
+  min-height: 2.75rem;
+  padding: 0.6rem 0.4rem 0.65rem 0;
+  color: var(--v4-ink);
+  text-decoration: none;
+  transition: background-color 0.2s ease, padding 0.3s var(--v4-ease);
+}
+.v4-role-title {
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.25;
+  letter-spacing: -0.004em;
+  overflow-wrap: anywhere;
+}
+/* The arrow after each title: the role opens its listing in a new tab. */
+.v4-role-title::after {
+  content: "\2197";
+  content: "\2197" / "";
+  margin-left: 0.35em;
+  font-weight: 400;
+  color: var(--v4-red);
+}
+.v4-role-department {
+  font-family: var(--v4-mono);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--v4-muted);
+}
+.v4-role a:focus-visible { outline-offset: -2px; }
+@media (hover: hover) and (pointer: fine) {
+  .v4-role a:hover { background: var(--v4-paper); padding-left: 0.5rem; }
+  .v4-role a:hover .v4-role-title { color: var(--v4-red); }
+}
+
+/* --- II. What I look for: a numbered list --------------------------------------- */
+.v4-criteria {
+  display: grid;
+  border-top: 1px solid var(--v4-ink);
+  counter-reset: none;
+}
+.v4-criterion {
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.75rem;
+  padding-block: 0.95rem 1rem;
+  border-bottom: 1px solid var(--v4-hair);
+}
+.v4-criterion-n {
+  font-weight: 500;
+  font-size: 2rem;
+  line-height: 0.9;
+  text-align: right;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-variation-settings: "opsz" 72;
+  color: var(--v4-red);
+}
+.v4-criterion-text {
+  font-size: clamp(1.15rem, 1.05rem + 0.35vw, 1.35rem);
+  line-height: 1.35;
+}
+@media (width >= 48rem) {
+  .v4-criteria {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: calc(var(--v4-gap) * 1.25);
+  }
+}
+@media (width >= 80rem) {
+  .v4-criteria { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.v4-criteria-closing {
+  margin-top: 1.75rem;
+  font-style: italic;
+  color: var(--v4-muted);
+}
+
+/* --- III. Mentorship: the selected lines -------------------------------------- */
+.v4-mentor-lines { padding-block: 1.5rem 0.5rem; quotes: "\201C" "\201D" "\2018" "\2019"; }
+.v4-mentor-line {
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.5rem, 1rem + 1.6vw, 2.4rem);
+  line-height: 1.2;
+  letter-spacing: -0.014em;
+  font-variation-settings: "opsz" 72;
+}
+.v4-mentor-line + .v4-mentor-line { margin-top: 0.4rem; }
+.v4-mentor-line--first::before { content: open-quote; color: var(--v4-red); }
+.v4-mentor-line--last::after { content: close-quote; color: var(--v4-red); }
+.v4-mentor-gap {
+  margin-block: 0.35rem;
+  font-size: clamp(1.5rem, 1rem + 1.6vw, 2.4rem);
+  line-height: 1;
+  color: var(--v4-muted);
+}
+.v4-mentor .v4-by { margin-top: 1rem; }
+
+/* --- IV. Questions: the classic Disclosure, ruled like a column ---------------- */
+.v4-faq { border-top: 1px solid var(--v4-ink); }
+.v4-faq .site-disclosure { border-bottom: 1px solid var(--v4-hair-strong); }
+.v4-faq .site-disclosure > summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  min-height: 2.75rem;
+  padding-block: 1.05rem 1.1rem;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--v4-serif);
+  font-weight: 500;
+  font-size: clamp(1.3rem, 1.15rem + 0.5vw, 1.65rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--v4-ink);
+  transition: color 0.2s ease;
+}
+.v4-faq .site-disclosure > summary:hover { color: var(--v4-red); }
+.v4-faq .site-disclosure > summary:focus-visible { outline-offset: -2px; }
+.v4-faq .site-disclosure-icon {
+  flex: none;
+  font-family: var(--v4-serif);
+  font-weight: 400;
+  font-size: 1.6em;
+  line-height: 0.8;
+  color: var(--v4-red);
+}
+.v4-faq .site-disclosure-body {
+  padding-bottom: 1.25rem;
+  max-width: 36em;
+  color: var(--v4-ink);
+  font-size: var(--v4-body);
+}
+
+/* --- V. Apply: the closing notice (the colophon has none on Careers) ---------- */
+.v4-apply { margin-top: var(--v4-section); margin-bottom: 0; }
+.v4-main:has(.v4-apply) + .v4-colophon { margin-top: clamp(2.5rem, 2rem + 2vw, 4rem); }
+
+/* --- Motion (Careers) ----------------------------------------------------------- */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .v4-criterion-n {
+      animation: v4-slide-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 25%;
+    }
+  }
+}

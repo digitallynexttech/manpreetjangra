@@ -1,0 +1,265 @@
+/* Contact, section F of /v4 (plan/versions-spec.md, V4 inner pages: "the
+   form styled as a 'Letters to the editor' panel (label), plus the office
+   address block"). Imported by src/app/v4/contact/page.tsx only. Every rule
+   is on a `v4-` class; the classic EnquiryForm keeps its markup and
+   behaviour and is restyled only inside `.v4-letters` (its `site-` classes
+   carry the classic look elsewhere). Shared pieces are in v4.css and
+   inner.css. */
+
+.v4-letters-section { padding-top: clamp(2.5rem, 1.5rem + 3vw, 4.5rem); }
+.v4-letters-grid { display: grid; gap: 2.75rem; }
+@media (width >= 64rem) {
+  .v4-letters-grid {
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: start;
+  }
+  .v4-letters { grid-column: 1 / span 8; }
+  .v4-details { grid-column: 9 / -1; position: relative; }
+  .v4-details::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--v4-gap) / -2);
+    width: 1px;
+    background: var(--v4-hair);
+    transform-origin: 50% 0;
+  }
+}
+
+/* --- The panel ------------------------------------------------------------------ */
+.v4-letters-form { padding-top: 1.5rem; }
+
+/* --- The classic EnquiryForm, set in the edition's type ------------------------- */
+.v4-letters .site-enquiry { display: grid; gap: 1.35rem; }
+.v4-letters .site-enquiry-title {
+  margin-bottom: 0.25rem;
+  font-family: var(--v4-serif);
+  font-weight: 500;
+  font-size: clamp(1.75rem, 1.15rem + 1.8vw, 2.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 72;
+  color: var(--v4-ink);
+}
+.v4-letters .site-form-row { display: grid; gap: 1.35rem; }
+@media (width >= 40rem) {
+  .v4-letters .site-form-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.v4-letters .site-field { display: grid; gap: 0.4rem; align-content: start; }
+.v4-letters .site-field > label {
+  font-family: var(--v4-serif);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.09em;
+  color: var(--v4-ink);
+}
+.v4-letters .site-field > label > [aria-hidden] { color: var(--v4-red); }
+.v4-letters .site-enquiry input,
+.v4-letters .site-enquiry select,
+.v4-letters .site-enquiry textarea {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.65rem 0.8rem;
+  background: var(--v4-paper);
+  border: 1px solid var(--v4-hair-strong);
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--v4-ink);
+  font: 400 1.125rem / 1.45 var(--v4-serif);
+}
+.v4-letters .site-enquiry textarea {
+  resize: vertical;
+  /* Ruled like writing paper. */
+  background-image: linear-gradient(transparent calc(100% - 1px), rgb(28 24 22 / 0.12) 0);
+  background-size: 100% 1.45em;
+  background-position: 0 0.65rem;
+  background-attachment: local;
+}
+.v4-letters .site-enquiry input:focus,
+.v4-letters .site-enquiry select:focus,
+.v4-letters .site-enquiry textarea:focus {
+  outline: none;
+  border-color: var(--v4-ink);
+  box-shadow: inset 0 -3px 0 var(--v4-marigold);
+}
+.v4-letters .site-enquiry input:focus-visible,
+.v4-letters .site-enquiry select:focus-visible,
+.v4-letters .site-enquiry textarea:focus-visible {
+  outline: 2px solid var(--v4-red);
+  outline-offset: 2px;
+}
+.v4-letters .site-enquiry ::placeholder { color: var(--v4-muted); font-style: italic; opacity: 1; }
+.v4-letters .site-enquiry select {
+  appearance: none;
+  padding-right: 2.75rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B4220B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  background-size: 1.1rem 1.1rem;
+}
+.v4-letters .site-enquiry select:has(option[value=""]:checked) { color: var(--v4-muted); font-style: italic; }
+.v4-letters .site-enquiry option { color: var(--v4-ink); font-style: normal; }
+.v4-letters .site-form-note {
+  font-family: var(--v4-mono);
+  font-size: 0.6875rem;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: var(--v4-muted);
+}
+.v4-letters .site-form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.6rem; }
+
+/* The classic buttons as the edition's ink button and text link. */
+.v4-letters .site-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.875rem;
+  padding: 0.55rem 1.15rem 0.6rem;
+  background: var(--v4-ink);
+  color: var(--v4-paper);
+  border: 1px solid var(--v4-ink);
+  border-radius: 0;
+  font-family: var(--v4-serif);
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  white-space: normal;
+  cursor: pointer;
+  transform: none;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+.v4-letters .site-button::before,
+.v4-letters .site-button::after { display: none; }
+.v4-letters .site-button:hover { background: var(--v4-red); border-color: var(--v4-red); transform: none; }
+.v4-letters .site-button:active { background: var(--v4-red-deep); }
+.v4-letters .site-button .site-arrow,
+.v4-letters .site-text-link .site-arrow { width: 1.1rem; height: 1.1rem; transform: none; }
+.v4-letters .site-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--v4-red);
+  font-family: var(--v4-serif);
+  font-weight: 400;
+  font-size: 1.0625rem;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+.v4-letters .site-text-link:hover { color: var(--v4-red-deep); text-decoration-thickness: 2px; }
+
+/* The draft: a proof on paper, the body set in Geist Mono. */
+.v4-letters .site-draft {
+  margin-top: 1rem;
+  padding: clamp(1rem, 0.6rem + 1.5vw, 1.75rem);
+  background: var(--v4-paper);
+  border: 1px solid var(--v4-ink);
+  border-radius: 0;
+}
+.v4-letters .site-draft:focus { outline: none; }
+.v4-letters .site-draft:focus-visible { outline: 2px solid var(--v4-red); outline-offset: 3px; }
+.v4-letters .site-draft > * + * { margin-top: 1rem; }
+.v4-letters .site-draft-title {
+  font-family: var(--v4-serif);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 1.15rem + 1vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.016em;
+}
+.v4-letters .site-draft-recipient { font-weight: 600; color: var(--v4-red); overflow-wrap: anywhere; }
+.v4-letters .site-draft pre {
+  padding: 1rem;
+  background: var(--v4-sand);
+  border-left: 3px solid var(--v4-red);
+  border-radius: 0;
+  font: 400 0.8125rem / 1.65 var(--v4-mono);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.v4-letters .site-status {
+  min-height: 1.5em;
+  font-family: var(--v4-mono);
+  font-size: 0.6875rem;
+  line-height: 1.6;
+  color: var(--v4-red);
+}
+.v4-letters .site-draft .site-status:empty { margin-block: 0; min-height: 0; }
+
+/* --- The details column --------------------------------------------------------- */
+.v4-details { display: grid; gap: 1.75rem; align-content: start; }
+@media (width >= 40rem) and (width < 64rem) {
+  .v4-details { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--v4-gap); }
+}
+.v4-detail { padding-top: 0.7rem; border-top: 3px solid var(--v4-ink); }
+.v4-detail-title {
+  margin-bottom: 0.55rem;
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.2;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+}
+.v4-detail p { font-size: 1.0625rem; line-height: 1.5; }
+.v4-detail-links li + li { border-top: 1px solid var(--v4-hair); }
+.v4-detail-links a {
+  display: grid;
+  gap: 0.1rem;
+  min-height: 2.75rem;
+  padding-block: 0.45rem 0.5rem;
+  color: var(--v4-ink);
+  text-decoration: none;
+}
+.v4-detail-link-label { font-weight: 600; font-size: 1.125rem; line-height: 1.25; }
+.v4-detail-link-label::after {
+  content: "\2197";
+  content: "\2197" / "";
+  margin-left: 0.35em;
+  font-weight: 400;
+  color: var(--v4-red);
+}
+.v4-detail-link-handle {
+  font-family: var(--v4-mono);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--v4-muted);
+  overflow-wrap: anywhere;
+}
+.v4-detail-links a:hover .v4-detail-link-label { color: var(--v4-red); }
+/* The office, set like the address block at the foot of a letter. */
+.v4-detail--office { background: var(--v4-sand); padding: 0.7rem 1rem 1rem; }
+.v4-address {
+  display: grid;
+  font-style: normal;
+  font-size: 1.125rem;
+  line-height: 1.45;
+}
+.v4-address > :first-child { font-weight: 600; }
+.v4-detail-time {
+  font-family: var(--v4-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+.v4 .v4-detail-time { font-size: 0.8125rem; }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .v4-details::before {
+      animation: v4-grow-y linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+  }
+}
