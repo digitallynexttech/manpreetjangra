@@ -117,8 +117,16 @@ export function ThreadDraw({
       ref={svg}
       className={classes}
       style={mode === "load" ? ({ ...style, "--v2-draw-delay": `${delay}s` } as CSSProperties) : style}
-      viewBox={spec.viewBox} aria-hidden="true" focusable="false">
-      <path d={spec.d} pathLength={1000} strokeWidth={spec.width} />
+      viewBox={spec.viewBox}
+      // A ring stretches to its box so it surrounds the whole word; the stroke keeps its width.
+      preserveAspectRatio={variant === "underline" && shape === "circle" ? "none" : undefined}
+      aria-hidden="true" focusable="false">
+      <path
+        d={spec.d}
+        pathLength={1000}
+        strokeWidth={spec.width}
+        vectorEffect={variant === "underline" && shape === "circle" ? "non-scaling-stroke" : undefined}
+      />
     </svg>
   );
 }

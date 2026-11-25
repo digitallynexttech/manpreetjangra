@@ -72,14 +72,18 @@ export function MixedHeading({
           // stays as rendered instead of dropping out of sight and rising.
           if (node.getBoundingClientRect().top < window.innerHeight * 0.88) return;
           if (stack) {
+            // The masks clip only while the parts rise; afterwards a ring or
+            // underline can draw past the word's box (see .v2-rise in v2.css).
+            node.classList.add("is-rising");
             gsap.from(node.querySelectorAll(":scope > .v2-rise > .v2-part"), {
               yPercent: 105,
               duration: 0.9,
               stagger: 0.08,
               ease: EASE_IN,
               scrollTrigger: { trigger: node, start: "top 88%", toggleActions: "play none none none" },
+              onComplete: () => node.classList.remove("is-rising"),
             });
-            return;
+            return () => node.classList.remove("is-rising");
           }
           const split = SplitText.create(node, {
             type: "lines",

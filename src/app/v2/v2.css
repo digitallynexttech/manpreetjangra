@@ -150,6 +150,11 @@ html.lenis.lenis-stopped.v2-scroll-locked { overflow: hidden; background-color: 
 .v2-line-mask { padding-block: 0.08em; margin-block: -0.08em; }
 .v2-rise { display: inline-block; overflow: clip; padding-block: 0.08em; margin-block: -0.08em; vertical-align: top; }
 .v2-rise > .v2-part { display: inline-block; }
+/* A part carrying a ring or underline is only masked while it rises (the
+   heading has .is-rising); after that the mark may draw outside the word's
+   box instead of being cut at the mask's edges. */
+.v2-rise:not(.v2-rise--load):has(.v2-mark-host) { overflow: visible; }
+.v2-mixed.is-rising > .v2-rise { overflow: clip; }
 .v2-rise--load > .v2-part {
   animation: v2-rise-in 1s var(--v2-ease) calc(var(--i, 0) * 90ms + var(--v2-rise-delay, 0.1s)) both;
 }
@@ -315,7 +320,7 @@ html.lenis.lenis-stopped.v2-scroll-locked { overflow: hidden; background-color: 
 }
 .v2-mark--underline { top: 72%; }
 /* Wide and tall enough to ring the word without crossing its letters. */
-.v2-mark--circle { top: -30%; left: -14%; width: 128%; height: 160%; }
+.v2-mark--circle { top: -58%; left: -12%; width: 124%; height: 190%; }
 
 /* --- Marquee (spec 3.4) --------------------------------------------------- */
 .v2-marquee { position: relative; overflow: clip; }
