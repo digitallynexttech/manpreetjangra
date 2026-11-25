@@ -1,67 +1,14 @@
 /* The /v3 home scenes (plan/versions-spec.md 3, V3 Home). Imported by
-   src/app/v3/page.tsx only; every rule is on a `v3-` class.
+   src/app/v3/layout.tsx (with every /v3 stylesheet); every rule is on a
+   `v3-` class, so none of it reaches the inner pages.
 
    Each scene has a plain layout first (no JavaScript, reduced motion: every
    word in place, the footage's first frame as a still), then the cinema
    layout its scroll shell switches on with `is-pinned` or `is-horizontal`
    (components/v3/Scenes.tsx). */
 
-/* --- Shared scene frame ------------------------------------------------------ */
-.v3-scene { position: relative; background: var(--v3-night); }
-.v3-stage {
-  position: relative;
-  isolation: isolate;
-  min-height: 100vh;
-  min-height: 100svh;
-}
-.v3-footage {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  background: var(--v3-night);
-}
-.v3-poster { position: absolute; inset: 0; display: block; }
-.v3-poster img,
-.v3-canvas {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.v3-poster img { object-fit: cover; }
-.v3-dim, .v3-shade {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.v3-dim { z-index: 1; background: var(--v3-night); opacity: 0.45; }
-.v3-shade { z-index: 1; }
-
-/* Pinned: the stage sticks for the scene's run. */
-.v3-scene.is-pinned { height: calc(100vh + var(--v3-run, 200vh)); height: calc(100svh + var(--v3-run, 200vh)); }
-.v3-scene.is-pinned > .v3-stage {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  height: 100svh;
-  min-height: 0;
-  overflow: clip;
-}
-
-.v3-lede {
-  max-width: 36rem;
-  font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
-  line-height: 1.6;
-  color: var(--v3-muted);
-}
-.v3-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem 2rem;
-}
+/* The scene frame (stage, footage, pinning), the lede and the action row
+   are in scenes.css, shared with the inner pages. */
 
 /* --- 1. Cold open ------------------------------------------------------------- */
 .v3-cold .v3-scene { --v3-run: 300vh; }
@@ -165,48 +112,9 @@
   height: 12vh;
   padding-inline: var(--v3-gutter);
 }
-.v3-cue {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.875rem;
-  font-family: var(--v3-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--v3-muted);
-}
-.v3-cue-line {
-  position: relative;
-  display: block;
-  width: 3rem;
-  height: 1px;
-  overflow: hidden;
-  background: var(--v3-line);
-}
-.v3-cue-line::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--v3-gold);
-  transform: scaleX(0.35);
-  transform-origin: 0 50%;
-}
 @media (prefers-reduced-motion: no-preference) {
   .v3-cold-name-in { display: inline-block; animation: v3-title-in 2.4s var(--v3-ease) 0.15s both; }
   .v3-cold-foot > * { animation: v3-fade-in 1.2s ease 1.2s both; }
-  .v3-cue-line::after { animation: v3-cue 2.4s var(--v3-ease) infinite; }
-}
-@keyframes v3-title-in {
-  from { opacity: 0; filter: blur(18px); transform: scale(1.04); }
-  to { opacity: 1; filter: blur(0); transform: none; }
-}
-@keyframes v3-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes v3-cue {
-  0% { transform: translateX(-100%) scaleX(0.35); }
-  100% { transform: translateX(300%) scaleX(0.35); }
 }
 
 /* --- 2. What I lead: chapter cards ---------------------------------------------- */
@@ -312,53 +220,7 @@
 .v3-row.is-horizontal .v3-panel:first-child { border-left: 0; }
 
 /* --- 3. In her words: subtitles ------------------------------------------------ */
-.v3-words .v3-scene { --v3-run: 240vh; }
-.v3-words .v3-stage {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 3rem;
-  padding: calc(var(--v3-bar) + 7vh) var(--v3-gutter) clamp(2rem, 8vh, 5rem);
-}
-.v3-words .v3-shade {
-  background: linear-gradient(
-    to bottom,
-    rgb(28 24 22 / 0.86) 0%,
-    rgb(28 24 22 / 0.4) 30%,
-    rgb(28 24 22 / 0.34) 52%,
-    rgb(28 24 22 / 0.9) 100%
-  );
-}
-.v3-words-head { position: relative; z-index: 2; display: grid; justify-items: start; gap: 1.25rem; max-width: 44rem; }
-.v3-subtitles {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 62rem;
-  margin-inline: auto;
-  text-align: center;
-}
-.v3-sub {
-  display: block;
-  font-family: var(--v3-serif);
-  font-weight: 300;
-  font-size: clamp(1.375rem, 0.85rem + 1.75vw, 2.625rem);
-  line-height: 1.32;
-  letter-spacing: -0.005em;
-  text-shadow: 0 1px 2px rgb(28 24 22 / 0.55), 0 6px 32px rgb(28 24 22 / 0.7);
-  text-wrap: balance;
-}
-.v3-sub:first-child::before { content: "\201C"; color: var(--v3-gold); }
-.v3-sub:last-child::after { content: "\201D"; color: var(--v3-gold); }
-.v3-subtitles-by {
-  margin-top: clamp(1.25rem, 3vh, 2rem);
-  font-family: var(--v3-mono);
-  font-size: 0.6875rem;
-  line-height: 1.6;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--v3-muted);
-}
+/* The subtitle scene itself is in scenes.css (`.v3-scene--words`). */
 .v3-words-after {
   display: grid;
   gap: 3rem;
@@ -436,31 +298,7 @@
 }
 .v3-talent-list li:last-child { border-bottom: 1px solid var(--v3-line); }
 .v3-talent-list q::before, .v3-talent-list q::after { color: var(--v3-gold); }
-.v3-talent .v3-lede q, .v3-lede q { color: var(--v3-fg); font-family: var(--v3-serif); font-style: italic; font-size: 1.08em; }
 .v3-talent-cta { display: grid; justify-items: start; gap: 1.25rem; margin-top: 0.5rem; }
-.v3-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-family: var(--v3-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--v3-fg);
-}
-.v3-pill-dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: var(--v3-gold);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .v3-pill-dot { animation: v3-pulse 2.2s ease-in-out infinite; }
-}
-@keyframes v3-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgb(243 179 92 / 0.55); }
-  60% { box-shadow: 0 0 0 0.5rem rgb(243 179 92 / 0); }
-}
 /* Below 1024 px the footage takes the top half of the screen and fades into
    night; the words sit under it. */
 @media (width < 64rem) {
@@ -624,65 +462,7 @@
 .v3-strip.is-horizontal .v3-frame-photo img { width: auto; height: 100%; max-height: 25rem; }
 
 /* --- 6. In numbers ---------------------------------------------------------------- */
-.v3-numbers { --v3-run: 130vh; }
-.v3-numbers-stage {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  justify-items: center;
-  gap: 1.5rem;
-  padding: clamp(4rem, 12vh, 7rem) var(--v3-gutter) clamp(2rem, 5vh, 3rem);
-}
-.v3-numbers-title { font-weight: 400; }
-.v3-number-list { display: grid; width: 100%; max-width: 72rem; }
-.v3-number-row {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  min-height: 30vh;
-  min-height: 30svh;
-  padding-block: 1.25rem;
-  border-top: 1px solid var(--v3-line);
-  text-align: center;
-}
-.v3-number-row:last-child { border-bottom: 1px solid var(--v3-line); }
-.v3-number {
-  font-family: var(--v3-serif);
-  font-weight: 300;
-  font-size: clamp(4.5rem, 1rem + 13vw, 11rem);
-  line-height: 0.86;
-  letter-spacing: -0.04em;
-  font-variant-numeric: lining-nums tabular-nums;
-}
-.v3-number-suffix { font-style: italic; color: var(--v3-gold); }
-.v3-number-label {
-  max-width: 22rem;
-  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
-  line-height: 1.5;
-  color: var(--v3-muted);
-}
-.v3-number-label .v3-link { margin-left: 0.25rem; }
-.v3-numbers-caption {
-  max-width: 44rem;
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  color: var(--v3-muted);
-  text-align: center;
-}
-@media (width >= 64rem) {
-  .v3-number-row { flex-direction: row; gap: 3rem; }
-  .v3-number { min-width: 3.2ch; text-align: right; }
-  .v3-number-label { width: 20rem; text-align: left; }
-}
-.v3-numbers.is-pinned .v3-numbers-stage { padding-top: calc(var(--v3-bar) + 2vh); padding-bottom: 3vh; gap: 1rem; }
-.v3-numbers.is-pinned .v3-number-list { grid-template-rows: repeat(3, minmax(0, 1fr)); }
-.v3-numbers.is-pinned .v3-number-row { min-height: 0; padding-block: 0.75rem; }
-.v3-numbers.is-pinned .v3-number { font-size: clamp(4rem, 17vh, 11rem); font-size: clamp(4rem, 17svh, 11rem); }
-@media (width < 64rem) {
-  .v3-numbers.is-pinned .v3-number { font-size: clamp(3.5rem, 12.5svh, 8rem); }
-  .v3-numbers.is-pinned .v3-number-label { font-size: 0.9375rem; }
-}
+/* The numbers scene is in scenes.css (shared with /v3/work). */
 
 /* --- 7. End credits ------------------------------------------------------------- */
 .v3-credits {
@@ -714,53 +494,7 @@
   text-transform: uppercase;
   color: var(--v3-gold);
 }
-.v3-credits-block { display: grid; justify-items: center; gap: 1.75rem; width: 100%; }
-.v3-credits-heading {
-  font-family: var(--v3-mono);
-  font-size: 0.75rem;
-  font-weight: 400;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--v3-gold);
-}
-.v3-credits-lede { max-width: 38rem; font-size: 1rem; line-height: 1.6; color: var(--v3-muted); }
-.v3-credit-list { display: grid; gap: 2rem; width: 100%; margin-top: 1rem; }
-.v3-credit-list--small { gap: 1.25rem; }
-.v3-credit {
-  display: grid;
-  justify-items: center;
-  gap: 0.5rem;
-}
-.v3-credit-left { max-width: 30rem; font-size: 0.9375rem; line-height: 1.55; color: var(--v3-muted); }
-.v3-credit-right { display: grid; justify-items: center; gap: 0.4rem; }
-.v3-credit-name {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  font-family: var(--v3-serif);
-  font-weight: 300;
-  font-size: clamp(1.75rem, 1.1rem + 1.8vw, 2.75rem);
-  line-height: 1.05;
-  letter-spacing: -0.015em;
-  color: var(--v3-fg);
-  transition: color 0.25s var(--v3-ease);
-}
-.v3-credit-name--small { font-size: clamp(1.25rem, 1rem + 0.7vw, 1.625rem); }
-.v3-credit-name:hover { color: var(--v3-gold); }
-.v3-credit-name svg { opacity: 0.6; }
-.v3-credit-meta {
-  font-family: var(--v3-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--v3-muted);
-}
-@media (width >= 48rem) {
-  .v3-credit { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: baseline; gap: 3rem; }
-  .v3-credit-left { justify-self: end; text-align: right; }
-  .v3-credit-right { justify-items: start; text-align: left; }
-}
+/* The credit rows (`.v3-credits-block`, `.v3-credit*`) are in scenes.css. */
 .v3-credits-cta {
   display: grid;
   justify-items: center;

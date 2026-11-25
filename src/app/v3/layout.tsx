@@ -4,8 +4,15 @@ import { V3Header, type ChapterLink } from "@/components/v3/V3Header";
 import { socialLinks } from "@/content/navigation";
 import { footer } from "@/content/shared";
 import { V3_BASE, chapters, labels } from "@/content/v3";
+import { TITLE_FOOTAGE } from "@/lib/v3";
 import { SEQUENCES, frameSrc, type SequenceName } from "@/lib/sequences";
+// Every /v3 stylesheet loads with the layout (all rules are on `v3-`
+// classes): with page-level stylesheets, prefetching a /v3 link preloaded the
+// other pages' CSS, which the browser then reported as unused.
 import "./v3.css";
+import "./scenes.css";
+import "./home.css";
+import "./inner.css";
 
 // The "Cinema" edition of the site (plan/versions-spec.md 3, V3): a dark,
 // film-like keynote. Its own chrome (the minimal top bar with the progress
@@ -22,14 +29,15 @@ export const metadata: Metadata = {
 };
 
 /** The still each chapter shows in the chapter list's screen: a frame from
- *  the footage of that page's title scene (small set, 800 or 540 px wide). */
+ *  the footage of that page's title scene (small set, 800 or 540 px wide).
+ *  The same footage opens each page (`TITLE_FOOTAGE` in lib/v3.ts). */
 const STILLS: readonly [SequenceName, number][] = [
   ["vermilion-silk", 48],
-  ["bronze-silk", 70],
-  ["needle-thread", 40],
-  ["bronze-silk", 20],
-  ["needle-thread", 76],
-  ["vermilion-silk", 100],
+  [TITLE_FOOTAGE.about, 70],
+  [TITLE_FOOTAGE.work, 40],
+  [TITLE_FOOTAGE.writing, 20],
+  [TITLE_FOOTAGE.careers, 76],
+  [TITLE_FOOTAGE.contact, 100],
 ];
 
 const chapterLinks: ChapterLink[] = chapters.map((chapter, index) => {

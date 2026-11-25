@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { PageMeta } from "@/content/types";
 import { footer } from "@/content/shared";
+import { chapters } from "@/content/v3";
 import sources from "@/content/sources.json";
 import { pageMetadata } from "./site";
 import { SEQUENCES, footageProviders, type SequenceName } from "./sequences";
@@ -19,6 +20,22 @@ export function v3Metadata(meta: PageMeta): Metadata {
 /** The frame sequences /v3 plays (spec V3): the cold open, her words, the
  *  talent scene, and the inner pages' title scenes. */
 export const V3_SEQUENCES: readonly SequenceName[] = ["vermilion-silk", "bronze-silk", "needle-thread"];
+
+/** The footage behind each inner page's title scene; the chapter list shows
+ *  a still of it. Every name is in `V3_SEQUENCES`. */
+export const TITLE_FOOTAGE = {
+  about: "bronze-silk",
+  work: "needle-thread",
+  writing: "vermilion-silk",
+  careers: "needle-thread",
+  contact: "bronze-silk",
+} as const satisfies Record<string, SequenceName>;
+
+/** The chapter number of a /v3 page ("02" for /v3/about), as the chapter
+ *  list and the footer number it. */
+export function chapterNumber(href: string): string {
+  return chapters.find((chapter) => chapter.href === href)?.number ?? "";
+}
 
 /** "Mixkit, Pexels": the footer's footage credit, from the sequences used. */
 export function footageCredit(): string {
@@ -72,5 +89,10 @@ export function subtitleLines(text: string, max = 48): string[] {
     }
   }
   if (line) lines.push(line);
+  // No orphan: a last line of a word or two joins the line before it.
+  if (lines.length > 1 && lines[lines.length - 1].length < max * 0.3) {
+    const last = lines.pop();
+    lines[lines.length - 1] += ` ${last}`;
+  }
   return lines;
 }

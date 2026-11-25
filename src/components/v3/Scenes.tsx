@@ -112,7 +112,40 @@ const talent: Builder = (tl, root) => {
   if (cta) tl.from(cta, { opacity: 0, y: 18, duration: 0.08 }, 0.8);
 };
 
-const BUILDERS = { cold: coldOpen, words: herWords, talent } as const;
+/** An inner page's title scene: the letterbox bars open as the footage
+ *  starts to play, then the title block drifts up and the footage darkens
+ *  towards the cut to the page. The title, its slate and its lede are on the
+ *  first screen and visible from the first paint; only the bars, the cue and
+ *  the footage move. */
+const titleCard: Builder = (tl, root) => {
+  const bars = q(root, ".v3-matte");
+  const copy = one(root, "[data-v3-title]");
+  const cue = one(root, "[data-v3-cue]");
+  const dim = one(root, ".v3-dim");
+  tl.to(bars, { scaleY: 0, duration: 0.32, ease: "power1.in" }, 0);
+  if (cue) tl.to(cue, { opacity: 0, duration: 0.12 }, 0);
+  if (dim) tl.fromTo(dim, { opacity: 0.5 }, { opacity: 0.22, duration: 0.32 }, 0).to(dim, { opacity: 0.72, duration: 0.45 }, 0.55);
+  if (copy) tl.to(copy, { yPercent: -10, opacity: 0.6, duration: 0.45, ease: "power1.in" }, 0.55);
+};
+
+/** Subtitles, one at a time (the careers criteria): the scene head, then
+ *  each line fades in at the bottom of the screen and gives way to the next,
+ *  as subtitles do; the last one stays. Opacity only, so a screen reader
+ *  still reads every line. */
+const oneByOne: Builder = (tl, root) => {
+  const head = one(root, "[data-v3-head]");
+  const lines = q(root, "[data-v3-line]");
+  if (head) tl.from(head, { opacity: 0, y: 28, duration: 0.08 }, 0.02);
+  const start = 0.12;
+  const step = (0.96 - start) / Math.max(1, lines.length);
+  lines.forEach((line, index) => {
+    const at = start + index * step;
+    tl.from(line, { opacity: 0, y: 16, filter: "blur(6px)", duration: step * 0.3 }, at);
+    if (index < lines.length - 1) tl.to(line, { opacity: 0, y: -12, filter: "blur(4px)", duration: step * 0.22 }, at + step * 0.78);
+  });
+};
+
+const BUILDERS = { cold: coldOpen, words: herWords, talent, title: titleCard, subtitles: oneByOne } as const;
 
 /** Where each scene's timeline starts: the cold open with the page; the
  *  others while their stage is still rising into view, so the first words
@@ -121,9 +154,12 @@ const STARTS = {
   cold: { words: "top top", footage: "top top" },
   words: { words: "top 30%", footage: "top bottom" },
   talent: { words: "top 30%", footage: "top bottom" },
+  title: { words: "top top", footage: "top top" },
+  subtitles: { words: "top 30%", footage: "top bottom" },
 } as const;
 
-/** A pinned scene over scrubbed footage: the cold open, her words, talent. */
+/** A pinned scene over scrubbed footage: the cold open, her words, talent,
+ *  the inner pages' title scenes and the one-by-one subtitles. */
 export function FootageScene({
   kind,
   sequence,
@@ -371,7 +407,7 @@ export function FilmStrip({ head, children }: { head: ReactNode; children: React
 /** Numbers (scene 6): three rows, one per third of the screen, pinned; each
  *  row comes up in turn and its numeral counts up to its value. The markup
  *  holds the final values (no JavaScript, reduced motion, screen readers). */
-export function NumbersScene({ children }: { children: ReactNode }) {
+export function NumbersScene({ children, className }: { children: ReactNode; className?: string }) {
   const root = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -391,9 +427,12 @@ export function NumbersScene({ children }: { children: ReactNode }) {
         const title = one(el, "[data-v3-head]");
         if (title) tl.from(title, { opacity: 0, y: 16, duration: 0.06 }, 0);
         const rows = q(el, "[data-v3-row]");
+        el.style.setProperty("--v3-rows", String(rows.length));
+        // Three rows a quarter of the run apart (the home); more rows closer.
+        const step = Math.min(0.24, 0.72 / Math.max(1, rows.length));
         const counters: { node: HTMLElement; final: string }[] = [];
         rows.forEach((row, index) => {
-          const at = 0.08 + index * 0.24;
+          const at = 0.08 + index * step;
           tl.from(row, { opacity: 0, y: 40, duration: 0.1 }, at);
           const node = one(row, "[data-v3-count]");
           const target = Number.parseInt(node?.dataset.v3Count ?? "", 10);
@@ -405,7 +444,7 @@ export function NumbersScene({ children }: { children: ReactNode }) {
             state,
             {
               value: target,
-              duration: 0.22,
+              duration: step - 0.02,
               ease: "power2.out",
               onUpdate: () => {
                 node.textContent = String(Math.round(state.value));
@@ -423,6 +462,7 @@ export function NumbersScene({ children }: { children: ReactNode }) {
           counters.forEach(({ node, final }) => {
             node.textContent = final;
           });
+          el.style.removeProperty("--v3-rows");
           el.classList.remove("is-pinned");
         };
       });
@@ -432,7 +472,7 @@ export function NumbersScene({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div ref={root} className="v3-scene v3-numbers">
+    <div ref={root} className={className ? `v3-scene v3-numbers ${className}` : "v3-scene v3-numbers"}>
       <div className="v3-stage v3-numbers-stage">{children}</div>
     </div>
   );
@@ -470,7 +510,9 @@ export function CreditsRoll({ children }: { children: ReactNode }) {
 }
 
 /** Measures every trigger again once the page has settled: after the web
- *  fonts load (headings change height) and shortly after mount. */
+ *  fonts load (headings change height), shortly after mount, and whenever
+ *  the page changes height on its own (an answer or a journey entry opening
+ *  moves every scene below it), once that change has come to rest. */
 export function ScrollRefresh() {
   useEffect(() => {
     let live = true;
@@ -479,9 +521,25 @@ export function ScrollRefresh() {
     };
     document.fonts?.ready.then(refresh);
     const late = window.setTimeout(refresh, 900);
+    const main = document.getElementById("site-content");
+    let height = main?.offsetHeight ?? 0;
+    let settle = 0;
+    const observer = new ResizeObserver(() => {
+      const next = main?.offsetHeight ?? 0;
+      if (Math.abs(next - height) < 2) return;
+      height = next;
+      window.clearTimeout(settle);
+      settle = window.setTimeout(() => {
+        refresh();
+        height = main?.offsetHeight ?? 0;
+      }, 260);
+    });
+    if (main) observer.observe(main);
     return () => {
       live = false;
       window.clearTimeout(late);
+      window.clearTimeout(settle);
+      observer.disconnect();
     };
   }, []);
   return null;

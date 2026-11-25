@@ -15,7 +15,6 @@ import { group, ventures } from "@/content/work";
 import { attributionOf, plural } from "@/lib/site";
 import { clipCredits, subtitleLines, v3Metadata } from "@/lib/v3";
 import { timelineView } from "@/lib/views";
-import "./home.css";
 
 export const metadata = v3Metadata(meta);
 
