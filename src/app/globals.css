@@ -18,6 +18,9 @@
 @source not "../content/v3.ts";
 @source not "../content/v4.ts";
 @source not "../content/v5.ts";
+@source not "../lib/v3.ts";
+@source not "../lib/v4.ts";
+@source not "../lib/v5.ts";
 @source not "./page.tsx";
 @source not "../components/editions";
 @source not "../content/editions.ts";
