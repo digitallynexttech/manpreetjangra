@@ -16,6 +16,7 @@ import { hero, hiring, journey, lead, meta, pillars, stats, words } from "@/cont
 import { portrait, zari } from "@/content/images";
 import { hasRoles, roles } from "@/content/roles";
 import { pageMetadata } from "@/lib/site";
+import { V1_BASE, toV1 } from "@/lib/versions";
 import { quoteView, timelineView } from "@/lib/views";
 
 export const metadata = pageMetadata(meta);
@@ -31,7 +32,7 @@ const FORWARD = ["nav-forward"];
 export default function Home() {
   return (
     <PageTransition>
-      <Hero hero={hero} portrait={portrait} hasRoles={hasRoles} />
+      <Hero hero={hero} portrait={portrait} hasRoles={hasRoles} base={V1_BASE} />
 
       {/* Proof row: three numbers that count up once (two with no open roles). */}
       <section className="border-t border-line bg-sand py-12 lg:py-16" aria-labelledby="proof-title">
@@ -40,7 +41,7 @@ export default function Home() {
             {stats.title}
           </h2>
           <Counter
-            items={stats.items.map(({ value, label, href, linkLabel }) => ({ value, label, href, linkLabel }))}
+            items={stats.items.map(({ value, label, href, linkLabel }) => ({ value, label, href: href && toV1(href), linkLabel }))}
             caption={stats.caption}
             phoneColumns={2}
           />
@@ -54,7 +55,7 @@ export default function Home() {
           <ul className="grid gap-6 lg:grid-cols-3 xl:gap-8" data-reveal="group">
             {pillars.map((pillar) => (
               <li key={pillar.index} data-reveal>
-                <Link className="site-card" href={pillar.link.href} transitionTypes={FORWARD}>
+                <Link className="site-card" href={toV1(pillar.link.href)} transitionTypes={FORWARD}>
                   <span className="site-caption">{pillar.index}</span>
                   <h3 className="mt-4 text-h4">{pillar.title}</h3>
                   <p className="mt-3">
@@ -91,7 +92,7 @@ export default function Home() {
           <div className="site-journey">
             <Timeline entries={journey.entries.map(timelineView)} variant="compact" />
             <p className="mt-10" data-reveal>
-              <TextLink href={journey.link.href} transitionTypes={FORWARD}>
+              <TextLink href={toV1(journey.link.href)} transitionTypes={FORWARD}>
                 {journey.link.label}
               </TextLink>
             </p>
@@ -128,7 +129,7 @@ export default function Home() {
               {words.links.map((link) => (
                 <TextLink
                   key={link.href}
-                  href={link.href}
+                  href={toV1(link.href)}
                   external={link.external}
                   transitionTypes={link.external ? undefined : FORWARD}
                 >
@@ -148,7 +149,7 @@ export default function Home() {
               <SectionHead id={hiring.id} eyebrow={hiring.eyebrow} title={hiring.title} accent={hiring.accent} lede={hiring.lede} />
               <div className="flex flex-wrap items-center gap-x-6 gap-y-4" data-reveal>
                 <Button
-                  href={(hasRoles ? hiring.button : hiring.buttonEmpty).href}
+                  href={toV1((hasRoles ? hiring.button : hiring.buttonEmpty).href)}
                   variant="outline"
                   transitionTypes={FORWARD}
                 >
@@ -174,7 +175,7 @@ export default function Home() {
         </div>
       </section>
 
-      <ContactBand surface="sand" />
+      <ContactBand surface="sand" base={V1_BASE} />
     </PageTransition>
   );
 }

@@ -12,6 +12,7 @@ import { introImages, podium } from "@/content/images";
 import { isConfirmed } from "@/content/types";
 import { articles, entryLevel, featured, intro, japanSession, meta, stage, themes } from "@/content/writing";
 import { pageMetadata } from "@/lib/site";
+import { toV1 } from "@/lib/versions";
 import { quoteView } from "@/lib/views";
 
 export const metadata = pageMetadata(meta);
@@ -217,7 +218,7 @@ export default function Writing() {
               ) : null}
 
               <div className="mt-8" data-reveal>
-                <Button href={stage.button.href}>{stage.button.label}</Button>
+                <Button href={toV1(stage.button.href)}>{stage.button.label}</Button>
               </div>
             </div>
           </div>

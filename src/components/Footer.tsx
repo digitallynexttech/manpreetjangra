@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { footerNav } from "@/content/navigation";
 import { footer } from "@/content/shared";
+import { withBase } from "@/lib/versions";
 import { LocalTime } from "./LocalTime";
 import { Monogram } from "./Monogram";
 import { SocialLinks } from "./SocialLinks";
@@ -8,7 +9,8 @@ import { SocialLinks } from "./SocialLinks";
 // Footer (spec 3.4): the night surface at the end of every page. From lg a
 // 12-column grid of three blocks (brand, site links, elsewhere); below lg
 // they stack 40 px apart. Only the local time runs in the browser.
-export function Footer() {
+// `base` is the edition's address prefix ("/v1"); the site links get it.
+export function Footer({ base = "" }: { base?: string }) {
   // Evaluated when the page is built.
   const credit = footer.credit.text.replace("{year}", String(new Date().getFullYear()));
   return (
@@ -30,7 +32,7 @@ export function Footer() {
             <ul className="site-footer-links">
               {footerNav.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href}>{item.label}</Link>
+                  <Link href={withBase(item.href, base)}>{item.label}</Link>
                 </li>
               ))}
             </ul>

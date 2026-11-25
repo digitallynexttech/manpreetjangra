@@ -10,6 +10,7 @@ import { Timeline } from "@/components/Timeline";
 import { SHOW_DIRECTORSHIP, beliefs, bio, education, intro, journey, meta, story } from "@/content/about";
 import { introImages } from "@/content/images";
 import { pageMetadata } from "@/lib/site";
+import { V1_BASE, toV1 } from "@/lib/versions";
 import { educationDetail, quoteView, timelineView } from "@/lib/views";
 
 export const metadata = pageMetadata(meta);
@@ -131,14 +132,14 @@ export default function About() {
             <div className="mt-6" data-reveal>
               <CopyButton text={bioText} label={bio.copy.label} doneLabel={bio.copy.doneLabel} failLabel={bio.copy.failLabel} />
               <p className="mt-4">
-                <TextLink href={bio.link.href}>{bio.link.label}</TextLink>
+                <TextLink href={toV1(bio.link.href)}>{bio.link.label}</TextLink>
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      <ContactBand surface="paper" />
+      <ContactBand surface="paper" base={V1_BASE} />
     </PageTransition>
   );
 }

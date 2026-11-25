@@ -1,4 +1,5 @@
 import { contactBand } from "@/content/shared";
+import { withBase } from "@/lib/versions";
 import { Button } from "./Button";
 import { SectionHead, titleId } from "./SectionHead";
 import { TextLink } from "./TextLink";
@@ -6,8 +7,9 @@ import { TextLink } from "./TextLink";
 // Contact band (spec 3.6): the closing call to action on Home, About and
 // Work. Writing, Careers and Contact end with their own. From lg the text
 // takes columns 1-7 and the actions columns 9-12, level with the lede's
-// last line; on phones they stack.
-export function ContactBand({ surface }: { surface: "sand" | "paper" }) {
+// last line; on phones they stack. `base` is the edition's address prefix
+// ("/v1"), given to the Get in touch link.
+export function ContactBand({ surface, base = "" }: { surface: "sand" | "paper"; base?: string }) {
   const band = contactBand;
   return (
     <section
@@ -28,7 +30,7 @@ export function ContactBand({ surface }: { surface: "sand" | "paper" }) {
           className="flex flex-wrap items-center gap-x-6 gap-y-4 lg:col-span-4 lg:col-start-9 lg:self-end lg:justify-end"
           data-reveal
         >
-          <Button href={band.primary.href}>{band.primary.label}</Button>
+          <Button href={withBase(band.primary.href, base)}>{band.primary.label}</Button>
           <TextLink href={band.secondary.href} external={band.secondary.external}>
             {band.secondary.label}
           </TextLink>

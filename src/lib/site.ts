@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { PageMeta, Quote } from "@/content/types";
+import { toV1 } from "./versions";
 
 // Only types are imported from src/content, so importing this file never pulls
 // content data or placeholders into a client bundle (spec 7.4).
@@ -11,6 +12,8 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://manpreetja
 export const SITE_NAME = "Manpreet Jangra";
 // Shown when a page is shared: a 1200x630 render of the home hero.
 export const SOCIAL_IMAGE = { url: "/social-card.jpg", width: 1200, height: 630, alt: "Manpreet Jangra, Chief Operating Officer, Digitally Next" };
+/** The classic page addresses, as the content files name them. They are served
+ *  under /v1 (`toV1`, src/lib/versions.ts). */
 export const ROUTES = ["/", "/about", "/work", "/writing", "/careers", "/contact"] as const;
 
 const WER_URL =
@@ -20,6 +23,9 @@ const WER_URL =
  * Builds the browser title, description, canonical link and sharing tags for
  * one page. Every page needs its own sharing tags: a page that sets only a
  * title would otherwise be shared with the homepage's title and address.
+ * The canonical address is the classic page at /v1 (`meta.path` "/about"
+ * gives "/v1/about", plan/versions-spec.md 2.3), for the classic pages and
+ * for the other editions, which reuse their metadata.
  */
 export function pageMetadata({
   title,
@@ -30,9 +36,9 @@ export function pageMetadata({
 }: PageMeta & { image?: typeof SOCIAL_IMAGE }): Metadata {
   const sharedTitle = absoluteTitle ? title : `${title} · ${SITE_NAME}`;
   // One absolute address for both tags, so the canonical link and og:url
-  // always match (for home Next prints "https://manpreetjangra.com" in both,
-  // as the sitemap does).
-  const url = new URL(path, SITE_URL).toString();
+  // always match (for home "https://manpreetjangra.com/v1" in both, as the
+  // sitemap lists it).
+  const url = new URL(toV1(path), SITE_URL).toString();
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,

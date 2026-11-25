@@ -15,9 +15,11 @@ import { Button } from "./Button";
 // Unlike the sibling, the links arrive as props from SiteChrome (a
 // server component), so this client file never imports content data (spec 7.5).
 
-/** The current page, or a page inside it, marks its link (spec 2.2). */
-function isCurrent(pathname: string, href: string) {
-  return pathname === href || pathname.startsWith(href + "/");
+/** The current page, or a page inside it, marks its link (spec 2.2). The
+ *  home link marks only its own page: under /v1 every page address starts
+ *  with the home address. */
+function isCurrent(pathname: string, href: string, homeHref: string) {
+  return pathname === href || (href !== homeHref && pathname.startsWith(href + "/"));
 }
 
 export function Header({
@@ -135,7 +137,7 @@ export function Header({
       key={item.href}
       href={item.href}
       className={sheetOnly ? "site-nav-sheet-only" : undefined}
-      aria-current={isCurrent(pathname, item.href) ? "page" : undefined}
+      aria-current={isCurrent(pathname, item.href, home.href) ? "page" : undefined}
       onClick={close}
     >
       {item.label}
@@ -154,7 +156,7 @@ export function Header({
     >
       <div className="site-wrap site-header-inner">
         <Link
-          href="/"
+          href={home.href}
           className="site-wordmark"
           aria-label="Manpreet Jangra, home"
           onClick={close}
@@ -195,7 +197,7 @@ export function Header({
                 href={cta.href}
                 variant="outline"
                 size="compact"
-                ariaCurrent={isCurrent(pathname, cta.href) ? "page" : undefined}
+                ariaCurrent={isCurrent(pathname, cta.href, home.href) ? "page" : undefined}
               >
                 {cta.label}
               </Button>

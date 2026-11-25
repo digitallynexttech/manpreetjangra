@@ -10,6 +10,7 @@ import { VentureList } from "@/components/VentureList";
 import { introImages } from "@/content/images";
 import { adac, clientStats, clientStory, group, how, intro, meta, operations, talent, ventures } from "@/content/work";
 import { pageMetadata } from "@/lib/site";
+import { V1_BASE, toV1 } from "@/lib/versions";
 import { quoteView, ventureView } from "@/lib/views";
 
 export const metadata = pageMetadata(meta);
@@ -75,7 +76,7 @@ export default function Work() {
               {talent.paragraph.text}
             </p>
             <p className="mt-8" data-reveal>
-              <TextLink href={talent.link.href}>{talent.link.label}</TextLink>
+              <TextLink href={toV1(talent.link.href)}>{talent.link.label}</TextLink>
             </p>
           </div>
           <div className="mt-12 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:self-end" data-reveal>
@@ -149,7 +150,7 @@ export default function Work() {
         </div>
       </section>
 
-      <ContactBand surface="sand" />
+      <ContactBand surface="sand" base={V1_BASE} />
     </PageTransition>
   );
 }
