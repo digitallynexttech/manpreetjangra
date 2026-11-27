@@ -9,13 +9,13 @@ export const isConfirmed = (value: string | undefined | null): value is string =
   typeof value === "string" && value.trim() !== "" && !value.startsWith("{{CONFIRM");
 export type Sourced = { facts: readonly FactId[] };
 export type Url = `https://${string}`;
-export type ExternalLink = { label: string; href: Url };
+type ExternalLink = { label: string; href: Url };
 export type InternalHref = `/${string}`;
 export type NavItem = { label: string; href: InternalHref };
 /** A paragraph made of plain text and quoted fragments, rendered as <q>. */
 export type Para = Sourced & { parts: readonly ({ text: string } | { quote: string })[] };
-export type Heading = { title: string; accent?: string };
-export type SectionCopy = Heading & { id: string; eyebrow: string; lede?: string | Para };
+type Heading = { title: string; accent?: string };
+type SectionCopy = Heading & { id: string; eyebrow: string; lede?: string | Para };
 export type Stat = Sourced & { value: string; label: string; href?: InternalHref; linkLabel?: string };
 export type Pillar = Sourced & { index: string; title: string; body: Para; link: { label: string; href: InternalHref } };
 export type TimelineEntry = Sourced & {
@@ -48,7 +48,7 @@ export type Article = Sourced & {
 };
 export type EducationEntry = Sourced & { degree: string; institution: string | Confirm; year?: string | Confirm };
 export type FaqItem = Sourced & { question: string; answer: Para };
-export type Gated<T> = T & { gate: readonly (string | Confirm)[] }; // renders only if every gate entry passes isConfirmed
+type Gated<T> = T & { gate: readonly (string | Confirm)[] }; // renders only if every gate entry passes isConfirmed
 
 // Gated items in writing.ts (C4, C5). Every field that needs her answer is typed `X | Confirm` and listed in `gate`.
 export type EntryLevel = Gated<Sourced & {
@@ -68,8 +68,7 @@ export type JapanSession = Gated<Sourced & {
 export type HomeHero = Sourced & {
   eyebrow: string; name: string; statement: string; accent: string;
   primary: { label: string; href: InternalHref };
-  secondary: { label: string; href: InternalHref };
-  secondaryEmpty: { label: string; href: InternalHref };   // "How I hire" -> "/careers#criteria", used when roles.length === 0
+  secondaryEmpty: { label: string; href: InternalHref };   // "How I hire": its label titles the hiring criteria on Careers
   credential: string;
 };
 
@@ -78,7 +77,7 @@ export type TimelineView = { id: string; yearLabel: string; title: string; body:
 export type QuoteView = { text: string; theme?: string; attribution: string; href?: string; linkLabel?: string };
 export type VentureView = { name: string; href: string; hostname: string; category: string; role: string; preview: string | null; previewAlt?: string };
 export type RoleGroupView = { key: string; heading: string; count: number; roles: { title: string; department: string; href: string }[] };
-export type IntroImage = { src: string; position?: string; opacity: number; start?: string };
+
 export type Portrait = {
   src: StaticImageData;                 // from "next/image"; built by hand: { src, width, height }
   kind: "cutout" | "photo";
@@ -93,7 +92,7 @@ export type PageMeta = { title: string; description: string; path: InternalHref 
 // section object a checked shape, so every `facts` array is a real FactId[].
 
 export type MailtoHref = `mailto:${string}`;
-export type Href = InternalHref | Url | MailtoHref;
+type Href = InternalHref | Url | MailtoHref;
 /** A link with its copy. `external` links open in a new tab. */
 export type LinkCopy = { label: string; href: Href; external?: boolean };
 export type SourcedLink = LinkCopy & Sourced;

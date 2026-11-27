@@ -6,7 +6,7 @@ import { SHOW_DIRECTORSHIP, beliefs, bio, education, intro, journey, story } fro
 import { hero, journey as homeJourney } from "@/content/home";
 import { portrait } from "@/content/images";
 import type { Para } from "@/content/types";
-import { labels, toV2 } from "@/content/v2";
+import { labels } from "@/content/v2";
 import { educationDetail, quoteView, timelineView } from "@/lib/views";
 import { BigFigure } from "../BigFigure";
 import { BigRows } from "../BigRows";
@@ -249,7 +249,7 @@ export function AboutBio() {
           <NotchCard corner="tr" className="v2-about-bio-card">
             <p className="v2-about-bio-text">{bioText}</p>
             <CopyButton text={bioText} label={bio.copy.label} doneLabel={bio.copy.doneLabel} failLabel={bio.copy.failLabel} />
-            <Link className="v2-link" href={toV2(bio.link.href)}>
+            <Link className="v2-link" href={bio.link.href}>
               {bio.link.label}
               <ArrowRight size={16} strokeWidth={2} aria-hidden="true" />
             </Link>

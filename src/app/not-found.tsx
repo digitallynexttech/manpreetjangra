@@ -1,36 +1,36 @@
 import type { Metadata } from "next";
-import { Button } from "@/components/Button";
-import { PageIntro } from "@/components/PageIntro";
+import Link from "next/link";
 import PageTransition from "@/components/PageTransition";
-import { SiteChrome } from "@/components/SiteChrome";
-import { TextLink } from "@/components/TextLink";
-import { introImages } from "@/content/images";
+import { MixedHeading } from "@/components/v2/MixedHeading";
+import { PillButton } from "@/components/v2/PillButton";
+import { ThreadField } from "@/components/v2/ThreadField";
 import { notFound } from "@/content/shared";
-import { V1_BASE, toV1 } from "@/lib/versions";
 
-// The branded 404 (spec 4.7): the page intro on the thread-paper texture, a
-// way back home that slides back (nav-back, spec 2.3) and three shortcuts.
-// Next adds the noindex tag to this page itself. It stays in the classic
-// style, and its links lead into the classic edition at /v1
-// (plan/versions-spec.md 2.5).
+// The branded 404 (spec 4.7) inside the site's chrome: the 404 label, the
+// heading and lede from the content, a way back home and three shortcuts.
+// Next adds the noindex tag to this page itself.
 
 export const metadata: Metadata = { title: notFound.title, description: null, openGraph: null, twitter: null };
 
 export default function NotFound() {
   return (
-    <SiteChrome base={V1_BASE}>
-      <PageTransition>
-        <PageIntro eyebrow={notFound.eyebrow} title={notFound.heading} lede={notFound.lede} image={introImages.notFound}>
-          <Button href={toV1(notFound.back.href)} transitionTypes={["nav-back"]}>
-            {notFound.back.label}
-          </Button>
-          {notFound.links.map((link) => (
-            <TextLink key={link.href} href={toV1(link.href)}>
-              {link.label}
-            </TextLink>
-          ))}
-        </PageIntro>
-      </PageTransition>
-    </SiteChrome>
+    <PageTransition>
+      <section className="v2-surface v2-inner-section v2-nope" data-v2-theme="paper" aria-labelledby="v2-nope-title">
+        <ThreadField seed={13} count={10} />
+        <div className="v2-wrap v2-nope-inner">
+          <p className="v2-label v2-inner-eyebrow">{notFound.eyebrow}</p>
+          <MixedHeading as="h1" id="v2-nope-title" size="title" parts={[{ text: notFound.heading, voice: "sans" }]} />
+          <p className="v2-body v2-nope-lede">{notFound.lede}</p>
+          <div className="v2-nope-actions">
+            <PillButton href={notFound.back.href}>{notFound.back.label}</PillButton>
+            {notFound.links.map((link) => (
+              <Link key={link.href} className="v2-nope-link" href={link.href}>
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+    </PageTransition>
   );
 }

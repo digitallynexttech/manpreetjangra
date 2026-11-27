@@ -7,7 +7,7 @@ import { journey } from "@/content/home";
 import { podium, portrait } from "@/content/images";
 import { stage } from "@/content/writing";
 import { isConfirmed } from "@/content/types";
-import { toV2, v2Nav } from "@/content/v2";
+import { siteNav } from "@/content/v2";
 import { ventures } from "@/content/work";
 import { quoteView, timelineView } from "@/lib/views";
 import { CaptionLabel } from "../CaptionLabel";
@@ -118,7 +118,7 @@ export function JourneyTrack() {
   const quote = quoteView("trust");
   const hasDirector = journey.entries.some((entry) => entry.id === "2024");
   // The page the end link opens (About), named from the navigation copy.
-  const endPage = v2Nav.find((item) => toV2(journey.link.href).split("#")[0] === item.href);
+  const endPage = siteNav.find((item) => journey.link.href.split("#")[0] === item.href);
   const podiumCaption = [stage.eyebrow, isConfirmed(stage.photoEvent) ? stage.photoEvent : null];
   return (
     <section className="v2-track" data-v2-theme="night" aria-labelledby="v2-journey-title">
@@ -175,7 +175,7 @@ export function JourneyTrack() {
                   {endPage.label}
                 </p>
               ) : null}
-              <Link className="v2-track-end-link v2-sans v2-size-title" href={toV2(journey.link.href)}>
+              <Link className="v2-track-end-link v2-sans v2-size-title" href={journey.link.href}>
                 {journey.link.label}
                 <ArrowRight className="v2-track-end-arrow" size="0.8em" strokeWidth={2.5} aria-hidden="true" />
               </Link>

@@ -35,7 +35,7 @@ import { lockScroll } from "./SmoothScroll";
 // imports no content.
 
 function isCurrent(pathname: string, href: string) {
-  if (href === "/v2") return pathname === "/v2";
+  if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(href + "/");
 }
 
@@ -51,7 +51,7 @@ function MenuGlyph() {
 
 function Wordmark({ first, last, label, theme }: { first: string; last: string; label: string; theme?: Theme }) {
   return (
-    <Link href="/v2" className="v2-wordmark" aria-label={label} data-v2-theme={theme}>
+    <Link href="/" className="v2-wordmark" aria-label={label} data-v2-theme={theme}>
       {/* The space keeps the two words apart for screen readers and copy;
           as a grid item it takes no room. */}
       <span className="v2-serif">{first}</span> <span className="v2-sans">{last}</span>

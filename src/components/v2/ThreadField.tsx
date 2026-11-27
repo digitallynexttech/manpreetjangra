@@ -26,7 +26,7 @@ const round = (n: number) => Math.round(n * 10) / 10;
 
 /** Threads that run across the box from left to right, each a chain of
  *  smooth cubic segments (C, then S so the joins stay smooth). */
-export function threadPaths(count: number, seed: number): string[] {
+function threadPaths(count: number, seed: number): string[] {
   const next = random(seed);
   const paths: string[] = [];
   for (let i = 0; i < count; i++) {

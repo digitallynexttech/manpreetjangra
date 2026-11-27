@@ -13,16 +13,12 @@ export default function nextConfig(phase: string): NextConfig {
     reactCompiler: true,
     // next/image serves AVIF first, then WebP (both keep the portrait's alpha).
     images: { formats: ["image/avif", "image/webp"] },
-    // The classic pages moved to /v1 when / became the editions index
-    // (plan/versions-spec.md 2.2). Old links keep working through temporary
-    // (302) redirects; the query string is passed on ("/contact?type=speaking"
-    // opens "/v1/contact?type=speaking"). Home has none: / is the index.
-    redirects: async () =>
-      ["/about", "/work", "/writing", "/careers", "/contact"].map((source) => ({
-        source,
-        destination: `/v1${source}`,
-        statusCode: 302 as const,
-      })),
+    // The site once had five editions at /v1 to /v5; the scroll edition (v2)
+    // is now the site itself. Old edition links land on the same page here.
+    redirects: async () => [
+      { source: "/v:edition(1|2|3|4|5)", destination: "/", permanent: true },
+      { source: "/v:edition(1|2|3|4|5)/:path*", destination: "/:path*", permanent: true },
+    ],
     turbopack: {
       rules: {
         "*.css": {

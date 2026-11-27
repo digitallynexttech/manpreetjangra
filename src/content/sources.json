@@ -52,38 +52,71 @@
       "prompt": "Generate one image: an extreme close-up macro photograph of gold zari thread embroidery on vermilion orange-red raw silk fabric, floral paisley motif partly out of frame, shallow depth of field, soft warm light from the upper left, gentle silk sheen and one soft fold, restrained and luxurious, muted highlights, no sequin glare. Aspect about 1536x864 (16:9). No text, no letters, no numbers, no people, no faces, no hands, no logos."
     },
     {
-      "file": "public/images/textures/silk-ivory.webp",
-      "generated": true,
-      "what": "Ivory silk folds. Generated image, not a photograph",
-      "tool": "Codex image generation (ChatGPT plan), 2026-11-24",
-      "source": "assets/generated/silk-ivory.png (1672x941)",
-      "processing": "1600x900 WebP quality 80 (LANCZOS scale to cover, centre crop) by .work/scripts/prepare_images.py",
-      "prompt": "Generate one image: soft folds of ivory cream raw silk fabric filling the whole frame, gentle diagonal folds running from lower left to upper right, matte with a faint sheen, soft diffuse daylight from the upper left, pale warm shadows. Colour palette: ivory #F4EEE6 and #FAF7F2 in the lights, warm sand #E3DBD1 and #D6C3A9 in the shadows, no saturated colour anywhere. Minimal, calm, very low contrast, photographic. Aspect about 16:9 (1600x900). No text, no letters, no people, no faces, no hands, no logos, no embroidery, no pattern, no objects."
-    },
-    {
-      "file": "public/images/textures/marble-ivory.webp",
-      "generated": true,
-      "what": "Ivory marble. Generated image, not a photograph",
-      "tool": "Codex image generation (ChatGPT plan), 2026-11-24",
-      "source": "assets/generated/marble-ivory.png (1672x941)",
-      "processing": "1600x900 WebP quality 80 (LANCZOS scale to cover, centre crop) by .work/scripts/prepare_images.py",
-      "prompt": "Generate one image: top-down photograph of a slab of pale ivory marble filling the frame, faint warm grey veins (#B9AEA3) and a few thin honey-coloured veins (#D9B98A) drifting diagonally, polished but matte, even soft light, very low contrast. Base colour close to #F2ECE3 and #FAF7F2. Subtle and calm. Aspect about 16:9 (1600x900). No text, no letters, no objects, no people, no faces, no reflections, no logos."
-    },
-    {
-      "file": "public/images/textures/thread-paper.webp",
-      "generated": true,
-      "what": "A vermilion thread on handmade paper. Generated image, not a photograph",
-      "tool": "Codex image generation (ChatGPT plan), 2026-11-24",
-      "source": "assets/generated/thread-paper.png (1672x941)",
-      "processing": "1600x900 WebP quality 80 (LANCZOS scale to cover, centre crop) by .work/scripts/prepare_images.py",
-      "prompt": "Generate one image: a sheet of warm ivory handmade cotton paper (#F6F1E9, #FAF7F2) filling the frame, very faint fibre texture, evenly lit from above, and a single thin vermilion-orange silk thread (#E4270C) lying in a loose, gentle curve across the lower third from left to right, casting a soft warm shadow. Minimal, calm, photographic, shallow depth of field. Aspect about 16:9 (1600x900). No text, no letters, no other objects, no needle, no people, no hands, no faces, no logos."
-    },
-    {
       "file": "public/social-card.jpg",
       "generated": false,
       "what": "Screenshot of this site's home hero at 1200x630",
       "origin": ".work/qa/social-card.mjs (Playwright; script written by the builder)",
       "processing": "Viewport screenshot of / from the production build at 1200x630, deviceScaleFactor 1, reduced motion (final state), after the fonts and the portrait loaded; JPEG quality 85. Rendered 2026-11-24; re-run the script after any hero change"
+    },
+    {
+      "file": "public/images/feed/reel-why-brands-drop-agencies-2025-05-28.webp",
+      "generated": false,
+      "what": "Cover of her Instagram reel of 28 May 2025 (Why Brands Drop Agencies)",
+      "origin": "assets/refs/social/ig-2025-05-28-reel-why-brands-drop-agencies-cover.jpg (640x1136)",
+      "processing": "640x1136 WebP quality 80 (behind its quote card in From her feed)",
+      "rights": "Hers; from her own post",
+      "facts": [
+        "F069",
+        "F154"
+      ]
+    },
+    {
+      "file": "public/images/feed/interns-2025-06-29-a.webp",
+      "generated": false,
+      "what": "Team photo with the summer interns at the office entrance, from her Instagram post of 29 June 2025",
+      "origin": "assets/refs/social/ig-2025-06-29-genz-interns.jpg (1440x809)",
+      "processing": "1200x674 WebP quality 78 (behind its quote card in From her feed)",
+      "rights": "Hers; needs the consent of everyone pictured before launch",
+      "facts": [
+        "F070",
+        "F213"
+      ]
+    },
+    {
+      "file": "public/images/feed/interns-2025-06-29-b.webp",
+      "generated": false,
+      "what": "Second team photo with the summer interns, from the same post of 29 June 2025",
+      "origin": "assets/refs/social/ig-2025-06-29-genz-interns-2.jpg (1440x809)",
+      "processing": "1200x674 WebP quality 78 (behind its quote card in From her feed)",
+      "rights": "Hers; needs the consent of everyone pictured before launch",
+      "facts": [
+        "F070",
+        "F213"
+      ]
+    },
+    {
+      "file": "public/images/feed/still-language.webp",
+      "generated": true,
+      "what": "Two silk threads, vermilion and marigold, knotted between two wooden spools on linen. Generated image: not a photograph of any real object or event",
+      "tool": "Codex image generation (ChatGPT plan), 2026-11-25",
+      "processing": "600 px wide WebP quality 80 (behind a LinkedIn quote card in From her feed)",
+      "prompt": "Generate one image: two silk threads, one deep vermilion and one marigold, crossing and knotting together on an ivory linen surface, with two small wooden thread spools; a quiet metaphor for two languages meeting. Warm editorial still-life photograph, shallow depth of field, soft directional window light, palette of ivory paper, warm near-black, deep vermilion red and marigold amber. Portrait orientation, aspect about 9x16. Put the main subject in the right third of the frame; keep the left two thirds calm, soft and uncluttered (text will sit there). No text, no letters, no logos, no identifiable faces, no people's faces."
+    },
+    {
+      "file": "public/images/feed/still-smarter.webp",
+      "generated": true,
+      "what": "A vintage brass ribbon microphone with a vermilion ribbon at its base. Generated image: not a photograph of any real object or event",
+      "tool": "Codex image generation (ChatGPT plan), 2026-11-25",
+      "processing": "600 px wide WebP quality 80 (behind a LinkedIn quote card in From her feed)",
+      "prompt": "Generate one image: a vintage brass ribbon microphone on a stand against a warm dark charcoal backdrop, a thin vermilion silk ribbon draped over its base, soft spotlight from the upper right. Warm editorial still-life photograph, shallow depth of field, soft directional window light, palette of ivory paper, warm near-black, deep vermilion red and marigold amber. Portrait orientation, aspect about 9x16. Put the main subject in the right third of the frame; keep the left two thirds calm, soft and uncluttered (text will sit there). No text, no letters, no logos, no identifiable faces, no people's faces."
+    },
+    {
+      "file": "public/images/feed/still-audience.webp",
+      "generated": true,
+      "what": "A warmly lit hall with an out-of-focus audience seen from the side of the stage, no faces. Generated image: not a photograph of any real event",
+      "tool": "Codex image generation (ChatGPT plan), 2026-11-25",
+      "processing": "600 px wide WebP quality 80 (behind a LinkedIn quote card in From her feed)",
+      "prompt": "Generate one image: a warmly lit conference hall seen from the side of the stage, rows of chairs with an out-of-focus audience as soft silhouettes from behind (no faces visible), marigold stage lights glowing as bokeh. Warm editorial still-life photograph, shallow depth of field, soft directional window light, palette of ivory paper, warm near-black, deep vermilion red and marigold amber. Portrait orientation, aspect about 9x16. Put the main subject in the right third of the frame; keep the left two thirds calm, soft and uncluttered (text will sit there). No text, no letters, no logos, no identifiable faces, no people's faces."
     }
   ],
   "content": [
@@ -106,53 +139,6 @@
       "scope": "Job-post lines",
       "source": "https://cutshort.io/company/digitally-next-47-LkawMqgJ",
       "note": "Posted by Manpreet Jangra, 2023-2024"
-    }
-  ],
-  "sequences": [
-    {
-      "folder": "public/sequences/vermilion-silk/",
-      "files": "<width>/0001.webp to <width>/0121.webp, widths 1600 and 800 (1600x900 and 800x450)",
-      "generated": false,
-      "what": "Red silk fabric waving (scroll frame sequence, 16:9)",
-      "source": "Mixkit, \"Red wavy fabric texture\" (40213), https://mixkit.co/free-stock-video/red-wavy-fabric-texture-40213/",
-      "licence": "Mixkit Stock Video Free License, https://mixkit.co/license/#videoFree. Free use, including commercial use and modification; attribution not required (credited here and in the footer of each edition that uses it)",
-      "processing": "Frames sampled from the clip with ffmpeg 7 and libwebp: ffmpeg -i <clip>.mp4 -vf \"fps=6,scale=<width>:-2\" -c:v libwebp -quality 60 -compression_level 6 -preset photo <out>/%04d.webp, once per width (1600 and 800 px wide); 121 frames (6 fps over 20.1 s), numbered 0001 upward with no gaps. Made 2026-11-24 (assets/sequences/README.md); the original MP4 is kept out of the repository (.work/video/raw/), since neither licence allows passing on the unmodified clip"
-    },
-    {
-      "folder": "public/sequences/needle-thread/",
-      "files": "<width>/0001.webp to <width>/0091.webp, widths 1600 and 800 (1600x900 and 800x450)",
-      "generated": false,
-      "what": "A needle being threaded in close-up (scroll frame sequence, 16:9)",
-      "source": "Pexels, \"Close-up of needle threading in sewing process\" (35166550), https://www.pexels.com/video/close-up-of-needle-threading-in-sewing-process-35166550/",
-      "licence": "Pexels License, https://www.pexels.com/license/. Free use, including commercial use and modification; attribution not required (credited here and in the footer of each edition that uses it)",
-      "processing": "Frames sampled from the clip with ffmpeg 7 and libwebp: ffmpeg -i <clip>.mp4 -vf \"fps=6,scale=<width>:-2\" -c:v libwebp -quality 60 -compression_level 6 -preset photo <out>/%04d.webp, once per width (1600 and 800 px wide); 91 frames (6 fps over 15.2 s), numbered 0001 upward with no gaps. Made 2026-11-24 (assets/sequences/README.md); the original MP4 is kept out of the repository (.work/video/raw/), since neither licence allows passing on the unmodified clip"
-    },
-    {
-      "folder": "public/sequences/bronze-silk/",
-      "files": "<width>/0001.webp to <width>/0123.webp, widths 900 and 540 (900x1600 and 540x960)",
-      "generated": false,
-      "what": "Dark orange silk fabric waving (scroll frame sequence, 9:16 portrait)",
-      "source": "Mixkit, \"Bright dark orange fabric waving\" (40226), https://mixkit.co/free-stock-video/bright-dark-orange-fabric-waving-40226/",
-      "licence": "Mixkit Stock Video Free License, https://mixkit.co/license/#videoFree. Free use, including commercial use and modification; attribution not required (credited here and in the footer of each edition that uses it)",
-      "processing": "Frames sampled from the clip with ffmpeg 7 and libwebp: ffmpeg -i <clip>.mp4 -vf \"fps=6,scale=<width>:-2\" -c:v libwebp -quality 60 -compression_level 6 -preset photo <out>/%04d.webp, once per width (900 and 540 px wide); 123 frames (6 fps over 20.5 s), numbered 0001 upward with no gaps. Made 2026-11-24 (assets/sequences/README.md); the original MP4 is kept out of the repository (.work/video/raw/), since neither licence allows passing on the unmodified clip"
-    },
-    {
-      "folder": "public/sequences/thread-spool/",
-      "files": "<width>/0001.webp to <width>/0079.webp, widths 1600 and 800 (1600x900 and 800x450)",
-      "generated": false,
-      "what": "A spool of white thread in close-up (scroll frame sequence, 16:9)",
-      "source": "Pexels, \"A close-up of a spool of white thread\" (26569054), https://www.pexels.com/video/a-close-up-of-a-spool-of-white-thread-26569054/",
-      "licence": "Pexels License, https://www.pexels.com/license/. Free use, including commercial use and modification; attribution not required (credited here and in the footer of each edition that uses it)",
-      "processing": "Frames sampled from the clip with ffmpeg 7 and libwebp: ffmpeg -i <clip>.mp4 -vf \"fps=8,scale=<width>:-2\" -c:v libwebp -quality 60 -compression_level 6 -preset photo <out>/%04d.webp, once per width (1600 and 800 px wide); 79 frames (8 fps over 9.9 s), numbered 0001 upward with no gaps. Made 2026-11-24 (assets/sequences/README.md); the original MP4 is kept out of the repository (.work/video/raw/), since neither licence allows passing on the unmodified clip"
-    },
-    {
-      "folder": "public/sequences/marigold/",
-      "files": "<width>/0001.webp to <width>/0078.webp, widths 1600 and 800 (1600x900 and 800x450)",
-      "generated": false,
-      "what": "Marigold flowers in close-up (scroll frame sequence, 16:9)",
-      "source": "Pexels, \"Close-up shot of marigold flowers\" (3976813), https://www.pexels.com/video/close-up-shot-of-marigold-flowers-3976813/",
-      "licence": "Pexels License, https://www.pexels.com/license/. Free use, including commercial use and modification; attribution not required (credited here and in the footer of each edition that uses it)",
-      "processing": "Frames sampled from the clip with ffmpeg 7 and libwebp: ffmpeg -i <clip>.mp4 -vf \"fps=5,scale=<width>:-2\" -c:v libwebp -quality 60 -compression_level 6 -preset photo <out>/%04d.webp, once per width (1600 and 800 px wide); 78 frames (5 fps over 15.6 s), numbered 0001 upward with no gaps. Made 2026-11-24 (assets/sequences/README.md); the original MP4 is kept out of the repository (.work/video/raw/), since neither licence allows passing on the unmodified clip"
     }
   ]
 }

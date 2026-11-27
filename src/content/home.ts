@@ -8,7 +8,7 @@ import { formatLongDate, plural } from "@/lib/site";
 // Home page (spec 4.1).
 
 /** Date of the LinkedIn figures in `stats` (refresh both together: CONTENT-REVIEW H1). */
-export const LINKEDIN_AS_OF = "2026-11-23";
+const LINKEDIN_AS_OF = "2026-11-23";
 
 const WER = "https://www.womenentrepreneursreview.com/article/6-women-leaders-on-patriotism-purpose-and-building-india-s-future-nwid-9136.html";
 
@@ -27,7 +27,6 @@ export const hero: HomeHero = {
   statement: "I run how Digitally Next works and who joins it, and I am building its AI Decision and Acceleration Center.",
   accent: "AI Decision and Acceleration Center",
   primary: { label: "Start a conversation", href: "/contact" },
-  secondary: { label: "See open roles", href: "/careers" },
   secondaryEmpty: { label: "How I hire", href: "/careers#criteria" },
   credential: "Heading talent acquisition for digital, AI and data · Featured in Women Entrepreneurs Review, 2026",
   facts: ["F010", "F002", "F001", "F012", "F011", "F100"],

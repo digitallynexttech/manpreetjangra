@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { ParaText } from "@/components/ParaText";
 import { hiring, lead, pillars, stats } from "@/content/home";
 import { socialLinks } from "@/content/navigation";
-import { labels, toV2 } from "@/content/v2";
+import { labels } from "@/content/v2";
 import { clientStats, clientStory } from "@/content/work";
 import { BigCounter } from "../BigCounter";
 import { MixedHeading } from "../MixedHeading";
@@ -68,7 +68,7 @@ export function InNumbers() {
                 >
                   <BigCounter value={item.value} label={item.label} />
                   {item.href && item.linkLabel ? (
-                    <Link className="v2-numbers-link" href={toV2(item.href)}>
+                    <Link className="v2-numbers-link" href={item.href}>
                       {item.linkLabel}
                       <ArrowRight size={16} strokeWidth={2} aria-hidden="true" />
                     </Link>
@@ -80,7 +80,7 @@ export function InNumbers() {
           <Column speed={0.9}>
             {pillars.map((pillar, index) => (
               <li key={pillar.index}>
-                <Link className={`v2-notch v2-notch--${index % 2 ? "bl" : "tr"} v2-numbers-card v2-numbers-pillar`} href={toV2(pillar.link.href)}>
+                <Link className={`v2-notch v2-notch--${index % 2 ? "bl" : "tr"} v2-numbers-card v2-numbers-pillar`} href={pillar.link.href}>
                   <h3 className="v2-sans v2-numbers-pillar-title">{pillar.title}</h3>
                   <p className="v2-numbers-pillar-body">
                     <ParaText para={pillar.body} />
@@ -114,7 +114,7 @@ export function InNumbers() {
         <div className="v2-numbers-cta">
           <ThreadDraw variant="underline" shape="line" trigger="scroll" start="top 90%" end="top 60%" className="v2-numbers-mark" />
           <p className="v2-numbers-cta-line">{lead.title}</p>
-          <PillButton href={toV2("/work")}>{pillars[0].link.label}</PillButton>
+          <PillButton href={"/work"}>{pillars[0].link.label}</PillButton>
         </div>
       </div>
     </section>

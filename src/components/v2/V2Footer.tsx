@@ -4,9 +4,8 @@ import { hero } from "@/content/home";
 import { portrait } from "@/content/images";
 import { socialLinks } from "@/content/navigation";
 import { contactBand, footer } from "@/content/shared";
-import { labels, toV2, v2Nav } from "@/content/v2";
+import { labels, siteNav } from "@/content/v2";
 import { ventures } from "@/content/work";
-import { ClassicLink } from "./ClassicLink";
 import { FieldPortrait } from "./FieldPortrait";
 import { FooterCta } from "./FooterCta";
 import { Marquee } from "./Marquee";
@@ -49,7 +48,7 @@ export function V2Footer() {
               {labels.pages}
             </h2>
             <ul>
-              {v2Nav.map((item) => (
+              {siteNav.map((item) => (
                 <li key={item.href}>
                   <Link className="v2-footer-link" href={item.href}>
                     {item.label}
@@ -81,8 +80,8 @@ export function V2Footer() {
           label={labels.group}
           items={ventures.map((venture) => venture.name)}
         />
-        <FooterCta href={toV2(hero.primary.href)}>
-          <PillButton href={toV2(hero.primary.href)} size="large">
+        <FooterCta href={hero.primary.href}>
+          <PillButton href={hero.primary.href} size="large">
             {hero.primary.label}
           </PillButton>
         </FooterCta>
@@ -92,7 +91,6 @@ export function V2Footer() {
         <p>
           <LocalTime prefix={footer.place.prefix} />
         </p>
-        <ClassicLink>{labels.classicSite}</ClassicLink>
       </div>
     </footer>
   );

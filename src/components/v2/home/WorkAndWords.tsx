@@ -3,7 +3,7 @@ import { ParaText } from "@/components/ParaText";
 import { lead } from "@/content/home";
 import { podium } from "@/content/images";
 import { isConfirmed } from "@/content/types";
-import { labels, toV2 } from "@/content/v2";
+import { labels } from "@/content/v2";
 import { meta as workMeta } from "@/content/work";
 import { meta as writingMeta, stage } from "@/content/writing";
 import { CaptionLabel } from "../CaptionLabel";
@@ -28,7 +28,7 @@ export function WorkAndWords() {
       id: "v2-split-work",
       parts: labels.theWork,
       lede: lead.lede,
-      href: toV2("/work"),
+      href: "/work",
       // The buttons have no visible text: they name their pages.
       label: workMeta.title,
     },
@@ -36,7 +36,7 @@ export function WorkAndWords() {
       id: "v2-split-words",
       parts: labels.herWords,
       lede: writingMeta.description,
-      href: toV2("/writing"),
+      href: "/writing",
       label: writingMeta.title,
     },
   ] as const;
@@ -86,7 +86,7 @@ export function PodiumStage() {
           <figcaption className="v2-podium-caption">
             <CaptionLabel as="h2" id="v2-podium-title" parts={caption} />
             <p className="v2-podium-line">{stage.paragraph}</p>
-            <PillButton href={toV2(stage.button.href)}>{stage.button.label}</PillButton>
+            <PillButton href={stage.button.href}>{stage.button.label}</PillButton>
           </figcaption>
         </figure>
       </PodiumScene>

@@ -1,4 +1,4 @@
-import type { IntroImage, Portrait, SizedImage, Sourced } from "./types";
+import type { Portrait, SizedImage, Sourced } from "./types";
 
 // Every picture on the site. Files live in public/images/ (provenance in
 // sources.json); sizes are intrinsic, so nothing shifts while they load.
@@ -27,19 +27,6 @@ export const podium: SizedImage & Sourced & { alt: string } = {
   facts: ["F082", "F210"],
 };
 
-/** Faint pictures behind the heading of each inner page (spec 8.3). The zari
- *  on Writing and Contact is 0.14 from 46 % (DD 4.4 says 0.22 from 38 %), so
- *  it is no louder than the other intros and stays clear of the lede
- *  (design review DR-04). */
-export const introImages = {
-  about: { src: "/images/textures/silk-ivory.webp", position: "50% 50%", opacity: 0.35, start: "38%" },
-  work: { src: "/images/textures/marble-ivory.webp", position: "50% 50%", opacity: 0.35, start: "38%" },
-  writing: { src: "/images/textures/zari.webp", position: "70% 40%", opacity: 0.14, start: "46%" },
-  careers: { src: "/images/textures/thread-paper.webp", position: "50% 75%", opacity: 0.4, start: "38%" },
-  contact: { src: "/images/textures/zari.webp", position: "30% 60%", opacity: 0.14, start: "46%" },
-  notFound: { src: "/images/textures/thread-paper.webp", position: "50% 75%", opacity: 0.4, start: "38%" },
-} as const satisfies Record<string, IntroImage>;
-
-/** Gold zari on vermilion silk: a generated image, behind the home night band
- *  (lg only, opacity 0.16) and the Writing and Contact intros. */
+/** Gold zari on vermilion silk: a generated image (behind the home feature
+ *  and the open menu's third tile). */
 export const zari: SizedImage = { src: "/images/textures/zari.webp", width: 1600, height: 900 };

@@ -2,7 +2,6 @@ import { HiringPill } from "@/components/HiringPill";
 import { ParaText } from "@/components/ParaText";
 import { hiring } from "@/content/home";
 import { hasRoles, roles } from "@/content/roles";
-import { toV2 } from "@/content/v2";
 import { Marquee } from "../Marquee";
 import { MixedHeading } from "../MixedHeading";
 import { PillButton } from "../PillButton";
@@ -29,7 +28,7 @@ export function Hiring() {
         <div className="v2-hiring-side">
           <p className="v2-hiring-lede"><ParaText para={hiring.lede} /></p>
           <div className="v2-hiring-actions">
-            <PillButton href={toV2(button.href)} variant="outline">
+            <PillButton href={button.href} variant="outline">
               {button.label}
             </PillButton>
             <PillButton href={hiring.email.href} variant="outline">

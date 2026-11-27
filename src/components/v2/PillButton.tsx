@@ -12,7 +12,7 @@ import type { ReactNode } from "react";
 const ICONS = { "arrow-right": ArrowRight, "arrow-up-right": ArrowUpRight, mail: Mail } as const;
 export type PillIcon = keyof typeof ICONS | "none";
 
-export const isExternalHref = (href: string) => /^https?:\/\//.test(href);
+const isExternalHref = (href: string) => /^https?:\/\//.test(href);
 
 export function PillButton({
   href,

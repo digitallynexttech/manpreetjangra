@@ -5,7 +5,7 @@ import { ParaText } from "@/components/ParaText";
 import { podium } from "@/content/images";
 import { socialLinks } from "@/content/navigation";
 import { isConfirmed } from "@/content/types";
-import { labels, toV2 } from "@/content/v2";
+import { labels } from "@/content/v2";
 import { articles, entryLevel, featured, intro, japanSession, stage, themes } from "@/content/writing";
 import { quoteView } from "@/lib/views";
 import { BigRows } from "../BigRows";
@@ -313,7 +313,7 @@ export function WritingStage() {
             </Reveal>
           ) : null}
 
-          <PillButton href={toV2(stage.button.href)} size="large">
+          <PillButton href={stage.button.href} size="large">
             {stage.button.label}
           </PillButton>
         </div>

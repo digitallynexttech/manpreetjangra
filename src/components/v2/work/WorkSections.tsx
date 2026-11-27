@@ -1,5 +1,5 @@
 import { ParaText } from "@/components/ParaText";
-import { labels, toV2 } from "@/content/v2";
+import { labels } from "@/content/v2";
 import { adac, clientStats, clientStory, group, how, intro, operations, talent, ventures } from "@/content/work";
 import { quoteView, ventureView } from "@/lib/views";
 import { BigCounter } from "../BigCounter";
@@ -107,7 +107,7 @@ export function WorkTalent() {
           <Reveal as="p" className="v2-lede v2-work-talent-para">
             {talent.paragraph.text}
           </Reveal>
-          <PillButton href={toV2(talent.link.href)} variant="outline">
+          <PillButton href={talent.link.href} variant="outline">
             {talent.link.label}
           </PillButton>
         </div>

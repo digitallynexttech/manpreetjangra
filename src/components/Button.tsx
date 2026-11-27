@@ -20,12 +20,12 @@ export function LinkIcon({ name, size = 20 }: { name: ButtonIcon; size?: number 
   return Icon ? <Icon className="site-arrow" size={size} strokeWidth={1.5} aria-hidden="true" /> : null;
 }
 
-export const isExternalHref = (href: string) => /^https?:\/\//.test(href);
-export const isMailHref = (href: string) => href.startsWith("mailto:");
+const isExternalHref = (href: string) => /^https?:\/\//.test(href);
+const isMailHref = (href: string) => href.startsWith("mailto:");
 
 /** The icon a link gets when none is named: Mail for mailto:, ArrowUpRight
  *  for another site, ArrowRight for a page of this site. */
-export function defaultIcon(href: string, external?: boolean): ButtonIcon {
+function defaultIcon(href: string, external?: boolean): ButtonIcon {
   if (isMailHref(href)) return "mail";
   return (external ?? isExternalHref(href)) ? "arrow-up-right" : "arrow-right";
 }

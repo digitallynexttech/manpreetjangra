@@ -21,7 +21,7 @@ export const intro: Intro = {
 /** Addresses. general [F181], careers [F144]. directEmail is C7
  *  (CONTENT-REVIEW A7): once confirmed, every enquiry except careers goes to
  *  her own address instead of contact@. */
-export const CONTACT: { general: string; careers: string; directEmail: string | Confirm } = {
+const CONTACT: { general: string; careers: string; directEmail: string | Confirm } = {
   general: "contact@digitallynext.com",
   careers: "careers@digitallynext.com",
   directEmail: "{{CONFIRM: your own @digitallynext.com address, if enquiries should reach you directly}}",

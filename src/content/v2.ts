@@ -1,4 +1,4 @@
-import type { InternalHref, NavItem } from "./types";
+import type { NavItem } from "./types";
 import { footerNav } from "./navigation";
 import { footer } from "./shared";
 
@@ -9,19 +9,9 @@ import { footer } from "./shared";
 // here carries a fact id. Every other word on /v2 comes from the content
 // files the classic site reads, through the same `isConfirmed` gates.
 
-/** The /v2 address of a classic page: "/" -> "/v2", "/about#bio" ->
- *  "/v2/about#bio". Links to other sites and mailto: links pass unchanged. */
-export function toV2(href: string): string {
-  if (!href.startsWith("/")) return href;
-  return href === "/" ? "/v2" : href.startsWith("/#") ? `/v2${href.slice(1)}` : `/v2${href}`;
-}
-
-/** The menu and footer links of /v2: the classic footer links (Home, About,
- *  Work, Writing, Careers, Contact), same labels, /v2 addresses. */
-export const v2Nav: readonly NavItem[] = footerNav.map((item) => ({
-  label: item.label,
-  href: toV2(item.href) as InternalHref,
-}));
+/** The menu and footer links: Home, About, Work, Writing, Careers, Contact
+ *  (the footer navigation, same labels and addresses). */
+export const siteNav: readonly NavItem[] = footerNav;
 
 /** The stacked wordmark: her name from the footer copy, one word per line
  *  ("MANPREET" in the serif voice over "JANGRA" in the sans voice). */
@@ -37,8 +27,6 @@ export const labels = {
   openMenu: "Open menu",
   closeMenu: "Close menu",
   menu: "Menu",
-  /** The way back to the classic edition of the site (menu and footer). */
-  classicSite: "Classic site",
   // Footer (spec 4.1 item 10).
   pages: "Pages",
   followOn: "Follow on",
