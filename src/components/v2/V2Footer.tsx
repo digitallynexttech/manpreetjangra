@@ -8,7 +8,6 @@ import { labels, siteNav } from "@/content/v2";
 import { ventures } from "@/content/work";
 import { FieldPortrait } from "./FieldPortrait";
 import { FooterCta } from "./FooterCta";
-import { Marquee } from "./Marquee";
 import { MixedHeading } from "./MixedHeading";
 import { PillButton } from "./PillButton";
 import { ThreadDraw } from "./ThreadDraw";
@@ -20,8 +19,8 @@ import { mixParts } from "./parts";
 // paper by default) into marigold; on it sits a night card with a tab at its
 // top centre: the contact heading in both voices with a marigold thread
 // drawn over it, the portrait on its vermilion field rising from the bottom
-// edge, a Pages column and a Follow on column, a strip of the group's names,
-// and the "Start a conversation" pill. Under the card, on marigold: the
+// edge, a Pages column and a Follow on column (with the group's names
+// listed under it), and the "Start a conversation" pill. Under the card, on marigold: the
 // credit line, the time in New Delhi and the way back to the classic site.
 
 export function V2Footer() {
@@ -61,25 +60,32 @@ export function V2Footer() {
             <FieldPortrait portrait={portrait} sizes="(min-width: 1024px) 26vw, 260px" decorative />
           </V2FooterStage>
           <div className="v2-footer-col">
-            <h2 className="v2-label">{labels.followOn}</h2>
-            <ul>
-              {socialLinks.map((link) => (
-                <li key={link.key}>
-                  <a className="v2-footer-link" href={link.href} target="_blank" rel="noopener noreferrer">
-                    {link.label}
-                    <span className="v2-sr-only">{labels.newTab}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <div className="v2-footer-list">
+              <h2 className="v2-label">{labels.followOn}</h2>
+              <ul>
+                {socialLinks.map((link) => (
+                  <li key={link.key}>
+                    <a className="v2-footer-link" href={link.href} target="_blank" rel="noopener noreferrer">
+                      {link.label}
+                      <span className="v2-sr-only">{labels.newTab}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {/* Names, not links: one of the three sites no longer resolves. */}
+            <div className="v2-footer-list">
+              <h2 className="v2-label">{labels.group}</h2>
+              <ul>
+                {ventures.map((venture) => (
+                  <li key={venture.name} className="v2-footer-name">
+                    {venture.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
-        <Marquee
-          className="v2-footer-marquee"
-          itemClassName="v2-sans"
-          label={labels.group}
-          items={ventures.map((venture) => venture.name)}
-        />
         <FooterCta href={hero.primary.href}>
           <PillButton href={hero.primary.href} size="large">
             {hero.primary.label}

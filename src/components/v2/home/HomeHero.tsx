@@ -12,8 +12,8 @@ import { ThreadField } from "../ThreadField";
 import { HeroScene } from "./HomeScenes";
 
 // 4.1 item 1, Lando's hero: her name in the stacked two-voice style at hero
-// size, the portrait on its vermilion field standing in front of it (the
-// name runs behind the panel), the hero eyebrow as a mono caption, a small
+// size, the portrait on its vermilion field beside it (the name is sized to
+// end before the panel), the hero eyebrow as a mono caption, a small
 // "now" card bottom left in the manner of Lando's "next race" card, and a
 // scroll cue bottom right, all on paper over the thread field.
 
@@ -53,7 +53,7 @@ export function HomeHero() {
           <div className="v2-hero-panel">
             <FieldPortrait
               portrait={portrait}
-              sizes="(min-width: 1024px) 34vw, (min-width: 768px) 60vw, 74vw"
+              sizes="(min-width: 1024px) 34vw, (min-width: 768px) 60vw, 92vw"
               preload
               plate
             />

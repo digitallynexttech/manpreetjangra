@@ -24,6 +24,9 @@
 /* --- 1. Hero -------------------------------------------------------------- */
 .v2-hero { overflow: clip; isolation: isolate; }
 .v2-hero-inner {
+  /* The name is sized from this box's content width (cqi: no gutters, no
+     scrollbar). MANPREET, the longer line, is about 5.6em wide. */
+  container-type: inline-size;
   position: relative;
   z-index: 1;
   min-height: 100svh;
@@ -33,8 +36,8 @@
   padding-bottom: clamp(20px, 4vh, 44px);
 }
 .v2-hero-eyebrow { position: relative; z-index: 3; }
-.v2-hero-name { position: relative; z-index: 1; margin-top: clamp(16px, 3.2vh, 36px); }
-.v2-hero-name.v2-size-hero { font-size: clamp(3.25rem, 16vw, 10rem); }
+.v2-hero-name { position: relative; z-index: 3; margin-top: clamp(16px, 3.2vh, 36px); }
+.v2-hero-name.v2-size-hero { font-size: min(10rem, calc(100cqi / 5.7)); white-space: nowrap; }
 .v2-hero-name .v2-serif { letter-spacing: -0.04em; }
 .v2-hero-name .v2-sans { letter-spacing: -0.045em; }
 /* Phones and tablets: the panel under the name on the right, the card
@@ -51,6 +54,17 @@
 .v2-hero-now-role { margin-top: 10px; font-size: 1.0625rem; line-height: 0.95; letter-spacing: -0.02em; text-wrap: balance; }
 .v2-hero-now-org { margin-top: 3px; font-size: 1.0625rem; line-height: 1; }
 .v2-hero-now .v2-notch-caption { margin-top: 14px; padding-top: 10px; font-size: 0.6875rem; }
+/* Phones: the eyebrow in two even lines, and the portrait as the screen's
+   centrepiece, centred: as wide as the content less twice the plate's
+   12 px (so the plate ends on the gutter line), never so tall that the card
+   leaves the first screen. The card, centred too, hangs half over the
+   portrait's foot, half below it. */
+@media (width < 48rem) {
+  .v2-hero-eyebrow { text-wrap: balance; }
+  .v2-hero-stage { padding-top: clamp(20px, 3vh, 32px); justify-items: center; }
+  .v2-hero-panel { width: min(calc(100% - 24px), calc((100svh - 21rem) * 0.8)); justify-self: center; }
+  .v2-hero-now { width: min(78%, 17rem); margin: -4.75rem 0 0; justify-self: center; }
+}
 /* The smallest phones: a wider, shorter-reaching card, so the role and the
    agency keep their lines and the card's foot stays on the first screen. */
 @media (width < 26rem) {
@@ -66,20 +80,26 @@
   color: var(--v2-fg);
 }
 @media (width >= 64rem) {
-  /* The name spans most of the width; the panel stands in front of the end
-     of MANPREET with its top edge across the capitals, so the tops of the
-     last letters stay readable above it and the name visibly runs on
-     behind it (depth, spec 4.1 item 1). The panel's top follows the name's
-     own box: padding, eyebrow line, gap, then a third of a line or so. */
+  /* Two columns under the eyebrow: the stacked name on the left and the
+     panel on the right, their tops on one line (the name's first line).
+     The name is sized from the room left of the panel, so MANPREET always
+     ends a clear gap before it and no letter runs behind the portrait.
+     The panel's height is what the screen leaves below that line; its
+     width follows at 4:5. */
   .v2-hero-inner {
-    --hero-fs: clamp(3.5rem, 13.6vw, 15rem);
     --hero-pad: clamp(14px, 3.4vh, 40px);
     --hero-gap: clamp(16px, 3.2vh, 36px);
-    --hero-panel-top: calc(var(--v2-header) + var(--hero-pad) + 1rem + var(--hero-gap) + var(--hero-fs) * 0.36);
+    --hero-panel-top: calc(var(--v2-header) + var(--hero-pad) + 0.75rem * 1.35 + var(--hero-gap));
     --hero-bottom: clamp(20px, 4vh, 44px);
     --hero-panel-w: min(31vw, calc((100svh - var(--hero-panel-top) - var(--hero-bottom) - 12px) * 0.8));
+    --hero-name-room: calc(100cqi - var(--hero-panel-w) - 14px - clamp(40px, 4.4vw, 88px));
   }
-  .v2-hero-name.v2-size-hero { font-size: var(--hero-fs); }
+  /* The serif capitals rise about 0.07em above the line box: moving the
+     name down by that much puts their tops level with the panel's. */
+  .v2-hero-name.v2-size-hero {
+    font-size: min(15rem, calc(var(--hero-name-room) / 5.7));
+    margin-top: calc(var(--hero-gap) + 0.07em);
+  }
   .v2-hero-stage { display: contents; }
   .v2-hero-panel {
     position: absolute;
@@ -88,10 +108,11 @@
     right: calc(var(--v2-gutter) + 14px);
     width: var(--hero-panel-w);
   }
+  /* Its foot on the panel's foot (the plate hangs 12 px below that). */
   .v2-hero-now {
     position: absolute;
     left: var(--v2-gutter);
-    bottom: clamp(24px, 5vh, 56px);
+    bottom: calc(var(--hero-bottom) + 12px);
     width: 16rem;
     margin: 0;
   }
@@ -168,6 +189,12 @@
   height: var(--loop-h);
   bottom: calc(var(--loop-h) * -0.38);
 }
+/* Phones: less night above and below the card, so the quote and the
+   manifesto read as one run instead of two islands. */
+@media (width < 48rem) {
+  .v2-words-stage { padding-block: 72px 96px; }
+  .v2-words-panel { padding-inline: 20px; }
+}
 @media (width >= 64rem) {
   .v2-words.is-pinned { height: 250vh; }
   .v2-words.is-pinned .v2-words-stage {
@@ -196,6 +223,9 @@
 .v2-manifesto-mark { width: 64px; height: 40px; color: var(--v2-stroke); }
 .v2-manifesto-mark path { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .v2-manifesto-text { max-width: 76rem; margin-inline: auto; }
+@media (width < 48rem) {
+  .v2-manifesto-inner { padding-block: 48px 72px; }
+}
 
 /* --- 4. Journey track ------------------------------------------------------ */
 /* Without the horizontal stage (phones, tablets, reduced motion, no
@@ -226,7 +256,68 @@
   padding-top: clamp(32px, 5vh, 56px);
   background: linear-gradient(to bottom, var(--color-sand), var(--color-paper) 80%);
 }
-.v2-track-item { position: relative; width: var(--sw, 100%); justify-self: var(--sj, start); margin: 0; }
+.v2-track-item { position: relative; margin: 0; }
+/* Phones: a timeline. The lede opens on the gutter line; under it a thread
+   runs down the left (the theme's accent, faint) through every frame, with
+   a ring at each dated entry and a filled, haloed dot at "Now". The frames
+   sit one indent in from the thread and run to the right edge, except the
+   portrait, which would otherwise fill a whole screen. The thread crosses
+   from the night group into the light one without a break (each group
+   clips at its own edge, so the two halves meet there). The closing link
+   is back on the gutter line, off the thread. */
+@media (width < 48rem) {
+  .v2-track-group {
+    --rail-x: 5px;
+    --rail-in: 30px;
+    --rail-gap: 56px;
+    row-gap: var(--rail-gap);
+    padding-block: 56px 72px;
+  }
+  .v2-track-group--night { --rail-tail: 128px; padding-bottom: var(--rail-tail); }
+  .v2-track-group--light { --rail-head: 24px; padding-top: var(--rail-head); }
+  .v2-track-entry,
+  .v2-track-photo,
+  .v2-track-quote { padding-left: var(--rail-in); }
+  .v2-track-entry::before,
+  .v2-track-photo::before,
+  .v2-track-quote::before {
+    content: "";
+    position: absolute;
+    left: var(--rail-x);
+    top: 0;
+    bottom: calc(var(--rail-gap) * -1);
+    width: 1.5px;
+    translate: -50% 0;
+    background: color-mix(in srgb, var(--v2-accent) 42%, transparent);
+  }
+  .v2-track-group--night > .v2-track-item:last-child::before { bottom: calc(var(--rail-tail) * -1); }
+  .v2-track-group--light > .v2-track-entry:first-of-type::before { top: calc(var(--rail-head) * -1); }
+  .v2-track-group--light > .v2-track-item:nth-last-child(2)::before { bottom: 0; }
+  .v2-track-entry::after {
+    content: "";
+    position: absolute;
+    left: var(--rail-x);
+    top: 8px;
+    width: 11px;
+    height: 11px;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: var(--v2-bg);
+    box-shadow: inset 0 0 0 2px var(--v2-accent);
+  }
+  .v2-track-entry--now::after {
+    width: 13px;
+    height: 13px;
+    background: var(--v2-accent);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--v2-accent) 18%, transparent);
+    animation: v2-now-pulse 2.4s var(--v2-ease) infinite;
+  }
+  .v2-track-portrait { width: 72%; }
+  .v2-track-end { padding-top: 8px; }
+}
+@keyframes v2-now-pulse {
+  50% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--v2-accent) 6%, transparent); }
+}
 @media (width >= 48rem) {
   .v2-track-group {
     grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -354,6 +445,19 @@
 }
 .v2-split-block { display: grid; justify-items: start; gap: 18px; }
 .v2-split-lede { max-width: 32ch; font-size: 0.9375rem; line-height: 1.45; color: var(--v2-fg); text-wrap: pretty; }
+/* Phones: the blocks on the gutter line like every other section (centred,
+   the column was only as wide as its longest lede and sat indented), with a
+   rule between them. */
+@media (width < 48rem) {
+  .v2-split-grid { justify-content: stretch; gap: 0; padding-block: 72px; }
+  .v2-split-block + .v2-split-block { margin-top: 48px; padding-top: 48px; border-top: 1px solid var(--v2-rule); }
+  /* The arrow beside the heading, level with its last line; the lede
+     under both across the full width. */
+  .v2-split-block { grid-template-columns: minmax(0, 1fr) auto; column-gap: 16px; }
+  .v2-split-block > .v2-mixed { grid-column: 1; grid-row: 1; }
+  .v2-split-block > .v2-round { grid-column: 2; grid-row: 1; align-self: end; width: 52px; height: 52px; margin-bottom: 0.3rem; }
+  .v2-split-lede { grid-column: 1 / -1; max-width: none; font-size: 1rem; color: var(--v2-muted); }
+}
 @media (width >= 48rem) {
   /* The two blocks share three rows (heading, lede, button), so their ledes
      and buttons line up, and the gap keeps THE WORK and HER WORDS apart. */
@@ -464,11 +568,24 @@
   text-wrap: balance;
 }
 /* Phones and tablets: a taller frame with the photo higher, so the foot
-   (caption, line, button) sits under the picture, not over it. */
+   (caption, line, button) sits under the picture, not over it. The two rows
+   of words leave the picture's back: one runs in the band above it, the
+   other just under it, so both read whole instead of peeking out at its
+   sides. The rows' grid follows the photo (`--pw`, its width and height). */
 @media (width < 64rem) {
-  .v2-podium-frame { height: min(176vw, 92svh); }
-  .v2-podium-photo { top: 38%; width: min(74vw, 46svh, 25rem); }
-  .v2-podium-words { bottom: auto; height: 76%; padding-bottom: 0; }
+  /* Capped for tablets, where the photo stops at 400 px but 92svh is tall. */
+  .v2-podium-frame { --pw: min(74vw, 46svh, 25rem); height: min(176vw, 92svh, 56rem); }
+  .v2-podium-photo { top: 38%; width: var(--pw); }
+  .v2-podium-words {
+    bottom: 0;
+    padding-bottom: 0;
+    grid-template-rows: calc(38% - var(--pw) / 2) var(--pw) minmax(0, 1fr);
+    align-content: stretch;
+    gap: 0;
+  }
+  .v2-podium-row:first-child { grid-row: 1; align-self: center; }
+  .v2-podium-row:last-child { grid-row: 3; align-self: start; margin-top: clamp(14px, 3.6svh, 36px); }
+  .v2-podium-word { font-size: clamp(2.75rem, 12.5vw, 6.5rem); }
 }
 @media (width >= 64rem) {
   .v2-podium-caption {
@@ -503,7 +620,8 @@
 /* Phones: the counters two to a row (a lone last one takes the row), the
    three pillars one under another, so the cards take two screens, not four. */
 @media (width < 48rem) {
-  .v2-numbers-grid { gap: 12px; }
+  .v2-numbers-inner { padding-block: 72px 120px; }
+  .v2-numbers-grid { gap: 12px; margin-top: 32px; }
   .v2-numbers-col:nth-child(odd) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .v2-numbers-col:nth-child(odd) > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
   .v2-numbers-col:nth-child(2) { gap: 12px; }
@@ -577,6 +695,10 @@
   color: var(--v2-fg);
   text-wrap: balance;
 }
+@media (width < 48rem) {
+  .v2-numbers-asof { margin-top: 28px; }
+  .v2-numbers-cta { margin-top: 80px; }
+}
 
 /* --- 7. Feature (curved edge out of the night) ---------------------------- */
 .v2-feature { overflow: clip; isolation: isolate; }
@@ -616,6 +738,19 @@
   line-height: 1.42;
 }
 .v2-feature-card figcaption { margin-top: 14px; }
+/* Phones and tablets: the zari tile across the full width, the paper card
+   floating over its foot (inset the same on both sides), the blush card
+   full width under it. Every edge is on the gutter line or mirrored. */
+@media (width < 64rem) {
+  .v2-feature-collage { gap: 24px; }
+  .v2-feature-zari { width: 100%; justify-self: stretch; aspect-ratio: 4 / 3; max-height: 30rem; }
+  .v2-feature-card { width: auto; }
+  .v2-feature-card--paper { margin: -88px 14px 0; }
+  .v2-feature-card--blush { justify-self: stretch; }
+}
+@media (width < 48rem) {
+  .v2-feature-grid { gap: 48px; padding-block: 96px 40px; }
+}
 /* Desktop, Lando's store collage: the zari tile in the middle, the paper
    card over its top left corner, the blush card over its bottom right one.
    The cards sit at opposite ends of the box, so they never cover each
@@ -695,12 +830,23 @@
   --v2-marquee-gap: clamp(1.5rem, 3vw, 3rem);
 }
 .v2-hiring-marquee .v2-marquee-dot { width: 10px; height: 10px; background: var(--v2-fg); }
+/* Phones: the two actions as full-width bars of one length (their labels
+   differ a lot), the arrow and the mail icon at the right end. */
+@media (width < 48rem) {
+  .v2-hiring-grid { padding-top: 72px; }
+  .v2-hiring-actions { display: grid; }
+  .v2-hiring-actions .v2-pill { justify-content: space-between; }
+  .v2-hiring-marquee { margin-top: 56px; }
+}
 
 /* --- 9. From her feed (paper into marigold) -------------------------------- */
 .v2-feed {
   overflow: clip;
   padding-block: clamp(96px, 16vh, 180px) clamp(56px, 9vh, 110px);
   background: linear-gradient(to bottom, var(--color-paper) 0, var(--color-paper) 56%, var(--color-marigold) 100%);
+}
+@media (width < 48rem) {
+  .v2-feed { padding-block: 72px 40px; }
 }
 /* The page ends on marigold, so the footer starts there too: FooterFrom
    marks the footer (data-from), see v2.css. */

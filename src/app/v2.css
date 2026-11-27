@@ -504,17 +504,27 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
 }
 .v2-header .v2-pill,
 .v2-header .v2-menu-button { transition-duration: 0.4s; }
+/* One line: the serif first name, then the bold sans surname, on a shared
+   baseline. Smaller on the narrowest phones, so it clears the Contact pill. */
 .v2-wordmark {
   display: grid;
-  min-height: 44px;
+  grid-auto-flow: column;
+  justify-content: start;
+  align-items: baseline;
   align-content: center;
-  font-size: 1.1875rem;
-  line-height: 0.9;
+  column-gap: 0.26em;
+  min-height: 44px;
+  font-size: 1.0625rem;
+  line-height: 1;
+  white-space: nowrap;
   color: inherit;
   text-decoration: none;
 }
 .v2-wordmark .v2-serif { color: inherit; letter-spacing: -0.02em; }
 .v2-wordmark .v2-sans { letter-spacing: -0.03em; }
+@media (width < 24rem) {
+  .v2-wordmark { font-size: 0.9375rem; }
+}
 @media (width >= 64rem) {
   .v2-wordmark { font-size: 1.375rem; }
 }
@@ -684,6 +694,10 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
   padding: clamp(96px, 16vh, 180px) clamp(8px, 0.8vw, 12px) 0;
   background: linear-gradient(to bottom, var(--v2-footer-from, var(--color-paper)) 0, var(--color-marigold) clamp(120px, 22vh, 260px));
 }
+/* Phones: just room for the tab above the card. */
+@media (width < 48rem) {
+  .v2-footer { padding-top: 64px; }
+}
 /* A page that ends on another colour says so through FooterFrom (a :has()
    rule on .v2 would restyle the whole page on every DOM change). */
 .v2-footer[data-from="marigold"] { --v2-footer-from: var(--color-marigold); }
@@ -765,22 +779,27 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
   overflow: clip;
 }
 .v2-footer-stage .v2-field { border-radius: 14px 14px 0 0; }
-.v2-footer-marquee {
-  position: relative;
-  z-index: 2;
-  margin-inline: calc(-1 * var(--v2-gutter));
-  padding-block: 18px;
+/* The right column holds two short lists: Follow on, then the group's
+   names. The names are plain text in the muted ink, set like the links. */
+.v2-footer-list { display: grid; gap: 8px; }
+.v2-footer-list + .v2-footer-list { margin-top: 24px; }
+.v2-footer-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
   color: var(--color-on-night-muted);
-  font-size: clamp(1.25rem, 2.2vw, 2rem);
-  --v2-marquee-gap: clamp(2rem, 4vw, 4rem);
-  --v2-marquee-duration: 36s;
 }
-/* One copy of the names is narrower than the card: each copy fills at least
-   a screen, so the loop never shows an empty stretch. */
-@media (prefers-reduced-motion: no-preference) {
-  .v2-footer-marquee .v2-marquee-group { min-width: 100vw; justify-content: space-around; }
+@media (pointer: coarse) {
+  .v2-footer-name { min-height: 44px; }
 }
-.v2-footer-cta { position: relative; z-index: 3; display: flex; justify-content: center; padding-bottom: 28px; }
+/* The pill stands on the portrait's foot, at the card's bottom edge. */
+.v2-footer-cta { position: absolute; z-index: 3; inset: auto 0 20px; display: flex; justify-content: center; }
 .v2-footer-bar {
   display: flex;
   flex-wrap: wrap;
@@ -797,6 +816,30 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
 @media (pointer: coarse) {
   .v2-footer-bar a { min-height: 44px; }
 }
+/* Phones: the action first, then the way round the site, then her.
+   The heading and its thread, the pill as a full-width bar under them, a
+   hairline, the two link columns set flush left (centred, their ragged
+   edges wandered), and the portrait last, rising out of the card's bottom
+   edge with nothing over it. Under the card the credit is centred in even
+   lines, the time under it. */
+@media (width < 48rem) {
+  .v2-footer-card { min-height: 0; padding-top: 48px; }
+  .v2-footer-cta { position: static; order: 1; margin-top: 76px; }
+  .v2-footer-cta .v2-pill { width: 100%; justify-content: space-between; }
+  .v2-footer-grid {
+    order: 2;
+    gap: 40px 16px;
+    margin-top: 36px;
+    padding-top: 32px;
+    border-top: 1px solid var(--color-night-line);
+  }
+  .v2-footer-col { justify-items: start; text-align: start; }
+  .v2-footer-col .v2-label { margin-bottom: 2px; }
+  .v2-footer-name { justify-content: flex-start; }
+  .v2-footer-stage { width: min(68%, 250px); }
+  .v2-footer-bar { flex-direction: column; justify-content: center; gap: 6px; padding: 18px 16px 24px; text-align: center; }
+  .v2-footer-credit { font-size: 0.625rem; line-height: 1.6; text-wrap: balance; }
+}
 @media (width >= 64rem) {
   .v2-footer-grid {
     grid-template-columns: 1fr auto 1fr;
@@ -811,13 +854,6 @@ details[open]:not([data-closing]) > summary .v2-row-arrow { rotate: 45deg; opaci
     order: 0;
     margin-top: clamp(-120px, -8vh, -40px);
   }
-  .v2-footer-marquee {
-    position: absolute;
-    inset: auto 0 clamp(64px, 9vh, 96px);
-    margin: 0;
-    z-index: 1;
-  }
-  .v2-footer-cta { position: absolute; inset: auto 0 20px; padding: 0; }
 }
 
 /* --- Page hero (spec 4.2) -------------------------------------------------- */

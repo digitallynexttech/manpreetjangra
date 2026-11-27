@@ -9,7 +9,7 @@ import { lockScroll } from "./SmoothScroll";
 
 // The /v2 header and its full-screen menu (plan/v2-spec.md 3.3, 3.4).
 //
-// Header: fixed and transparent; the stacked wordmark on the left, a
+// Header: fixed and transparent; the one-line wordmark on the left, a
 // Contact pill and a square menu button on the right (Lando's Store pill and
 // menu button). Its colours follow the surface under it: every /v2 surface
 // says `data-v2-theme="paper"` or `"night"`, and on each scroll frame the

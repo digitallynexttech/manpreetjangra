@@ -29,7 +29,7 @@ import { TrackScene } from "./HomeScenes";
 /** Where a frame sits. Desktop row: width, distance from the top of the
  *  stage, gap before it (negative overlaps the previous frame, one high,
  *  one low) and speed. Collage from 768 px: grid columns and a top offset.
- *  Phones: width and side. */
+ *  Phones stack every frame at full width, flush left (home.css). */
 type Place = {
   w: string;
   y: string;
@@ -37,23 +37,21 @@ type Place = {
   speed?: number;
   col: string;
   mt?: string;
-  sw: string;
-  end?: boolean;
 };
 
 const PLACES: Record<string, Place> = {
-  intro: { w: "30vw", y: "27vh", gap: "0vw", col: "1 / span 8", sw: "100%" },
-  "2017": { w: "21vw", y: "12vh", gap: "7vw", col: "2 / span 6", sw: "90%" },
-  portrait: { w: "13vw", y: "50vh", gap: "-5vw", speed: 0.12, col: "9 / span 3", mt: "14vh", sw: "56%", end: true },
-  "2018": { w: "21vw", y: "21vh", gap: "6vw", col: "1 / span 6", sw: "90%" },
-  imet: { w: "25vw", y: "60vh", gap: "-2vw", speed: -0.08, col: "7 / span 6", mt: "16vh", sw: "86%", end: true },
-  "2019": { w: "21vw", y: "10vh", gap: "6vw", col: "2 / span 6", sw: "90%" },
-  quote: { w: "23vw", y: "59vh", gap: "-5vw", col: "7 / span 5", mt: "12vh", sw: "92%", end: true },
-  podium: { w: "27vw", y: "13vh", gap: "6vw", col: "1 / span 5", sw: "80%" },
-  "2024": { w: "19vw", y: "60vh", gap: "3vw", speed: 0.08, col: "7 / span 6", mt: "18vh", sw: "90%", end: true },
-  now: { w: "25vw", y: "15vh", gap: "-8vw", col: "1 / span 7", sw: "100%" },
-  dn: { w: "27vw", y: "55vh", gap: "-5vw", speed: 0.1, col: "5 / span 8", mt: "4vh", sw: "86%", end: true },
-  end: { w: "18vw", y: "34vh", gap: "6vw", col: "1 / -1", sw: "100%" },
+  intro: { w: "30vw", y: "27vh", gap: "0vw", col: "1 / span 8" },
+  "2017": { w: "21vw", y: "12vh", gap: "7vw", col: "2 / span 6" },
+  portrait: { w: "13vw", y: "50vh", gap: "-5vw", speed: 0.12, col: "9 / span 3", mt: "14vh" },
+  "2018": { w: "21vw", y: "21vh", gap: "6vw", col: "1 / span 6" },
+  imet: { w: "25vw", y: "60vh", gap: "-2vw", speed: -0.08, col: "7 / span 6", mt: "16vh" },
+  "2019": { w: "21vw", y: "10vh", gap: "6vw", col: "2 / span 6" },
+  quote: { w: "23vw", y: "59vh", gap: "-5vw", col: "7 / span 5", mt: "12vh" },
+  podium: { w: "27vw", y: "13vh", gap: "6vw", col: "1 / span 5" },
+  "2024": { w: "19vw", y: "60vh", gap: "3vw", speed: 0.08, col: "7 / span 6", mt: "18vh" },
+  now: { w: "25vw", y: "15vh", gap: "-8vw", col: "1 / span 7" },
+  dn: { w: "27vw", y: "55vh", gap: "-5vw", speed: 0.1, col: "5 / span 8", mt: "4vh" },
+  end: { w: "18vw", y: "34vh", gap: "6vw", col: "1 / -1" },
 };
 
 function place(key: string): { style: CSSProperties; speed?: number } {
@@ -65,8 +63,6 @@ function place(key: string): { style: CSSProperties; speed?: number } {
       "--gap": p.gap,
       "--col": p.col,
       "--mt": p.mt ?? "0px",
-      "--sw": p.sw,
-      "--sj": p.end ? "end" : "start",
     } as CSSProperties,
     speed: p.speed,
   };
@@ -108,7 +104,7 @@ function Website({ id, index }: { id: string; index: number }) {
     <Item id={id} as="figure" className="v2-track-photo v2-track-site">
       <CaptionLabel as="figcaption" parts={[venture.name]} small />
       <div className="v2-track-frame v2-track-frame--site">
-        <Image src={venture.preview} alt={venture.previewAlt ?? ""} width={960} height={600} sizes="(min-width: 1024px) 28vw, (min-width: 768px) 50vw, 86vw" />
+        <Image src={venture.preview} alt={venture.previewAlt ?? ""} width={960} height={600} sizes="(min-width: 1024px) 28vw, (min-width: 768px) 50vw, 100vw" />
       </div>
     </Item>
   );
@@ -140,7 +136,7 @@ export function JourneyTrack() {
             <Entry id="2017" />
             <Item id="portrait" as="figure" className="v2-track-photo v2-track-portrait">
               <CaptionLabel as="figcaption" parts={[portrait.caption]} small />
-              <FieldPortrait portrait={portrait} sizes="(min-width: 1024px) 14vw, (min-width: 768px) 26vw, 56vw" decorative />
+              <FieldPortrait portrait={portrait} sizes="(min-width: 1024px) 14vw, (min-width: 768px) 26vw, 64vw" decorative />
             </Item>
             <Entry id="2018" />
             <Website id="imet" index={1} />
@@ -160,8 +156,8 @@ export function JourneyTrack() {
             <Item id="podium" as="figure" className="v2-track-photo v2-track-podium">
               <CaptionLabel as="figcaption" parts={podiumCaption} small />
               <div className="v2-track-frame v2-track-frame--square">
-                <Image src={podium.src} alt={podium.alt} width={podium.width} height={podium.height} sizes="(min-width: 1024px) 28vw, (min-width: 768px) 42vw, 80vw" />
-                <Image className="v2-photo-grey" src={podium.src} alt="" width={podium.width} height={podium.height} sizes="(min-width: 1024px) 28vw, (min-width: 768px) 42vw, 80vw" />
+                <Image src={podium.src} alt={podium.alt} width={podium.width} height={podium.height} sizes="(min-width: 1024px) 28vw, (min-width: 768px) 42vw, 100vw" />
+                <Image className="v2-photo-grey" src={podium.src} alt="" width={podium.width} height={podium.height} sizes="(min-width: 1024px) 28vw, (min-width: 768px) 42vw, 100vw" />
               </div>
             </Item>
             {hasDirector ? <Entry id="2024" /> : null}
